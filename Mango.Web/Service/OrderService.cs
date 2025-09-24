@@ -1,0 +1,95 @@
+﻿using Mango.Web.Models;
+using Mango.Web.Service.IService;
+using Mango.Web.Utility;
+using Xango.Services.Dto;
+
+namespace Mango.Web.Service
+{
+    public class OrderService : IOrderService
+    {
+        private readonly IBaseService _baseService;
+        public OrderService(IBaseService baseService)
+        {
+            _baseService = baseService;
+        }
+
+        public async Task<ResponseDto> CancelOrder(OrderHeaderDto orderHeaderDto)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = SD.ApiType.PUT,
+                Data = orderHeaderDto,
+                Url = SD.OrderAPIBase + "/api/order/CancelOrder"
+            });
+        }
+
+
+        public async Task<ResponseDto?> CreateOrder(CartDto cartDto)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = cartDto,
+                Url = SD.OrderAPIBase + "/api/order/CreateOrder"
+            });
+        }
+
+        public async Task<ResponseDto?> CreateStripeSession(StripeRequestDto stripeRequestDto)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = stripeRequestDto,
+                Url = SD.OrderAPIBase + "/api/order/CreateStripeSession"
+            });
+        }
+
+        public async Task<ResponseDto?> GetAll(string userId, string? status)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = SD.ApiType.GET,
+                Url = SD.OrderAPIBase + "/api/order/GetAll?status=" + status + "&userid=" + userId
+            });
+        }
+
+        public async Task<ResponseDto?> GetUser(string email)
+        {
+            return await _baseService.SendAsync(new RequestDto
+            {
+                ApiType = SD.ApiType.POST,
+                Data = email,
+                Url = SD.AuthAPIBase + "/api/order/GetUser"
+            });
+        }
+
+        public async Task<ResponseDto?> GetOrder(int orderId)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = SD.ApiType.GET,
+                Url = SD.OrderAPIBase + "/api/order/GetOrder/" + orderId
+            });
+        }
+
+        public async Task<ResponseDto?> UpdateOrderStatus(int orderId, string newStatus)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = newStatus,
+                Url = SD.OrderAPIBase + "/api/order/UpdateOrderStatus/" + orderId
+            });
+        }
+
+        public async Task<ResponseDto?> ValidateStripeSession(int orderHeaderId)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = SD.ApiType.POST,
+                Data = orderHeaderId,
+                Url = SD.OrderAPIBase + "/api/order/ValidateStripeSession"
+            });
+        }
+    }
+}
