@@ -30,6 +30,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Mango.MessageBus\Xango.MessageBus.csproj" />
     <ProjectReference Include="..\Mango.Services.AuthAPI\Xango.Services.AuthAPI.csproj" />
+    <ProjectReference Include="..\Xango.ConfigurationStore\Xango.ConfigurationStore.csproj" />
     <ProjectReference Include="..\Xango.Services.Dto\Xango.Services.Dto.csproj" />
   </ItemGroup>
 

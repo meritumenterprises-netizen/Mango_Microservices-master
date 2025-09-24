@@ -39,7 +39,7 @@
 	    <PrivateAssets>all</PrivateAssets>
 	    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	  <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+	  <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -48,6 +48,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Mango.MessageBus\Xango.MessageBus.csproj" />
+    <ProjectReference Include="..\Xango.ConfigurationStore\Xango.ConfigurationStore.csproj" />
     <ProjectReference Include="..\Xango.Services.Dto\Xango.Services.Dto.csproj" />
   </ItemGroup>
 
