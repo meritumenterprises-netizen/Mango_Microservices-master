@@ -6,7 +6,7 @@ namespace Xango.Services.AuthAPI
     {
         public static MapperConfiguration RegisterMaps()
         {
-            var mappingConfig = new MapperConfiguration(config =>
+            var mappingConfig = new MapperConfiguration((config, ILoggerFactory loggerFactory) =>
             {
             });
             return mappingConfig;
