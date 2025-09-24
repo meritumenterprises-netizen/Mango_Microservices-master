@@ -33,7 +33,6 @@ namespace Mango.Services.CouponAPI.Controllers
             {
                 IEnumerable<Coupon> objList = _db.Coupons.ToList();
                 _response.Result = _mapper.Map<IEnumerable<CouponDto>>(objList);
-                //_messageBus.PublishMessage(_response.Result, _configuration.GetValue<string>("TopicAndQueueNames:GetCouponsQueue"));
             }
             catch (Exception ex)
             {
@@ -52,7 +51,6 @@ namespace Mango.Services.CouponAPI.Controllers
             {
                 Coupon obj = _db.Coupons.First(u => u.CouponId == id);
                 _response.Result = _mapper.Map<CouponDto>(obj);
-                //_messageBus.PublishMessage(_response.Result, _configuration.GetValue<string>("TopicAndQueueNames:GetCouponQueue"));
             }
             catch (Exception ex)
             {
@@ -70,7 +68,6 @@ namespace Mango.Services.CouponAPI.Controllers
             {
                 Coupon obj = _db.Coupons.First(u => u.CouponCode.ToLower() == code.ToLower());
                 _response.Result = _mapper.Map<CouponDto>(obj);
-                //_messageBus.PublishMessage(_response.Result, _configuration.GetValue<string>("TopicAndQueueNames:GetCouponQueue"));
             }
             catch (Exception ex)
             {
@@ -86,11 +83,10 @@ namespace Mango.Services.CouponAPI.Controllers
         {
             try
             {
+                couponDto.CouponId = null;
                 Coupon obj = _mapper.Map<Coupon>(couponDto);
                 _db.Coupons.Add(obj);
                 _db.SaveChanges();
-
-
 
                 var options = new Stripe.CouponCreateOptions
                 {
@@ -104,7 +100,6 @@ namespace Mango.Services.CouponAPI.Controllers
 
 
                 _response.Result = _mapper.Map<CouponDto>(obj);
-                //_messageBus.PublishMessage(_response.Result, _configuration.GetValue<string>("TopicAndQueueNames:CreateCouponQueue"));
             }
             catch (Exception ex)
             {
@@ -126,7 +121,6 @@ namespace Mango.Services.CouponAPI.Controllers
                 _db.SaveChanges();
 
                 _response.Result = _mapper.Map<CouponDto>(obj);
-                //_messageBus.PublishMessage(_response.Result, _configuration.GetValue<string>("TopicAndQueueNames:UpdateCouponQueue"));
             }
             catch (Exception ex)
             {
@@ -147,11 +141,8 @@ namespace Mango.Services.CouponAPI.Controllers
                 _db.Coupons.Remove(obj);
                 _db.SaveChanges();
 
-
                 var service = new Stripe.CouponService();
                 service.Delete(obj.CouponCode);
-
-                //_messageBus.PublishMessage(obj.CouponCode, _configuration.GetValue<string>("TopicAndQueueNames:DeleteCouponQueue"));
             }
             catch (Exception ex)
             {
