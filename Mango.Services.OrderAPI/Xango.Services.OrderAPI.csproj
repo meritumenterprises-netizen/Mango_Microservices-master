@@ -22,15 +22,13 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
-	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	  <PackageReference Include="StackExchange.Redis" Version="2.9.17" />
 	  <PackageReference Include="Stripe.net" Version="41.13.0" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Mango.MessageBus\Xango.MessageBus.csproj" />
-    <ProjectReference Include="..\Xango.ConfigurationStore\Xango.ConfigurationStore.csproj" />
     <ProjectReference Include="..\Xango.Services.Dto\Xango.Services.Dto.csproj" />
   </ItemGroup>
 

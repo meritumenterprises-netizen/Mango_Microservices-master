@@ -1,9 +1,13 @@
-﻿using RabbitMQ.Client;
+﻿using Microsoft.AspNetCore.Mvc;
+using RabbitMQ.Client;
 using System.Text;
 
 namespace Mango.MessageBus
 {
-    public class MessageBus : IMessageBus
+    [ApiController]
+    [Route("[controller]")]
+
+    public class MessageBusController : IMessageBus
     {
         private string connectionString = "amqp://guest:guest@localhost:5672/";
 

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Mango.MessageBus;
 using Mango.Services.AuthAPI.Models.Dto;
 using Mango.Services.AuthAPI.Service.IService;
 using Microsoft.AspNetCore.Mvc;
@@ -16,18 +15,16 @@ namespace Mango.Services.AuthAPI.Controllers
     public class AuthAPIController : ControllerBase
     {
         private readonly IAuthService _authService;
-        private readonly IMessageBus _messageBus;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly ConnectionMultiplexer _redis = null;
         private readonly IDatabase _db = null;
 
         protected ResponseDto _response;
-        public AuthAPIController(IAuthService authService, IMessageBus messageBus, IConfiguration configuration, IMapper mapper)
+        public AuthAPIController(IAuthService authService, IConfiguration configuration, IMapper mapper)
         {
             _authService = authService;
             _configuration = configuration;
-            _messageBus = messageBus;
             _mapper = mapper;
             _response = new();
             _redis = ConnectionMultiplexer.Connect("localhost");
@@ -45,7 +42,7 @@ namespace Mango.Services.AuthAPI.Controllers
                 _response.Message = errorMessage;
                 return BadRequest(_response);
             }
-            await _messageBus.PublishMessage(model.Email, _configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue"));
+            //await _messageBus.PublishMessage(model.Email, _configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue"));
             _response.IsSuccess = true;
             _response.Message = "Registration successful";
             return Ok(_response);
@@ -63,7 +60,7 @@ namespace Mango.Services.AuthAPI.Controllers
             }
             _response.Result = loginResponse;
             _response.IsSuccess = true;
-            await _messageBus.PublishMessage(model.UserName, _configuration.GetValue<string>("TopicAndQueueNames:LoginUserQueue"));
+            //await _messageBus.PublishMessage(model.UserName, _configuration.GetValue<string>("TopicAndQueueNames:LoginUserQueue"));
             return Ok(_response);
 
             return Ok(_response);
@@ -80,7 +77,7 @@ namespace Mango.Services.AuthAPI.Controllers
                 _response.Message = "Error encountered";
                 return BadRequest(_response);
             }
-            await _messageBus.PublishMessage(model.Name + ":" + model.Role, _configuration.GetValue<string>("TopicAndQueueNames:AssignRolesQueue"));
+            //await _messageBus.PublishMessage(model.Name + ":" + model.Role, _configuration.GetValue<string>("TopicAndQueueNames:AssignRolesQueue"));
             return Ok(_response);
 
         }
@@ -91,7 +88,7 @@ namespace Mango.Services.AuthAPI.Controllers
             _response.IsSuccess = true;
             _response.Message = "Logout successful";
             _db.StringSet(model.UserName, "");
-            await _messageBus.PublishMessage(model.UserName, _configuration.GetValue<string>("TopicAndQueueNames:LogoutUserQueue"));
+            //await _messageBus.PublishMessage(model.UserName, _configuration.GetValue<string>("TopicAndQueueNames:LogoutUserQueue"));
             return Ok(_response);
         }
 

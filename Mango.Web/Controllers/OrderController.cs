@@ -20,7 +20,7 @@ namespace Mango.Web.Controllers
         {
             _orderService = orderService;
             _cartService = cartService;
-            var config = new MapperConfiguration(cfg => { });
+            var config = new MapperConfiguration(cfg=> { }, null);
             _mapper = mapper;
         }
 

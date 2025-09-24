@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Mango.MessageBus;
+//using Mango.MessageBus;
 using Mango.Services.OrderAPI.Data;
 using Mango.Services.OrderAPI.Models;
 using Mango.Services.OrderAPI.Models.Dto;
@@ -24,17 +24,15 @@ namespace Mango.Services.OrderAPI.Controllers
         private IMapper _mapper;
         private readonly AppDbContext _db;
         private IProductService _productService;
-        private readonly IMessageBus _messageBus;
         private readonly IConfiguration _configuration;
         private readonly ConnectionMultiplexer _redis = null;
         private readonly IDatabase _db2 = null;
 
         public OrderAPIController(AppDbContext db,
             IProductService productService, IMapper mapper, IConfiguration configuration
-            , IMessageBus messageBus)
+            )
         {
             _db = db;
-            _messageBus = messageBus;
             this._response = new ResponseDto();
             _productService = productService;
             _mapper = mapper;
@@ -79,7 +77,7 @@ namespace Mango.Services.OrderAPI.Controllers
             {
                 OrderHeader orderHeader = _db.OrderHeaders.Include(u => u.OrderDetails).First(u => u.OrderHeaderId == id);
                 _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
-                _messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:GetOrderQueue"));
+                //_messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:GetOrderQueue"));
             }
             catch (Exception ex)
             {
@@ -102,7 +100,7 @@ namespace Mango.Services.OrderAPI.Controllers
                     _db.SaveChanges();
                     _response.IsSuccess = true;
                     _response.Message = "Order cancelled successfully";
-                    _messageBus.PublishMessage(orderHeader, _configuration.GetValue<string>("TopicAndQueueNames:CancelOrderQueue"));
+                    //_messageBus.PublishMessage(orderHeader, _configuration.GetValue<string>("TopicAndQueueNames:CancelOrderQueue"));
                 }
             }
             catch (Exception ex)
@@ -129,7 +127,7 @@ namespace Mango.Services.OrderAPI.Controllers
 
                 orderHeaderDto.OrderHeaderId = orderCreated.OrderHeaderId;
                 _response.Result = orderHeaderDto;
-                _messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:CreateOrderQueue"));
+                //_messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:CreateOrderQueue"));
             }
             catch (Exception ex)
             {
@@ -233,7 +231,7 @@ namespace Mango.Services.OrderAPI.Controllers
                         UserId = orderHeader.UserId
                     };
                     _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
-                    _messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:CreateStripeSessionQueue"));
+                    //_messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:CreateStripeSessionQueue"));
                 }
             }
             catch (Exception ex)
@@ -269,7 +267,7 @@ namespace Mango.Services.OrderAPI.Controllers
                     orderHeader.Status = newStatus;
                     _db.SaveChanges();
 
-                    _messageBus.PublishMessage(JsonConvert.SerializeObject(orderHeader), _configuration.GetValue<string>("TopicAndQueueNames:UpdateOrderStatusQueue"));
+                    //_messageBus.PublishMessage(JsonConvert.SerializeObject(orderHeader), _configuration.GetValue<string>("TopicAndQueueNames:UpdateOrderStatusQueue"));
                 }
             }
             catch (Exception ex)
@@ -292,7 +290,7 @@ namespace Mango.Services.OrderAPI.Controllers
                 {
                     _response.IsSuccess = false;
                     _response.Message = "Product is used in one or more orders.";
-                    _messageBus.PublishMessage(_response.Message, _configuration.GetValue<string>("TopicAndQueueNames:ProductUsedInOrdersQueue"));
+                    //_messageBus.PublishMessage(_response.Message, _configuration.GetValue<string>("TopicAndQueueNames:ProductUsedInOrdersQueue"));
                     return _response;
                 }
                 _response.IsSuccess = true;

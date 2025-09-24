@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Mango.MessageBus;
 using Mango.Services.ProductAPI.Data;
 using Mango.Services.ProductAPI.Models;
 using Mango.Services.ProductAPI.Models.Dto;
@@ -17,15 +16,13 @@ namespace Mango.Services.ProductAPI.Controllers
         private readonly AppDbContext _db;
         private new ResponseDto _response;
         private IMapper _mapper;
-        private readonly IMessageBus _messageBus;
         private readonly IConfiguration _configuration;
 
-        public ProductAPIController(AppDbContext db, IMapper mapper, IMessageBus messageBus, IConfiguration configuration)
+        public ProductAPIController(AppDbContext db, IMapper mapper, IConfiguration configuration)
         {
             _db = db;
             _mapper = mapper;
             _response = new ResponseDto();
-            _messageBus = messageBus;
             _configuration = configuration;
         }
 
@@ -54,7 +51,7 @@ namespace Mango.Services.ProductAPI.Controllers
             {
                 Product obj = _db.Products.First(u => u.ProductId == id);
                 _response.Result = _mapper.Map<ProductDto>(obj);
-                _messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Message), _configuration.GetValue<string>("TopicAndQueueNames:ProductRetrievedQueue"));
+                //_messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Message), _configuration.GetValue<string>("TopicAndQueueNames:ProductRetrievedQueue"));
             }
             catch (Exception ex)
             {
@@ -104,7 +101,7 @@ namespace Mango.Services.ProductAPI.Controllers
                 _db.Products.Update(product);
                 _db.SaveChanges();
                 _response.Result = _mapper.Map<ProductDto>(product);
-                _messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:ProductCreatedQueue"));
+                //_messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:ProductCreatedQueue"));
             }
             catch (Exception ex)
             {
@@ -152,7 +149,7 @@ namespace Mango.Services.ProductAPI.Controllers
                 _db.SaveChanges();
 
                 _response.Result = _mapper.Map<ProductDto>(product);
-                _messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:ProductUpdatedQueue"));
+                //_messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:ProductUpdatedQueue"));
             }
             catch (Exception ex)
             {
@@ -183,7 +180,7 @@ namespace Mango.Services.ProductAPI.Controllers
                 _db.SaveChanges();
                 _response.IsSuccess = true;
                 _response.Message = "Product deleted successfully";
-                _messageBus.PublishMessage(JsonConvert.SerializeObject(obj), _configuration.GetValue<string>("TopicAndQueueNames:ProductDeletedQueue"));
+                //_messageBus.PublishMessage(JsonConvert.SerializeObject(obj), _configuration.GetValue<string>("TopicAndQueueNames:ProductDeletedQueue"));
             }
             catch (Exception ex)
             {

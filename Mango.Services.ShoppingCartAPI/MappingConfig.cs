@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Mango.Services.ShoppingCartAPI.Models;
 using Mango.Services.ShoppingCartAPI.Models.Dto;
+using LoggerFactory = Xango.Services.Dto.LoggerFactory;
 
 namespace Mango.Services.ShoppingCartAPI
 {
@@ -12,7 +13,7 @@ namespace Mango.Services.ShoppingCartAPI
             {
                 config.CreateMap<CartHeader, CartHeaderDto>().ReverseMap();
                 config.CreateMap<CartDetails, CartDetailsDto>().ReverseMap();
-            });
+            }, (ILoggerFactory)new LoggerFactory());
             return mappingConfig;
         }
     }

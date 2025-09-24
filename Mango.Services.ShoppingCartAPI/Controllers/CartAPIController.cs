@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Mango.MessageBus;
 using Mango.Services.ShoppingCartAPI.Data;
 using Mango.Services.ShoppingCartAPI.Models;
 using Mango.Services.ShoppingCartAPI.Models.Dto;
@@ -24,15 +23,13 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         private IProductService _productService;
         private ICouponService _couponService;
         private IConfiguration _configuration;
-        private readonly IMessageBus _messageBus;
         private readonly ConnectionMultiplexer _redis = null;
         private readonly IDatabase _db2 = null;
 
         public CartAPIController(AppDbContext db,
-            IMapper mapper, IProductService productService, ICouponService couponService, IMessageBus messageBus, IConfiguration configuration)
+            IMapper mapper, IProductService productService, ICouponService couponService, IConfiguration configuration)
         {
             _db = db;
-            _messageBus = messageBus;
             _productService = productService;
             this._response = new ResponseDto();
             _mapper = mapper;
@@ -80,7 +77,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 }
 
                 _response.Result = cart;
-                _messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:ShoppingCartRetrievedQueue"));
+                //_messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:ShoppingCartRetrievedQueue"));
             }
             catch (Exception ex)
             {
@@ -101,7 +98,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 _db.CartHeaders.Update(cartFromDb);
                 await _db.SaveChangesAsync();
                 _response.Result = true;
-                _messageBus.PublishMessage(cartFromDb.CouponCode, _configuration.GetValue<string>("TopicAndQueueNames:CouponAppliedQueue"));
+                //_messageBus.PublishMessage(cartFromDb.CouponCode, _configuration.GetValue<string>("TopicAndQueueNames:CouponAppliedQueue"));
             }
             catch (Exception ex)
             {
@@ -116,7 +113,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         {
             try
             {
-                await _messageBus.PublishMessage(cartDto, _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue"));
+                //await _messageBus.PublishMessage(cartDto, _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue"));
                 _response.Result = true;
             }
             catch (Exception ex)
@@ -194,7 +191,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 _db.CartHeaders.Remove(cartFromDb);
                 await _db.SaveChangesAsync();
                 _response.Result = true;
-                _messageBus.PublishMessage(JsonConvert.SerializeObject(cartFromDb), _configuration.GetValue<string>("TopicAndQueueNames:ShoppingCartDeletedQueue"));
+                //_messageBus.PublishMessage(JsonConvert.SerializeObject(cartFromDb), _configuration.GetValue<string>("TopicAndQueueNames:ShoppingCartDeletedQueue"));
             }
             catch (Exception ex)
             {
@@ -244,7 +241,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 {
                     _response.IsSuccess = false;
                     _response.Message = "Product is used in one or more shopping carts.";
-                    _messageBus.PublishMessage(JsonConvert.SerializeObject(productUsed), _configuration.GetValue<string>("TopicAndQueueNames:ProductUsedInShoppingCartsQueue"));
+                    //_messageBus.PublishMessage(JsonConvert.SerializeObject(productUsed), _configuration.GetValue<string>("TopicAndQueueNames:ProductUsedInShoppingCartsQueue"));
                     return _response;
                 }
                 _response.IsSuccess = true;

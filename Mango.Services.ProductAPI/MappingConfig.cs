@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Xango.Services.Dto;
 using Mango.Services.ProductAPI.Models;
 using Mango.Services.ProductAPI.Models.Dto;
+using LoggerFactory = Xango.Services.Dto.LoggerFactory;
 
 namespace Mango.Services.ProductAPI
 {
@@ -11,7 +13,7 @@ namespace Mango.Services.ProductAPI
             var mappingConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<ProductDto, Product>().ReverseMap();
-            });
+            }, (ILoggerFactory)new LoggerFactory());
             return mappingConfig;
         }
     }

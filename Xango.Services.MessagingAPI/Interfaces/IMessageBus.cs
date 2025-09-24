@@ -1,8 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using RabbitMQ.Client;
-using System.Text;
-
-namespace Mango.MessageBus
+﻿namespace Xango.Services.MessagingAPI
 {
     public interface IMessageBus
     {
