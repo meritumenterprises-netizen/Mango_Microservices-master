@@ -29,6 +29,7 @@ namespace Mango.Services.AuthAPI.Service
             _dbRedis = _redis.GetDatabase();
 
         }
+
         public async Task<UserDto> CurrentUser(string email)
         {
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());

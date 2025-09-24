@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-//using Mango.MessageBus;
 using Mango.Services.OrderAPI.Data;
 using Mango.Services.OrderAPI.Models;
 using Mango.Services.OrderAPI.Models.Dto;
@@ -18,6 +17,7 @@ namespace Mango.Services.OrderAPI.Controllers
 {
     [Route("api/order")]
     [ApiController]
+    //[Authorize]
     public class OrderAPIController : ControllerBase
     {
         protected ResponseDto _response;
@@ -33,7 +33,7 @@ namespace Mango.Services.OrderAPI.Controllers
             )
         {
             _db = db;
-            this._response = new ResponseDto();
+            _response = new ResponseDto();
             _productService = productService;
             _mapper = mapper;
             _configuration = configuration;
@@ -42,21 +42,22 @@ namespace Mango.Services.OrderAPI.Controllers
 
         }
 
-        [Authorize]
         [HttpGet("GetAll")]
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        //[ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        [Authorize]
         public ResponseDto? GetAll(string userId, string status = "all")
         {
             try
             {
                 IEnumerable<OrderHeader> objList;
+                var userEmail = User.Claims.Where((claim) => claim.Type == "name").First().Value;
                 if (User.IsInRole(SD.RoleAdmin))
                 {
                     objList = _db.OrderHeaders.AsNoTracking().Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).Where(u => status == "all" || u.Status == status);
                 }
                 else
                 {
-                    objList = _db.OrderHeaders.AsNoTracking().Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).Where(u => (status == "all" || u.Status == status) && u.UserId == userId);
+                    objList = _db.OrderHeaders.AsNoTracking().Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).Where(u => (status == "all" || u.Status == status) && u.Email== userEmail);
                 }
                 _response.Result = _mapper.Map<IEnumerable<OrderHeaderDto>>(objList);
             }
@@ -68,7 +69,6 @@ namespace Mango.Services.OrderAPI.Controllers
             return _response;
         }
 
-        [Authorize]
         [HttpGet("GetOrder/{id:int}")]
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         public ResponseDto? Get(int id)
@@ -77,7 +77,6 @@ namespace Mango.Services.OrderAPI.Controllers
             {
                 OrderHeader orderHeader = _db.OrderHeaders.Include(u => u.OrderDetails).First(u => u.OrderHeaderId == id);
                 _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
-                //_messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:GetOrderQueue"));
             }
             catch (Exception ex)
             {
@@ -87,7 +86,6 @@ namespace Mango.Services.OrderAPI.Controllers
             return _response;
         }
 
-        [Authorize]
         [HttpGet("CancelOrder/{id:int}")]
         public async Task<ResponseDto> CancelOrder(int id)
         {
@@ -100,7 +98,6 @@ namespace Mango.Services.OrderAPI.Controllers
                     _db.SaveChanges();
                     _response.IsSuccess = true;
                     _response.Message = "Order cancelled successfully";
-                    //_messageBus.PublishMessage(orderHeader, _configuration.GetValue<string>("TopicAndQueueNames:CancelOrderQueue"));
                 }
             }
             catch (Exception ex)
@@ -111,7 +108,6 @@ namespace Mango.Services.OrderAPI.Controllers
             return _response;
         }
 
-        [Authorize]
         [HttpPost("CreateOrder")]
         public async Task<ResponseDto> CreateOrder([FromBody] CartDto cartDto)
         {
@@ -127,7 +123,6 @@ namespace Mango.Services.OrderAPI.Controllers
 
                 orderHeaderDto.OrderHeaderId = orderCreated.OrderHeaderId;
                 _response.Result = orderHeaderDto;
-                //_messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:CreateOrderQueue"));
             }
             catch (Exception ex)
             {
@@ -137,8 +132,6 @@ namespace Mango.Services.OrderAPI.Controllers
             return _response;
         }
 
-
-        [Authorize]
         [HttpPost("CreateStripeSession")]
         public async Task<ResponseDto> CreateStripeSession([FromBody] StripeRequestDto stripeRequestDto)
         {
@@ -202,8 +195,6 @@ namespace Mango.Services.OrderAPI.Controllers
             return _response;
         }
 
-
-        [Authorize]
         [HttpPost("ValidateStripeSession")]
         public async Task<ResponseDto> ValidateStripeSession([FromBody] int orderHeaderId)
         {
@@ -231,7 +222,6 @@ namespace Mango.Services.OrderAPI.Controllers
                         UserId = orderHeader.UserId
                     };
                     _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
-                    //_messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:CreateStripeSessionQueue"));
                 }
             }
             catch (Exception ex)
@@ -242,8 +232,6 @@ namespace Mango.Services.OrderAPI.Controllers
             return _response;
         }
 
-
-        [Authorize]
         [HttpPost("UpdateOrderStatus/{orderId:int}")]
         public async Task<ResponseDto> UpdateOrderStatus(int orderId, [FromBody] string newStatus)
         {
@@ -267,7 +255,6 @@ namespace Mango.Services.OrderAPI.Controllers
                     orderHeader.Status = newStatus;
                     _db.SaveChanges();
 
-                    //_messageBus.PublishMessage(JsonConvert.SerializeObject(orderHeader), _configuration.GetValue<string>("TopicAndQueueNames:UpdateOrderStatusQueue"));
                 }
             }
             catch (Exception ex)
@@ -290,7 +277,6 @@ namespace Mango.Services.OrderAPI.Controllers
                 {
                     _response.IsSuccess = false;
                     _response.Message = "Product is used in one or more orders.";
-                    //_messageBus.PublishMessage(_response.Message, _configuration.GetValue<string>("TopicAndQueueNames:ProductUsedInOrdersQueue"));
                     return _response;
                 }
                 _response.IsSuccess = true;
@@ -307,13 +293,17 @@ namespace Mango.Services.OrderAPI.Controllers
         }
 
         [HttpPost("GetUser")]
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        //[ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         public async Task<ResponseDto> GetUser([FromBody] string email)
         {
             ResponseDto response = new ResponseDto();
             try
             {
                 string value = _db2.StringGet(email);
+                if (string.IsNullOrEmpty(value))
+                {
+                    throw new ApplicationException($"No user {email} found in Redis store");
+                }
                 response.IsSuccess = true;
                 response.Message = "Success";
                 response.Result = value;

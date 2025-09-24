@@ -48,7 +48,6 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 builder.AddAppAuthetication();
-
 builder.Services.AddAuthorization();
 
 var app = builder.Build();

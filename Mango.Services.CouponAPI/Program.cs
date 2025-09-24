@@ -4,6 +4,7 @@ using Mango.Services.CouponAPI.Data;
 using Mango.Services.CouponAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -17,13 +18,10 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-var assemblies = Directory.GetFiles(AppContext.BaseDirectory, "*.dll")
-                          .Select(Assembly.LoadFrom)
-                          .ToArray();
 
 
 builder.Services.AddControllers();
@@ -54,12 +52,11 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 builder.AddAppAuthetication();
-
+//builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 
+
 var app = builder.Build();
-
-
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
@@ -72,11 +69,13 @@ app.UseSwaggerUI(c =>
     }
 });
 Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
+
 ApplyMigration();
 app.Run();
 
