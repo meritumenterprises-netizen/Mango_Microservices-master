@@ -42,7 +42,6 @@ namespace Mango.Services.AuthAPI.Controllers
                 _response.Message = errorMessage;
                 return BadRequest(_response);
             }
-            //await _messageBus.PublishMessage(model.Email, _configuration.GetValue<string>("TopicAndQueueNames:RegisterUserQueue"));
             _response.IsSuccess = true;
             _response.Message = "Registration successful";
             return Ok(_response);
@@ -60,7 +59,6 @@ namespace Mango.Services.AuthAPI.Controllers
             }
             _response.Result = loginResponse;
             _response.IsSuccess = true;
-            //await _messageBus.PublishMessage(model.UserName, _configuration.GetValue<string>("TopicAndQueueNames:LoginUserQueue"));
             return Ok(_response);
 
             return Ok(_response);
@@ -77,7 +75,6 @@ namespace Mango.Services.AuthAPI.Controllers
                 _response.Message = "Error encountered";
                 return BadRequest(_response);
             }
-            //await _messageBus.PublishMessage(model.Name + ":" + model.Role, _configuration.GetValue<string>("TopicAndQueueNames:AssignRolesQueue"));
             return Ok(_response);
 
         }
@@ -88,7 +85,6 @@ namespace Mango.Services.AuthAPI.Controllers
             _response.IsSuccess = true;
             _response.Message = "Logout successful";
             _db.StringSet(model.UserName, "");
-            //await _messageBus.PublishMessage(model.UserName, _configuration.GetValue<string>("TopicAndQueueNames:LogoutUserQueue"));
             return Ok(_response);
         }
 
