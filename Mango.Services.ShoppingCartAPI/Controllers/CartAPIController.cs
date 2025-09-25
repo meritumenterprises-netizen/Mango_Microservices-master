@@ -223,30 +223,5 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             }
             return _response;
         }
-        [HttpGet("ProductUsedInShoppingCarts/{id}")]
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
-        public ResponseDto ProductUsedInShoppingCarts(int id)
-        {
-            try
-            {
-                var productUsed = _db.CartDetails.Any((cartDetail) => cartDetail.ProductId == id);
-                if (productUsed)
-                {
-                    _response.IsSuccess = false;
-                    _response.Message = "Product is used in one or more shopping carts.";
-                    //_messageBus.PublishMessage(JsonConvert.SerializeObject(productUsed), _configuration.GetValue<string>("TopicAndQueueNames:ProductUsedInShoppingCartsQueue"));
-                    return _response;
-                }
-                _response.IsSuccess = true;
-                _response.Message = "";
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-            return _response;
-        }
-
     }
 }

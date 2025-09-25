@@ -250,32 +250,5 @@ namespace Mango.Services.OrderAPI.Controllers
             }
             return _response;
         }
-
-
-        [HttpGet("ProductUsedInOrders/{id}")]
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
-        public ResponseDto ProductUsedInOrders(int id)
-        {
-            try
-            {
-                var productUsed = _db.OrderDetails.Any((orderDetail) => orderDetail.ProductId == id);
-                if (productUsed)
-                {
-                    _response.IsSuccess = false;
-                    _response.Message = "Product is used in one or more orders.";
-                    return _response;
-                }
-                _response.IsSuccess = true;
-                _response.Message = "";
-
-
-            }
-            catch (Exception ex)
-            {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-            }
-            return _response;
-        }
     }
 }

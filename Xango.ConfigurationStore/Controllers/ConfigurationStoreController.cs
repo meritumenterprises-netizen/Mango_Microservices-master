@@ -72,7 +72,6 @@ namespace Xango.ConfigurationStore.Controllers
                     list.Add(new ServiceActionDto() { ActionName = "CreateStripeSession", ActionMethod = "https://localhost:7004/api/order/CreateStripeSession/{userId}", HttpMethod = "POST", IsAuthorized = true });
                     list.Add(new ServiceActionDto() { ActionName = "ValidateStripeSession", ActionMethod = "https://localhost:7004/api/order/ValidateStripeSession", HttpMethod = "POST", IsAuthorized = true });
                     list.Add(new ServiceActionDto() { ActionName = "UpdateOrderStatus", ActionMethod = "https://localhost:7004/api/order,UpdateOrderStatus/{orderId:int}", HttpMethod = "POST", IsAuthorized = true });
-                    list.Add(new ServiceActionDto() { ActionName = "ProductUsedInOrders", ActionMethod = "https://localhost:7004/api/order/ProductUsedInOrders/{id}", HttpMethod = "GET", IsAuthorized = true });                    
                     break;
                 case "shoppingcartapi":
                     list.Add(new ServiceActionDto() { ActionName = "GetCart", ActionMethod = "https://localhost:7003/api/shoppingcart/{userId}", HttpMethod = "GET" });
