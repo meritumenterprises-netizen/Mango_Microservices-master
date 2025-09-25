@@ -11,7 +11,7 @@ namespace Mango.Web.Service.IService
         Task<ResponseDto?> AssignRoleAsync(RegistrationRequestDto registrationRequestDto);
 
         Task<UserDto> GetUser(string email);
-        Task<ResponseDto?> SetUser(string email, UserDto userDto);
+        //Task<ResponseDto?> SetUser(string email, UserDto userDto);
         Task<UserDto> GetCurrentUser(HttpRequest request);
     }
 }

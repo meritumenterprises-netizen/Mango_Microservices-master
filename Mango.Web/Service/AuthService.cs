@@ -35,17 +35,6 @@ namespace Mango.Web.Service
             return userDto;
         }
 
-        public async Task<ResponseDto?> SetUser(string email, UserDto userDto)
-        {
-            return await _baseService.SendAsync(new RequestDto()
-            {
-                ApiType = SD.ApiType.POST,
-                Data = userDto,
-                Url = SD.AuthAPIBase + "/api/auth/SetUser/" + email
-            });
-        }
-
-
         public async Task<ResponseDto?> AssignRoleAsync(RegistrationRequestDto registrationRequestDto)
         {
             return await _baseService.SendAsync(new RequestDto()
