@@ -17,7 +17,7 @@ namespace Xango.Services.ShoppingCartAPI.Service
         public async Task<UserDto> GetUser(string userEmail)
         {
             var client = _httpClientFactory.CreateClient("Auth");
-            var response = await client.GetAsync($"/api/auth/GetUser?email=" + userEmail);
+            var response = await client.GetAsync($"/api/auth/GetUser/" + userEmail);
             var resp = response.Content.ReadFromJsonAsync<ResponseDto>().Result;
             if (resp != null && resp.IsSuccess)
             {

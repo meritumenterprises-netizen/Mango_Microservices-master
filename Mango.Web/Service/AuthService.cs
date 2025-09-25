@@ -29,7 +29,7 @@ namespace Mango.Web.Service
             {
                 ApiType = SD.ApiType.GET,
                 Data = "",
-                Url = SD.AuthAPIBase + "/api/auth/GetUser?email=" + email
+                Url = SD.AuthAPIBase + "/api/auth/GetUser/" + email
             });
             var userDto = JsonConvert.DeserializeObject<UserDto>(Convert.ToString(responseDto?.Result.ToString()));
             return userDto;
