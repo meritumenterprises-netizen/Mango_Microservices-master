@@ -17,7 +17,7 @@ namespace Mango.Services.OrderAPI.Controllers
 {
     [Route("api/order")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class OrderAPIController : ControllerBase
     {
         protected ResponseDto _response;
@@ -25,8 +25,6 @@ namespace Mango.Services.OrderAPI.Controllers
         private readonly AppDbContext _db;
         private IProductService _productService;
         private readonly IConfiguration _configuration;
-        private readonly ConnectionMultiplexer _redis = null;
-        private readonly IDatabase _db2 = null;
 
         public OrderAPIController(AppDbContext db,
             IProductService productService, IMapper mapper, IConfiguration configuration
@@ -37,14 +35,11 @@ namespace Mango.Services.OrderAPI.Controllers
             _productService = productService;
             _mapper = mapper;
             _configuration = configuration;
-            _redis = ConnectionMultiplexer.Connect("localhost");
-            _db2 = _redis.GetDatabase();
 
         }
 
         [HttpGet("GetAll")]
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
-        [Authorize]
         public ResponseDto? GetAll(string userId, string status = "all")
         {
             try

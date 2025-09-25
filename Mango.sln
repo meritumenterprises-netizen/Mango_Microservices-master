@@ -25,7 +25,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.Dto", "Xango
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dto", "Dto", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.ConfigurationStore", "Xango.ConfigurationStore\Xango.ConfigurationStore.csproj", "{64BF8F70-BB59-45DD-8BC0-E05CC9758D59}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.ConfigurationStoreApi", "Xango.ConfigurationStore\Xango.ConfigurationStoreApi.csproj", "{64BF8F70-BB59-45DD-8BC0-E05CC9758D59}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.MessagingAPI", "Xango.Services.MessagingAPI\Xango.Services.MessagingAPI.csproj", "{280E510F-D5D2-4DAB-9B14-302BB3896F18}"
 EndProject

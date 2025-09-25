@@ -27,7 +27,7 @@ namespace Mango.Services.ProductAPI.Controllers
         }
 
         [HttpGet]
-        //[ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         public ResponseDto Get()
         {
             try
@@ -62,7 +62,7 @@ namespace Mango.Services.ProductAPI.Controllers
         }
 
         [HttpPost]
-        //[Authorize(Roles = "ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         public ResponseDto Post(ProductDto ProductDto)
         {
             try
@@ -149,7 +149,6 @@ namespace Mango.Services.ProductAPI.Controllers
                 _db.SaveChanges();
 
                 _response.Result = _mapper.Map<ProductDto>(product);
-                //_messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:ProductUpdatedQueue"));
             }
             catch (Exception ex)
             {
