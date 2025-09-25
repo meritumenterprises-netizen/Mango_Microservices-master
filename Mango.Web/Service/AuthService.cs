@@ -1,6 +1,7 @@
 ﻿using Mango.Web.Models;
 using Mango.Web.Service.IService;
 using Mango.Web.Utility;
+using Newtonsoft.Json;
 using System.Web.Providers.Entities;
 using Xango.Services.Dto;
 
@@ -22,14 +23,16 @@ namespace Mango.Web.Service
             };
         }
 
-        public async Task<ResponseDto?> GetUser(string email)
+        public async Task<UserDto?> GetUser(string email)
         {
-            return await _baseService.SendAsync(new RequestDto
+            var responseDto = await _baseService.SendAsync(new RequestDto
             {
-                ApiType = SD.ApiType.POST,
-                Data = email,
-                Url = SD.AuthAPIBase + "/api/auth/GetUser"
+                ApiType = SD.ApiType.GET,
+                Data = "",
+                Url = SD.AuthAPIBase + "/api/auth/GetUser?email=" + email
             });
+            var userDto = JsonConvert.DeserializeObject<UserDto>(Convert.ToString(responseDto?.Result.ToString()));
+            return userDto;
         }
 
         public async Task<ResponseDto?> SetUser(string email, UserDto userDto)

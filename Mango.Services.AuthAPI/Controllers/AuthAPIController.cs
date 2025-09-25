@@ -3,7 +3,6 @@ using Mango.Services.AuthAPI.Models.Dto;
 using Mango.Services.AuthAPI.Service.IService;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using StackExchange.Redis;
 using System.Web;
 using Xango.Services.AuthAPI.Models.Dto;
 using Xango.Services.Dto;
@@ -17,8 +16,6 @@ namespace Mango.Services.AuthAPI.Controllers
         private readonly IAuthService _authService;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
-        private readonly ConnectionMultiplexer _redis = null;
-        private readonly IDatabase _db = null;
 
         protected ResponseDto _response;
         public AuthAPIController(IAuthService authService, IConfiguration configuration, IMapper mapper)
@@ -27,8 +24,6 @@ namespace Mango.Services.AuthAPI.Controllers
             _configuration = configuration;
             _mapper = mapper;
             _response = new();
-            _redis = ConnectionMultiplexer.Connect("localhost");
-            _db = _redis.GetDatabase();
         }
 
         [HttpPost("register")]
@@ -43,7 +38,6 @@ namespace Mango.Services.AuthAPI.Controllers
                 return BadRequest(_response);
             }
             var userDto = _authService.CurrentUser(model.Email).Result;
-            _db.StringSet(model.Email, JsonConvert.SerializeObject(userDto));
             _response.IsSuccess = true;
             _response.Message = "Registration successful";
             return Ok(_response);
@@ -60,7 +54,6 @@ namespace Mango.Services.AuthAPI.Controllers
                 return BadRequest(_response);
             }
             var user = _authService.CurrentUser(loginResponse.User.Email).Result;  
-            _db.StringSet(model.UserName, JsonConvert.SerializeObject(user));
             _response.Result = loginResponse;
             _response.IsSuccess = true;
             return Ok(_response);
@@ -88,50 +81,16 @@ namespace Mango.Services.AuthAPI.Controllers
         {
             _response.IsSuccess = true;
             _response.Message = "Logout successful";
-            _db.StringSet(model.UserName, "");
             return Ok(_response);
         }
 
-        [HttpPost("SaveUser")]
-        public async Task<ResponseDto> SaveUser(string email, [FromBody] UserDto user)
+        [HttpGet("GetUser")]
+        public async Task<IActionResult> GetUser(string email)
         {
-            ResponseDto response = new ResponseDto();
-            try
-            {
-                _db.StringSet(email, JsonConvert.SerializeObject(user));
-                response.IsSuccess = true;
-                response.Message = "Success";
-                response.Result = user;
-
-            }
-            catch (Exception ex)
-            {
-                response.IsSuccess = false;
-                response.Message = ex.Message;
-                response.Result = "";
-            }
-            return response;
-        }
-
-        [HttpPost("GetUser")]
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
-        public async Task<ResponseDto> GetUser([FromBody] string email)
-        {
-            ResponseDto response = new ResponseDto();
-            try
-            {
-                string value = _db.StringGet(email);
-                response.IsSuccess = true;
-                response.Message = "Success";
-                response.Result = value;
-            }
-            catch (Exception ex)
-            {
-                response.IsSuccess = false;
-                response.Message = ex.Message;
-                response.Result = "";
-            }
-            return response;
+            var userDto = await _authService.CurrentUser(email);
+            _response.IsSuccess = true;
+            _response.Result = JsonConvert.SerializeObject(userDto);
+            return Ok(_response);
         }
     }
 }

@@ -7,9 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using StackExchange.Redis;
 
 using Xango.Services.Dto;
+using Xango.Services.ShoppingCartAPI.Service.IService;
 
 namespace Mango.Services.ShoppingCartAPI.Controllers
 {
@@ -21,13 +21,12 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         private IMapper _mapper;
         private readonly AppDbContext _db;
         private IProductService _productService;
+        private IAuthService _authService;
         private ICouponService _couponService;
         private IConfiguration _configuration;
-        private readonly ConnectionMultiplexer _redis = null;
-        private readonly IDatabase _db2 = null;
 
         public CartAPIController(AppDbContext db,
-            IMapper mapper, IProductService productService, ICouponService couponService, IConfiguration configuration)
+            IMapper mapper, IProductService productService, ICouponService couponService, IConfiguration configuration, IAuthService authService)
         {
             _db = db;
             _productService = productService;
@@ -35,13 +34,12 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             _mapper = mapper;
             _couponService = couponService;
             _configuration = configuration;
-            _redis = ConnectionMultiplexer.Connect("localhost");
-            _db2 = _redis.GetDatabase();
+            _authService = authService;
 
         }
         [HttpGet("GetCart/{userId}")]
         [Authorize]
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        //[ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         public async Task<ResponseDto> GetCart(string userId)
         {
             try
@@ -50,7 +48,8 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 {
                     CartHeader = _mapper.Map<CartHeaderDto>(_db.CartHeaders.First(u => u.UserId== userId))
                 };
-                UserDto userDto = JsonConvert.DeserializeObject<UserDto>(_db2.StringGet(User.Claims.First((k) => k.Type == "name").Value));
+                var userEmail = User.Claims.Where((claim) => claim.Type == "name").First().Value;
+                var userDto = await _authService.GetUser(userEmail);
                 cart.CartHeader.Name = userDto.Name;
                 cart.CartHeader.Email = userDto.Email;
                 cart.CartHeader.Phone = userDto.PhoneNumber;
@@ -77,7 +76,6 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 }
 
                 _response.Result = cart;
-                //_messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:ShoppingCartRetrievedQueue"));
             }
             catch (Exception ex)
             {
@@ -98,7 +96,6 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 _db.CartHeaders.Update(cartFromDb);
                 await _db.SaveChangesAsync();
                 _response.Result = true;
-                //_messageBus.PublishMessage(cartFromDb.CouponCode, _configuration.GetValue<string>("TopicAndQueueNames:CouponAppliedQueue"));
             }
             catch (Exception ex)
             {
@@ -113,7 +110,6 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
         {
             try
             {
-                //await _messageBus.PublishMessage(cartDto, _configuration.GetValue<string>("TopicAndQueueNames:EmailShoppingCartQueue"));
                 _response.Result = true;
             }
             catch (Exception ex)
@@ -123,9 +119,6 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             }
             return _response;
         }
-
-
-
 
         [HttpPost("CartUpsert")]
         public async Task<ResponseDto> CartUpsert(CartDto cartDto)
@@ -253,27 +246,6 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 _response.Message = ex.Message;
             }
             return _response;
-        }
-
-        [HttpPost("GetUser")]
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
-        public async Task<ResponseDto> GetUser([FromBody] string email)
-        {
-            ResponseDto response = new ResponseDto();
-            try
-            {
-                string value = _db2.StringGet(email);
-                response.IsSuccess = true;
-                response.Message = "Success";
-                response.Result = value;
-            }
-            catch (Exception ex)
-            {
-                response.IsSuccess = false;
-                response.Message = ex.Message;
-                response.Result = "";
-            }
-            return response;
         }
 
     }

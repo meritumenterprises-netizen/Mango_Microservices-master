@@ -4,7 +4,6 @@ using Mango.Services.AuthAPI.Models.Dto;
 using Mango.Services.AuthAPI.Service.IService;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
-using StackExchange.Redis;
 using Xango.Services.Dto;
 
 namespace Mango.Services.AuthAPI.Service
@@ -15,8 +14,6 @@ namespace Mango.Services.AuthAPI.Service
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
-        private readonly ConnectionMultiplexer _redis;
-        private readonly IDatabase _dbRedis;
 
         public AuthService(AppDbContext db, IJwtTokenGenerator jwtTokenGenerator,
             UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
@@ -25,9 +22,6 @@ namespace Mango.Services.AuthAPI.Service
             _jwtTokenGenerator = jwtTokenGenerator;
             _userManager = userManager;
             _roleManager = roleManager;
-            _redis = ConnectionMultiplexer.Connect("localhost");
-            _dbRedis = _redis.GetDatabase();
-
         }
 
         public async Task<UserDto> CurrentUser(string email)
@@ -80,8 +74,6 @@ namespace Mango.Services.AuthAPI.Service
                 PhoneNumber = user.PhoneNumber
             };
 
-            _dbRedis.StringSet(userDTO.Email, JsonConvert.SerializeObject(userDTO));
-
             LoginResponseDto loginResponseDto = new LoginResponseDto()
             {
                 User = userDTO,
@@ -118,10 +110,6 @@ namespace Mango.Services.AuthAPI.Service
                     };
 
                     var resultAssignToRole = await AssignRole(user.Email, registrationRequestDto.Role);
-
-
-                    _dbRedis.StringSet(userDto.Email, JsonConvert.SerializeObject(userDto));
-
                     return "";
 
                 }

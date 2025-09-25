@@ -49,20 +49,10 @@ namespace Mango.Web.Service
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = SD.ApiType.GET,
+                Data = "",
                 Url = SD.ShoppingCartAPIBase + "/api/cart/GetCart/" + userId
             });
         }
-
-        public async Task<ResponseDto?> GetUser(string email)
-        {
-            return await _baseService.SendAsync(new RequestDto
-            {
-                ApiType = SD.ApiType.POST,
-                Data = email,
-                Url = SD.AuthAPIBase + "/api/cart/GetUser"
-            });
-        }
-
 
 
         public async Task<ResponseDto?> RemoveFromCartAsync(int cartDetailsId)

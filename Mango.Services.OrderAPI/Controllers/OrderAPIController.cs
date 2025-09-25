@@ -43,7 +43,7 @@ namespace Mango.Services.OrderAPI.Controllers
         }
 
         [HttpGet("GetAll")]
-        //[ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         [Authorize]
         public ResponseDto? GetAll(string userId, string status = "all")
         {
@@ -242,19 +242,10 @@ namespace Mango.Services.OrderAPI.Controllers
                 {
                     if (newStatus == SD.Status_Cancelled)
                     {
-                        //we will give refund
-                        var options = new RefundCreateOptions
-                        {
-                            Reason = RefundReasons.RequestedByCustomer,
-                            PaymentIntent = orderHeader.PaymentIntentId
-                        };
-
-                        //var service = new RefundService();
-                        //Refund refund = service.Create(options);
+                        // TODO: we will give refund
                     }
                     orderHeader.Status = newStatus;
                     _db.SaveChanges();
-
                 }
             }
             catch (Exception ex)
@@ -291,31 +282,5 @@ namespace Mango.Services.OrderAPI.Controllers
             }
             return _response;
         }
-
-        [HttpPost("GetUser")]
-        //[ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
-        public async Task<ResponseDto> GetUser([FromBody] string email)
-        {
-            ResponseDto response = new ResponseDto();
-            try
-            {
-                string value = _db2.StringGet(email);
-                if (string.IsNullOrEmpty(value))
-                {
-                    throw new ApplicationException($"No user {email} found in Redis store");
-                }
-                response.IsSuccess = true;
-                response.Message = "Success";
-                response.Result = value;
-            }
-            catch (Exception ex)
-            {
-                response.IsSuccess = false;
-                response.Message = ex.Message;
-                response.Result = "";
-            }
-            return response;
-        }
-
     }
 }

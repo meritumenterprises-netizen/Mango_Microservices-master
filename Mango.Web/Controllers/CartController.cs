@@ -31,7 +31,7 @@ namespace Mango.Web.Controllers
         [Authorize]
         public async Task<IActionResult> Checkout()
         {
-            UserDto userDto = JsonConvert.DeserializeObject<UserDto>(_authService.GetUser(User.Identity.Name).Result.Result.ToString());
+            UserDto userDto = await _authService.GetUser(User.Identity.Name);
             var cartDto = JsonConvert.DeserializeObject<CartDto>(_cartService.GetCartByUserIdAsnyc(userDto.ID.ToString()).Result.Result.ToString());
             return View(cartDto);
         }
@@ -152,11 +152,11 @@ namespace Mango.Web.Controllers
             return View();
         }
 
-
         private async Task<CartDto> LoadCartDtoBasedOnLoggedInUser()
         {
-            var userDto = JsonConvert.DeserializeObject<UserDto>(_authService.GetUser(User.Identity.Name).Result.Result.ToString());
-            ResponseDto? response = await _cartService.GetCartByUserIdAsnyc(userDto.ID.ToString());
+            var userEmail = User.Claims.Where((claim) => claim.Type == "email").First().Value;
+            var userDto= await _authService.GetUser(userEmail);
+            ResponseDto? response = await _cartService.GetCartByUserIdAsnyc(userDto.ID);
             if (response != null & response.IsSuccess)
             {
                 CartDto cartDto = JsonConvert.DeserializeObject<CartDto>(Convert.ToString(response.Result));
