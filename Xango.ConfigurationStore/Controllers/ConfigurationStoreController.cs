@@ -14,19 +14,26 @@ namespace Xango.ConfigurationStore.Controllers
             _response = new ResponseDto();
         }
 
-        [HttpGet("Index")]
-        public IActionResult Index()
+        [HttpPost("RegisterService")]
+        public async Task<IActionResult> RegisterService()
         {
-            return View();
+            return Ok();
         }
 
-        [HttpGet("GetInfo")]
-        public ResponseDto GetInfo()
+        [HttpGet("ListServices")]
+        public async Task<ResponseDto> ListServices()
         {
             _response.IsSuccess = true;
             _response.Message = "All is alright";
             return _response;
         }
 
+        [HttpGet("GetServiceMethods/{servicename}")]
+        public async Task<ResponseDto> GetServiceMethods(string servicename)
+        {
+            _response.IsSuccess = true;
+            _response.Message = "All is alright";
+            return _response;
+        }
     }
 }

@@ -18,14 +18,5 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     }
-  },
-  "$schema": "http://json.schemastore.org/launchsettings.json",
-  "iisSettings": {
-    "windowsAuthentication": false,
-    "anonymousAuthentication": true,
-    "iisExpress": {
-      "applicationUrl": "http://localhost:2288",
-      "sslPort": 44377
-    }
   }
 }

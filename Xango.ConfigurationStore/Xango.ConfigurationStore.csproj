@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Xango.Services.Dto\Xango.Services.Dto.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="NewFolder\" />
+  </ItemGroup>
+
 </Project>
