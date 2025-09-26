@@ -12,12 +12,12 @@ using Xango.Services.Interfaces;
 
 namespace Mango.Web.Controllers
 {
-    public class AuthController : Controller
+    public class AuthAPIController : Controller
     {
         private readonly IAuthService _authService;
         private readonly ITokenProvider _tokenProvider;
 
-        public AuthController(IAuthService authService, ITokenProvider tokenProvider)
+        public AuthAPIController(IAuthService authService, ITokenProvider tokenProvider)
         {
             _authService = authService;
             _tokenProvider = tokenProvider;

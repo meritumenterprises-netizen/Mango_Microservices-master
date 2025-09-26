@@ -46,15 +46,18 @@ namespace Mango.Services.AuthAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto model)
         {
-            var loginResponse = JsonConvert.DeserializeObject<LoginResponseDto>(_authService.Login(model).GetAwaiter().GetResult().Result.ToString());
-            if (loginResponse.User == null)
+            var response = await _authService.Login(model);
+            var loginResponseDto = (LoginResponseDto)response.Result; 
+            var userDto = loginResponseDto.User;
+
+            if (userDto == null)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Username or password is incorrect";
                 return BadRequest(_response);
             }
-            var user = _authService.GetUser(loginResponse.User.Email).Result;  
-            _response.Result = loginResponse;
+            var user = _authService.GetUser(userDto.Email).Result;  
+            _response.Result = JsonConvert.SerializeObject(userDto);
             _response.IsSuccess = true;
             return Ok(_response);
 
