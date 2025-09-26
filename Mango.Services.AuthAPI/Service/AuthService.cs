@@ -4,6 +4,7 @@ using Mango.Services.AuthAPI.Service.IService;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
+using Xango.Services.Interfaces;
 
 namespace Mango.Services.AuthAPI.Service
 {
@@ -23,42 +24,68 @@ namespace Mango.Services.AuthAPI.Service
             _roleManager = roleManager;
         }
 
-        public async Task<UserDto> CurrentUser(string email)
+        public async Task<ResponseDto?> GetUser(string email)
         {
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
             if (user != null)
             {
-                return new UserDto() { ID = user.Id, Name = user.Name, Email = user.Email, PhoneNumber = user.PhoneNumber };
-            }
-            return new UserDto();
-        }
-
-        public async Task<bool> AssignRole(string email, string roleName)
-        {
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
-            if (user != null)
-            {
-                if (!_roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult())
+                var response = new ResponseDto()
                 {
-                    //create role if it does not exist
-                    _roleManager.CreateAsync(new IdentityRole(roleName)).GetAwaiter().GetResult();
-                }
-                await _userManager.AddToRoleAsync(user, roleName);
-                return true;
+                    IsSuccess = true,
+                    Result = JsonConvert.SerializeObject(new UserDto() { ID = user.Id, Name = user.Name, Email = user.Email, PhoneNumber = user.PhoneNumber })
+                };
+                return response;
             }
-            return false;
-
+            return new ResponseDto();
         }
 
-        public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
+        public async Task<ResponseDto?> CurrentUser(string email)
         {
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
+            if (user != null)
+            {
+                var response = new ResponseDto()
+                {
+                    IsSuccess = true,
+                    Result = JsonConvert.SerializeObject(new UserDto() { ID = user.Id, Name = user.Name, Email = user.Email, PhoneNumber = user.PhoneNumber })
+                };
+                return response;
+            }
+            return new ResponseDto();
+        }
+
+        //public async Task<ResponseDto?> AssignRole(string email, string roleName)
+        //{
+        //    var responseDto = new ResponseDto();
+        //    var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
+        //    if (user != null)
+        //    {
+        //        if (!_roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult())
+        //        {
+        //            //create role if it does not exist
+        //            _roleManager.CreateAsync(new IdentityRole(roleName)).GetAwaiter().GetResult();
+        //        }
+        //        await _userManager.AddToRoleAsync(user, roleName);
+        //        responseDto.IsSuccess = true;
+        //        return responseDto;
+        //    }
+        //    responseDto.IsSuccess = false;
+        //    return responseDto;
+
+        //}
+
+        public async Task<ResponseDto> Login(LoginRequestDto loginRequestDto)
+        {
+            var responseDto = new ResponseDto();
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDto.UserName.ToLower());
 
             bool isValid = await _userManager.CheckPasswordAsync(user, loginRequestDto.Password);
 
             if (user == null || isValid == false)
             {
-                return new LoginResponseDto() { User = null, Token = "" };
+                responseDto.IsSuccess = false;
+                responseDto.Result = JsonConvert.SerializeObject(new LoginResponseDto() { User = null, Token = "" });
+                return responseDto;
             }
 
             //if user was found , Generate JWT Token
@@ -78,11 +105,12 @@ namespace Mango.Services.AuthAPI.Service
                 User = userDTO,
                 Token = token
             };
+            responseDto.Result = JsonConvert.SerializeObject(loginResponseDto);
 
-            return loginResponseDto;
+            return responseDto;
         }
 
-        public async Task<string> Register(RegistrationRequestDto registrationRequestDto)
+        public async Task<ResponseDto?> Register(RegistrationRequestDto registrationRequestDto)
         {
             ApplicationUser user = new()
             {
@@ -108,21 +136,46 @@ namespace Mango.Services.AuthAPI.Service
                         PhoneNumber = userToReturn.PhoneNumber
                     };
 
-                    var resultAssignToRole = await AssignRole(user.Email, registrationRequestDto.Role);
-                    return "";
+                    var responseDto = await AssignRole(new RegistrationRequestDto() { Email = user.Email, Role = registrationRequestDto.Role });
+                    return responseDto;
 
                 }
                 else
                 {
-                    return result.Errors.FirstOrDefault().Description;
+                    return new ResponseDto() { IsSuccess = false, Message = result.Errors.FirstOrDefault().Description };
                 }
 
             }
             catch (Exception ex)
             {
-
+                return new ResponseDto() { IsSuccess = false, Message = ex.Message};
             }
-            return "Error Encountered";
+            return new ResponseDto() { IsSuccess = false };
+        }
+
+        public async Task<ResponseDto?> Logout(LogoutRequestDto logoutRequestDto)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<ResponseDto?> AssignRole(RegistrationRequestDto registrationRequestDto)
+        {
+            var responseDto = new ResponseDto();
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == registrationRequestDto.Email.ToLower());
+            if (user != null)
+            {
+                if (!_roleManager.RoleExistsAsync(registrationRequestDto.Role).GetAwaiter().GetResult())
+                {
+                    //create role if it does not exist
+                    _roleManager.CreateAsync(new IdentityRole(registrationRequestDto.Role)).GetAwaiter().GetResult();
+                }
+                _userManager.AddToRoleAsync(user,registrationRequestDto.Role);
+                responseDto.IsSuccess = true;
+                return responseDto;
+            }
+            responseDto.IsSuccess = false;
+            responseDto.Message = "User does not exist";
+            return responseDto;
         }
     }
 }

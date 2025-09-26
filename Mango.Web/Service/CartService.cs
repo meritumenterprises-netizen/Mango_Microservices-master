@@ -1,7 +1,7 @@
 ﻿using Mango.Web.Service.IService;
 using Mango.Web.Utility;
 using Xango.Models.Dto;
-
+using Xango.Services.Interfaces;
 
 namespace Mango.Web.Service
 {
@@ -13,7 +13,7 @@ namespace Mango.Web.Service
             _baseService = baseService;
         }
 
-        public async Task<ResponseDto?> ApplyCouponAsync(CartDto cartDto)
+        public async Task<ResponseDto?> ApplyCoupon(CartDto cartDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -43,7 +43,7 @@ namespace Mango.Web.Service
             });
         }
 
-        public async Task<ResponseDto?> GetCartByUserIdAsnyc(string userId)
+        public async Task<ResponseDto?> GetCartByUserId(string userId)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -54,7 +54,7 @@ namespace Mango.Web.Service
         }
 
 
-        public async Task<ResponseDto?> RemoveFromCartAsync(int cartDetailsId)
+        public async Task<ResponseDto?> RemoveFromCart(int cartDetailsId)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -65,7 +65,7 @@ namespace Mango.Web.Service
         }
 
 
-        public async Task<ResponseDto?> UpsertCartAsync(CartDto cartDto)
+        public async Task<ResponseDto?> UpsertCart(CartDto cartDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {

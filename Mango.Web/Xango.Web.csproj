@@ -22,6 +22,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Mango.Services.OrderAPI\Xango.Services.OrderAPI.csproj" />
     <ProjectReference Include="..\Xango.Services.Dto\Xango.Services.Dto.csproj" />
+    <ProjectReference Include="..\Xango.Services.Interfaces\Xango.Services.Interfaces.csproj" />
   </ItemGroup>
 
 </Project>

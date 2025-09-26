@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using Xango.Models.Dto;
-using Xango.Services.Dto;
+using Xango.Services.Interfaces;
 
 
 namespace Mango.Web.Controllers
@@ -31,8 +31,9 @@ namespace Mango.Web.Controllers
         [Authorize]
         public async Task<IActionResult> Checkout()
         {
-            UserDto userDto = await _authService.GetUser(User.Identity.Name);
-            var cartDto = JsonConvert.DeserializeObject<CartDto>(_cartService.GetCartByUserIdAsnyc(userDto.ID.ToString()).Result.Result.ToString());
+            var responseDto = await _authService.GetUser(User.Identity.Name);
+            UserDto userDto = JsonConvert.DeserializeObject<UserDto>(JsonConvert.SerializeObject(responseDto.Result));
+            var cartDto = JsonConvert.DeserializeObject<CartDto>(_cartService.GetCartByUserId(userDto.ID.ToString()).Result.Result.ToString());
             return View(cartDto);
         }
 
@@ -90,7 +91,7 @@ namespace Mango.Web.Controllers
             if (response != null & response.IsSuccess)
             {
                 OrderHeaderDto orderHeader = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
-                var cartDto = _cartService.GetCartByUserIdAsnyc(orderHeader.UserId);
+                var cartDto = _cartService.GetCartByUserId(orderHeader.UserId);
                 _cartService.DeleteCart(orderHeader.UserId);
                 if (orderHeader.Status == SD.Status_Approved)
                 {
@@ -104,7 +105,7 @@ namespace Mango.Web.Controllers
         public async Task<IActionResult> Remove(int cartDetailsId)
         {
             var userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
-            ResponseDto? response = await _cartService.RemoveFromCartAsync(cartDetailsId);
+            ResponseDto? response = await _cartService.RemoveFromCart(cartDetailsId);
             if (response != null & response.IsSuccess)
             {
                 TempData["success"] = "Cart updated successfully";
@@ -117,7 +118,7 @@ namespace Mango.Web.Controllers
         public async Task<IActionResult> ApplyCoupon(CartDto cartDto)
         {
 
-            ResponseDto? response = await _cartService.ApplyCouponAsync(cartDto);
+            ResponseDto? response = await _cartService.ApplyCoupon(cartDto);
             if (response != null & response.IsSuccess)
             {
                 TempData["success"] = "Cart updated successfully";
@@ -144,7 +145,7 @@ namespace Mango.Web.Controllers
         public async Task<IActionResult> RemoveCoupon(CartDto cartDto)
         {
             cartDto.CartHeader.CouponCode = "";
-            ResponseDto? response = await _cartService.ApplyCouponAsync(cartDto);
+            ResponseDto? response = await _cartService.ApplyCoupon(cartDto);
             if (response != null & response.IsSuccess)
             {
                 TempData["success"] = "Cart updated successfully";
@@ -156,8 +157,9 @@ namespace Mango.Web.Controllers
         private async Task<CartDto> LoadCartDtoBasedOnLoggedInUser()
         {
             var userEmail = User.Claims.Where((claim) => claim.Type == "email").First().Value;
-            var userDto= await _authService.GetUser(userEmail);
-            ResponseDto? response = await _cartService.GetCartByUserIdAsnyc(userDto.ID);
+            var responseDto = await _authService.GetUser(userEmail);
+            var userDto= JsonConvert.DeserializeObject<UserDto>(JsonConvert.SerializeObject(responseDto.Result));
+            ResponseDto? response = await _cartService.GetCartByUserId(userDto.ID);
             if (response != null & response.IsSuccess)
             {
                 CartDto cartDto = JsonConvert.DeserializeObject<CartDto>(Convert.ToString(response.Result));

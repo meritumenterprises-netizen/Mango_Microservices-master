@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure;
 using Mango.Services.OrderAPI.Models;
 using Mango.Web.Service.IService;
 using Mango.Web.Utility;
@@ -10,7 +9,7 @@ using Stripe;
 using Stripe.Checkout;
 using System.IdentityModel.Tokens.Jwt;
 using Xango.Models.Dto;
-using Xango.Services.Dto;
+using Xango.Services.Interfaces;
 
 namespace Mango.Web.Controllers
 {

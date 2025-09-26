@@ -1,6 +1,7 @@
 ﻿using Mango.Web.Service.IService;
 using Mango.Web.Utility;
 using Xango.Models.Dto;
+using Xango.Services.Interfaces;    
 
 namespace Mango.Web.Service
 {
@@ -12,7 +13,7 @@ namespace Mango.Web.Service
             _baseService = baseService;
         }
 
-        public async Task<ResponseDto?> CreateProductsAsync(ProductDto productDto)
+        public async Task<ResponseDto?> CreateProducts(ProductDto productDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -23,7 +24,7 @@ namespace Mango.Web.Service
             });
         }
 
-        public async Task<ResponseDto?> DeleteProductAsync(int id)
+        public async Task<ResponseDto?> DeleteProduct(int id)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -32,7 +33,7 @@ namespace Mango.Web.Service
             });
         }
 
-        public async Task<ResponseDto?> GetAllProductsAsync()
+        public async Task<ResponseDto?> GetAllProducts()
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -43,7 +44,7 @@ namespace Mango.Web.Service
 
 
 
-        public async Task<ResponseDto?> GetProductByIdAsync(int id)
+        public async Task<ResponseDto?> GetProductById(int id)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -52,7 +53,7 @@ namespace Mango.Web.Service
             });
         }
 
-        public async Task<ResponseDto?> UpdateProductsAsync(ProductDto productDto)
+        public async Task<ResponseDto?> UpdateProducts(ProductDto productDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {

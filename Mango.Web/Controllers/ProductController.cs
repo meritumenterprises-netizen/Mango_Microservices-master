@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
-
+using Xango.Services.Interfaces;
 
 namespace Mango.Web.Controllers
 {
@@ -19,7 +19,7 @@ namespace Mango.Web.Controllers
         {
             List<ProductDto>? list = new();
 
-            ResponseDto? response = await _productService.GetAllProductsAsync();
+            ResponseDto? response = await _productService.GetAllProducts();
 
             if (response != null && response.IsSuccess)
             {
@@ -43,7 +43,7 @@ namespace Mango.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                ResponseDto? response = await _productService.CreateProductsAsync(model);
+                ResponseDto? response = await _productService.CreateProducts(model);
 
                 if (response != null && response.IsSuccess)
                 {
@@ -60,7 +60,7 @@ namespace Mango.Web.Controllers
 
         public async Task<IActionResult> DeleteProduct(int productId)
         {
-            var response = await _productService.DeleteProductAsync(productId);
+            var response = await _productService.DeleteProduct(productId);
 
             if (response != null && response.IsSuccess)
             {
@@ -76,7 +76,7 @@ namespace Mango.Web.Controllers
 
         public async Task<IActionResult> ProductEdit(int productId)
         {
-            ResponseDto? response = await _productService.GetProductByIdAsync(productId);
+            ResponseDto? response = await _productService.GetProductById(productId);
 
             if (response != null && response.IsSuccess)
             {
@@ -95,7 +95,7 @@ namespace Mango.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                ResponseDto? response = await _productService.UpdateProductsAsync(productDto);
+                ResponseDto? response = await _productService.UpdateProducts(productDto);
 
                 if (response != null && response.IsSuccess)
                 {

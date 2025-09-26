@@ -8,6 +8,7 @@ using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Xango.Models.Dto;
+using Xango.Services.Interfaces;
 
 namespace Mango.Web.Controllers
 {
@@ -32,7 +33,7 @@ namespace Mango.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequestDto obj)
         {
-            ResponseDto responseDto = await _authService.LoginAsync(obj);
+            ResponseDto responseDto = await _authService.Login(obj);
 
             if (responseDto != null && responseDto.IsSuccess)
             {
@@ -54,7 +55,7 @@ namespace Mango.Web.Controllers
         public async Task<IActionResult> Logout(LogoutRequestDto obj)
         {
             obj.UserName = User?.Identity?.Name;
-            ResponseDto responseDto = await _authService.LogoutAsync(obj);
+            ResponseDto responseDto = await _authService.Logout(obj);
             await HttpContext.SignOutAsync();
             _tokenProvider.ClearToken();
             TempData.Remove("error");
@@ -78,7 +79,7 @@ namespace Mango.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegistrationRequestDto obj)
         {
-            ResponseDto result = await _authService.RegisterAsync(obj);
+            ResponseDto result = await _authService.Register(obj);
             ResponseDto assingRole;
 
             if (result != null && result.IsSuccess)
@@ -87,7 +88,7 @@ namespace Mango.Web.Controllers
                 {
                     obj.Role = SD.RoleCustomer;
                 }
-                assingRole = await _authService.AssignRoleAsync(obj);
+                assingRole = await _authService.AssignRole(obj);
                 if (assingRole != null && assingRole.IsSuccess)
                 {
                     TempData["success"] = "Registration Successful";

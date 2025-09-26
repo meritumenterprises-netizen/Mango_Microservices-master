@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using Xango.Models.Dto;
+using Xango.Services.Interfaces;
 
 namespace Mango.Web.Controllers
 {
@@ -24,7 +25,7 @@ namespace Mango.Web.Controllers
         {
             List<ProductDto>? list = new();
 
-            ResponseDto? response = await _productService.GetAllProductsAsync();
+            ResponseDto? response = await _productService.GetAllProducts();
 
             if (response != null && response.IsSuccess)
             {
@@ -43,7 +44,7 @@ namespace Mango.Web.Controllers
         {
             ProductDto? model = new();
 
-            ResponseDto? response = await _productService.GetProductByIdAsync(productId);
+            ResponseDto? response = await _productService.GetProductById(productId);
 
             if (response != null && response.IsSuccess)
             {
@@ -80,7 +81,7 @@ namespace Mango.Web.Controllers
             List<CartDetailsDto> cartDetailsDtos = new() { cartDetails };
             cartDto.CartDetails = cartDetailsDtos;
 
-            ResponseDto? response = await _cartService.UpsertCartAsync(cartDto);
+            ResponseDto? response = await _cartService.UpsertCart(cartDto);
 
             if (response != null && response.IsSuccess)
             {

@@ -1,6 +1,7 @@
 ﻿using Mango.Web.Service.IService;
 using Mango.Web.Utility;
 using Xango.Models.Dto;
+using Xango.Services.Interfaces;
 
 namespace Mango.Web.Service
 {
@@ -12,7 +13,7 @@ namespace Mango.Web.Service
             _baseService = baseService;
         }
 
-        public async Task<ResponseDto?> CreateCouponsAsync(CouponDto couponDto)
+        public async Task<ResponseDto?> CreateCoupons(CouponDto couponDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -22,7 +23,7 @@ namespace Mango.Web.Service
             });
         }
 
-        public async Task<ResponseDto?> DeleteCouponsAsync(int id)
+        public async Task<ResponseDto?> DeleteCoupons(int id)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -31,7 +32,7 @@ namespace Mango.Web.Service
             });
         }
 
-        public async Task<ResponseDto?> GetAllCouponsAsync()
+        public async Task<ResponseDto?> GetAllCoupons()
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -40,7 +41,7 @@ namespace Mango.Web.Service
             });
         }
 
-        public async Task<ResponseDto?> GetCouponAsync(string couponCode)
+        public async Task<ResponseDto?> GetCoupon(string couponCode)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -49,7 +50,7 @@ namespace Mango.Web.Service
             });
         }
 
-        public async Task<ResponseDto?> GetCouponByIdAsync(int id)
+        public async Task<ResponseDto?> GetCouponById(int id)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -58,7 +59,7 @@ namespace Mango.Web.Service
             });
         }
 
-        public async Task<ResponseDto?> UpdateCouponsAsync(CouponDto couponDto)
+        public async Task<ResponseDto?> UpdateCoupons(CouponDto couponDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {

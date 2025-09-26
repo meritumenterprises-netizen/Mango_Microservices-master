@@ -37,6 +37,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "Integra
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ContractTests", "ContractTests", "{85731118-5519-45C8-B68D-B99C34350BF9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Interfaces", "Interfaces", "{D9D3E35F-4441-4359-B8D3-62FE7F83C299}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.Interfaces", "Xango.Services.Interfaces\Xango.Services.Interfaces.csproj", "{8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -79,6 +83,10 @@ Global
 		{280E510F-D5D2-4DAB-9B14-302BB3896F18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{280E510F-D5D2-4DAB-9B14-302BB3896F18}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{280E510F-D5D2-4DAB-9B14-302BB3896F18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -97,6 +105,8 @@ Global
 		{62954A90-B3DD-4AA8-8A5C-6AA12C249684} = {826ABE7B-8994-495E-8E63-9F003FEDB3E6}
 		{1526836E-8499-490D-8F71-C684B2995D8F} = {826ABE7B-8994-495E-8E63-9F003FEDB3E6}
 		{85731118-5519-45C8-B68D-B99C34350BF9} = {826ABE7B-8994-495E-8E63-9F003FEDB3E6}
+		{D9D3E35F-4441-4359-B8D3-62FE7F83C299} = {ADB819A7-64B4-4AFF-BA2B-69EFB3F6577A}
+		{8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F} = {D9D3E35F-4441-4359-B8D3-62FE7F83C299}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {929D2BC7-133A-46CF-89C4-0315B8019576}

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
+using Xango.Services.Interfaces;    
 
 namespace Mango.Web.Controllers
 {
@@ -18,7 +19,7 @@ namespace Mango.Web.Controllers
         {
             List<CouponDto>? list = new();
 
-            ResponseDto? response = await _couponService.GetAllCouponsAsync();
+            ResponseDto? response = await _couponService.GetAllCoupons();
 
             if (response != null && response.IsSuccess)
             {
@@ -42,7 +43,7 @@ namespace Mango.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                ResponseDto? response = await _couponService.CreateCouponsAsync(model);
+                ResponseDto? response = await _couponService.CreateCoupons(model);
 
                 if (response != null && response.IsSuccess)
                 {
@@ -59,7 +60,7 @@ namespace Mango.Web.Controllers
 
         public async Task<IActionResult> CouponDelete(int couponId)
         {
-            ResponseDto? response = await _couponService.GetCouponByIdAsync(couponId);
+            ResponseDto? response = await _couponService.GetCouponById(couponId);
 
             if (response != null && response.IsSuccess)
             {
@@ -76,7 +77,7 @@ namespace Mango.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> CouponDelete(CouponDto couponDto)
         {
-            ResponseDto? response = await _couponService.DeleteCouponsAsync(couponDto.CouponId);
+            ResponseDto? response = await _couponService.DeleteCoupons(couponDto.CouponId);
 
             if (response != null && response.IsSuccess)
             {

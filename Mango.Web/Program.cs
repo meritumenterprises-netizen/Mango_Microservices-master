@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using Xango.Web;
 using Xango.Web.Mapping;
 using Xango.Models.Dto;
+using Xango.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 

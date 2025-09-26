@@ -1,6 +1,6 @@
 ﻿using Xango.Models.Dto;
 
-namespace Mango.Web.Service.IService
+namespace Xango.Services.Interfaces
 {
     public interface IOrderService
     {
@@ -11,5 +11,6 @@ namespace Mango.Web.Service.IService
         Task<ResponseDto?> GetOrder(int orderId);
         Task<ResponseDto?> UpdateOrderStatus(int orderId, string newStatus);
         Task<ResponseDto?> GetUser(string email);
+
     }
 }

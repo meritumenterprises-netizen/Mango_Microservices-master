@@ -1,4 +1,5 @@
 ﻿using Mango.Web.Service.IService;
+using Xango.Services.Interfaces;
 using Mango.Web.Utility;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
@@ -13,27 +14,38 @@ namespace Mango.Web.Service
             _baseService = baseService;
         }
 
-        public async Task<UserDto> GetCurrentUser(HttpRequest request)
+        public async Task<ResponseDto?> GetCurrentUser(HttpRequest request)
         {
-            return new UserDto()
+
+            var userDto = new UserDto()
             {
                 Email = request.HttpContext.User.Identity.Name
             };
+            var responseDto = new ResponseDto()
+            {
+                IsSuccess = true,
+                Result = JsonConvert.SerializeObject(userDto)
+            };
+            return responseDto;
         }
 
-        public async Task<UserDto?> GetUser(string email)
+        public async Task<ResponseDto?> GetUser(string email)
         {
-            var responseDto = await _baseService.SendAsync(new RequestDto
+            var requestDto= await _baseService.SendAsync(new RequestDto
             {
                 ApiType = ApiType.GET,
                 Data = "",
                 Url = SD.AuthAPIBase + "/api/auth/GetUser/" + email
             });
-            var userDto = JsonConvert.DeserializeObject<UserDto>(Convert.ToString(responseDto?.Result.ToString()));
-            return userDto;
+            var responseDto = new ResponseDto()
+            {
+                IsSuccess = true,
+                Result = JsonConvert.DeserializeObject<UserDto>(Convert.ToString(requestDto?.Result.ToString()))
+            };
+            return responseDto;
         }
 
-        public async Task<ResponseDto?> AssignRoleAsync(Xango.Models.Dto.RegistrationRequestDto registrationRequestDto)
+        public async Task<ResponseDto?> AssignRole(Xango.Models.Dto.RegistrationRequestDto registrationRequestDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -43,7 +55,7 @@ namespace Mango.Web.Service
             });
         }
 
-        public async Task<ResponseDto?> LoginAsync(Xango.Models.Dto.LoginRequestDto loginRequestDto)
+        public async Task<ResponseDto?> Login(Xango.Models.Dto.LoginRequestDto loginRequestDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -53,7 +65,7 @@ namespace Mango.Web.Service
             }, withBearer: false);
         }
 
-        public async Task<ResponseDto?> RegisterAsync(Xango.Models.Dto.RegistrationRequestDto registrationRequestDto)
+        public async Task<ResponseDto?> Register(Xango.Models.Dto.RegistrationRequestDto registrationRequestDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -63,7 +75,7 @@ namespace Mango.Web.Service
             }, withBearer: false);
         }
 
-        public async Task<ResponseDto?> LogoutAsync(Xango.Models.Dto.LogoutRequestDto logoutRequestDto)
+        public async Task<ResponseDto?> Logout(Xango.Models.Dto.LogoutRequestDto logoutRequestDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
@@ -72,5 +84,11 @@ namespace Mango.Web.Service
                 Url = SD.AuthAPIBase + "/api/auth/logout"
             });
         }
+
+        public async Task<ResponseDto> CurrentUser(string email)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
