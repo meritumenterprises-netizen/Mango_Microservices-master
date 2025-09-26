@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Connections;
-using Microsoft.AspNetCore.Mvc;
-using System.Text;
-using Xango.Models.Dto;
+﻿using AutoMapper;
 using Confluent.Kafka;
-using System.Web.Http;
-using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Web;
+using Xango.Models.Dto;
 
 namespace Xango.Services.MessagingAPI.Controllers
 {
@@ -22,6 +22,7 @@ namespace Xango.Services.MessagingAPI.Controllers
         }
 
         [HttpPost]
+        [ActionName("PublishMessage")]
         public async Task<ResponseDto> PublishMessage(object messageObj, string topic_queue_Name)
         {
             var config = new ProducerConfig
