@@ -1,5 +1,4 @@
-﻿using Mango.Services.AuthAPI.Models.Dto;
-using Xango.Services.Dto;
+﻿using Xango.Models.Dto;
 
 namespace Mango.Services.AuthAPI.Service.IService
 {

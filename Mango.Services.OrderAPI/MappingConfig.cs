@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
+using Xango.Models.Dto;
+using Xango.Services.Dto;
 using Mango.Services.OrderAPI.Models;
-using Mango.Services.OrderAPI.Models.Dto;
 using System.Runtime.CompilerServices;
 
 namespace Mango.Services.OrderAPI
@@ -23,7 +24,7 @@ namespace Mango.Services.OrderAPI
 
                 config.CreateMap<OrderHeader, OrderHeaderDto>().ReverseMap();
                 config.CreateMap<OrderDetailsDto, OrderDetails>().ReverseMap();
-            }, (ILoggerFactory)new LoggerFactory());
+            }, (ILoggerFactory)new Microsoft.Extensions.Logging.LoggerFactory());
 
             return mappingConfig;
         }

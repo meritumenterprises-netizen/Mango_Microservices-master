@@ -1,6 +1,7 @@
-﻿using Mango.Services.OrderAPI.Models.Dto;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Xango.Services.Dto;
+using Xango.Models.Dto;
 
 namespace Mango.Services.OrderAPI.Models
 {

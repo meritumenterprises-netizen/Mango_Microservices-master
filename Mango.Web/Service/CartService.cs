@@ -1,7 +1,6 @@
-﻿using Mango.Web.Models;
-using Mango.Web.Service.IService;
+﻿using Mango.Web.Service.IService;
 using Mango.Web.Utility;
-using Xango.Services.Dto;
+using Xango.Models.Dto;
 
 
 namespace Mango.Web.Service
@@ -18,7 +17,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = cartDto,
                 Url = SD.ShoppingCartAPIBase + "/api/cart/ApplyCoupon"
             });
@@ -28,7 +27,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.DELETE,
+                ApiType = ApiType.DELETE,
                 Data = "",
                 Url = SD.ShoppingCartAPIBase + $"/api/cart/DeleteCart/{userId}"
             });
@@ -38,7 +37,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = cartDto,
                 Url = SD.ShoppingCartAPIBase + "/api/cart/EmailCartRequest"
             });
@@ -48,7 +47,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.GET,
+                ApiType = ApiType.GET,
                 Data = "",
                 Url = SD.ShoppingCartAPIBase + "/api/cart/GetCart/" + userId
             });
@@ -59,7 +58,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = cartDetailsId,
                 Url = SD.ShoppingCartAPIBase + "/api/cart/RemoveCart"
             });
@@ -70,7 +69,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = cartDto,
                 Url = SD.ShoppingCartAPIBase + "/api/cart/CartUpsert"
             });

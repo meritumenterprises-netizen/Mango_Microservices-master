@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using Xango.Services.Dto;
 using Mango.Services.ProductAPI.Models;
-using Mango.Services.ProductAPI.Models.Dto;
 using LoggerFactory = Xango.Services.Dto.LoggerFactory;
+using Xango.Models.Dto;
 
 namespace Mango.Services.ProductAPI
 {

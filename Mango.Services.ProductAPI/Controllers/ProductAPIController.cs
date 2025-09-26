@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
 using Mango.Services.ProductAPI.Data;
 using Mango.Services.ProductAPI.Models;
-using Mango.Services.ProductAPI.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Xango.Models.Dto;
 using Xango.Services.Dto;
+
 
 namespace Mango.Services.ProductAPI.Controllers
 {

@@ -1,6 +1,4 @@
-﻿using Xango.Services.Dto;
-
-namespace Mango.Web.Models
+﻿namespace Xango.Models.Dto
 {
     public class LoginResponseDto
     {

@@ -1,7 +1,6 @@
-﻿using Mango.Web.Models;
-using Mango.Web.Service.IService;
+﻿using Mango.Web.Service.IService;
 using Mango.Web.Utility;
-using Xango.Services.Dto;
+using Xango.Models.Dto;
 
 namespace Mango.Web.Service
 {
@@ -17,7 +16,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = couponDto,
                 Url = SD.CouponAPIBase + "/api/coupon"
             });
@@ -27,7 +26,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.DELETE,
+                ApiType = ApiType.DELETE,
                 Url = SD.CouponAPIBase + "/api/coupon/" + id
             });
         }
@@ -36,7 +35,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.GET,
+                ApiType = ApiType.GET,
                 Url = SD.CouponAPIBase + "/api/coupon"
             });
         }
@@ -45,7 +44,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.GET,
+                ApiType = ApiType.GET,
                 Url = SD.CouponAPIBase + "/api/coupon/GetByCode/" + couponCode
             });
         }
@@ -54,7 +53,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.GET,
+                ApiType = ApiType.GET,
                 Url = SD.CouponAPIBase + "/api/coupon/" + id
             });
         }
@@ -63,7 +62,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.PUT,
+                ApiType = ApiType.PUT,
                 Data = couponDto,
                 Url = SD.CouponAPIBase + "/api/coupon"
             });

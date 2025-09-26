@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Logging;
 using Xango.Web;
 using Xango.Web.Mapping;
+using Xango.Models.Dto;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,10 +1,9 @@
 ﻿using Mango.Services.AuthAPI.Data;
 using Mango.Services.AuthAPI.Models;
-using Mango.Services.AuthAPI.Models.Dto;
 using Mango.Services.AuthAPI.Service.IService;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
-using Xango.Services.Dto;
+using Xango.Models.Dto;
 
 namespace Mango.Services.AuthAPI.Service
 {

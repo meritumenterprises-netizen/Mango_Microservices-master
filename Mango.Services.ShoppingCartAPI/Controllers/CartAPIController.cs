@@ -1,15 +1,18 @@
 ﻿using AutoMapper;
 using Mango.Services.ShoppingCartAPI.Data;
 using Mango.Services.ShoppingCartAPI.Models;
-using Mango.Services.ShoppingCartAPI.Models.Dto;
 using Mango.Services.ShoppingCartAPI.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Xango.Models.Dto;
+using Xango.Services.Dto;
+using Xango.Services.Dto;
 using Newtonsoft.Json;
 
 using Xango.Services.Dto;
 using Xango.Services.ShoppingCartAPI.Service.IService;
+using Xango.Models.Dto;
 
 namespace Mango.Services.ShoppingCartAPI.Controllers
 {

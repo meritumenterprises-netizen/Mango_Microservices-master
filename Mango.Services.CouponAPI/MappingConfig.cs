@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using Xango.Services.Dto;
+using Xango.Models.Dto;
 using Mango.Services.CouponAPI.Models;
-using Mango.Services.CouponAPI.Models.Dto;
+
 using LoggerFactory = Xango.Services.Dto.LoggerFactory;
 
 namespace Mango.Services.CouponAPI

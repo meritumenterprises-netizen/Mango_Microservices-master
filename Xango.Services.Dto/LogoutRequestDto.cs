@@ -1,4 +1,4 @@
-﻿namespace Xango.Services.AuthAPI.Models.Dto
+﻿namespace Xango.Models.Dto
 {
     public class LogoutRequestDto
     {

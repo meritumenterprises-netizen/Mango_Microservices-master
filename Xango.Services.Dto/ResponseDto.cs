@@ -1,4 +1,4 @@
-﻿namespace Xango.Services.Dto
+﻿namespace Xango.Models.Dto
 {
     public class ResponseDto
     {

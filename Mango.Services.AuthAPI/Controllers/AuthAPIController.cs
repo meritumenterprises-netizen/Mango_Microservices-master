@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
-using Mango.Services.AuthAPI.Models.Dto;
 using Mango.Services.AuthAPI.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Web;
-using Xango.Services.AuthAPI.Models.Dto;
-using Xango.Services.Dto;
+using Xango.Models.Dto;
 
 namespace Mango.Services.AuthAPI.Controllers
 {

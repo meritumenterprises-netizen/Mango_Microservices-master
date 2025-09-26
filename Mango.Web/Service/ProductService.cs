@@ -1,7 +1,6 @@
-﻿using Mango.Web.Models;
-using Mango.Web.Service.IService;
+﻿using Mango.Web.Service.IService;
 using Mango.Web.Utility;
-using Xango.Services.Dto;
+using Xango.Models.Dto;
 
 namespace Mango.Web.Service
 {
@@ -17,10 +16,10 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = productDto,
                 Url = SD.ProductAPIBase + "/api/product",
-                ContentType = SD.ContentType.MultipartFormData
+                ContentType = ContentType.MultipartFormData
             });
         }
 
@@ -28,7 +27,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.DELETE,
+                ApiType = ApiType.DELETE,
                 Url = SD.ProductAPIBase + "/api/product/" + id
             });
         }
@@ -37,7 +36,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.GET,
+                ApiType = ApiType.GET,
                 Url = SD.ProductAPIBase + "/api/product"
             });
         }
@@ -48,7 +47,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.GET,
+                ApiType = ApiType.GET,
                 Url = SD.ProductAPIBase + "/api/product/" + id
             });
         }
@@ -57,10 +56,10 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.PUT,
+                ApiType = ApiType.PUT,
                 Data = productDto,
                 Url = SD.ProductAPIBase + "/api/product",
-                ContentType = SD.ContentType.MultipartFormData
+                ContentType = ContentType.MultipartFormData
             });
         }
     }

@@ -1,5 +1,5 @@
-﻿using Mango.Web.Models;
-using Xango.Services.Dto;
+﻿
+using Xango.Models.Dto;
 
 namespace Mango.Web.Service.IService
 {

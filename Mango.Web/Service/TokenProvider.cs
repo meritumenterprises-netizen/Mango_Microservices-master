@@ -1,5 +1,6 @@
 ﻿using Mango.Web.Service.IService;
 using Mango.Web.Utility;
+using Xango.Models.Dto;
 
 namespace Mango.Web.Service
 {

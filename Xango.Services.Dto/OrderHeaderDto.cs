@@ -1,5 +1,5 @@
 ﻿
-namespace Mango.Services.OrderAPI.Models.Dto
+namespace Xango.Models.Dto
 {
     public class OrderHeaderDto
     {
@@ -8,7 +8,7 @@ namespace Mango.Services.OrderAPI.Models.Dto
         public string? CouponCode { get; set; }
         public double Discount { get; set; }
         public double OrderTotal { get; set; }
-
+        public string OrderTotalWithCurrency { get; set; }
         public string? Name { get; set; }
 
         public string? Phone { get; set; }

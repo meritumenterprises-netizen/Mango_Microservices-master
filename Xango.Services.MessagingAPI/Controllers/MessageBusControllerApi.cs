@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using RabbitMQ.Client;
 using System.Text;
-using Xango.Services.Dto;
+using Xango.Models.Dto;
+using Confluent.Kafka;
+using System.Web.Http;
+using HttpPostAttribute = System.Web.Http.HttpPostAttribute;
 
 namespace Xango.Services.MessagingAPI.Controllers
 {
@@ -22,35 +25,19 @@ namespace Xango.Services.MessagingAPI.Controllers
         [HttpPost]
         public async Task<ResponseDto> PublishMessage(object messageObj, string topic_queue_Name)
         {
-            //var factory = new ConnectionFactory()
-            //{
-            //    HostName = "localhost", // local machine
-            //    UserName = "guest",
-            //    Password = "guest"
-            //};
+            var config = new ProducerConfig
+            {
+                BootstrapServers = "localhost:9092"
+            };
 
-            //// Connect to RabbitMQ
-            //using (var connection = await factory.CreateConnectionAsync())
-            //using (var channel = await connection.CreateChannelAsync())
-            //{
-            //    // Declare a queue named "log_queue"
-            //    await channel.QueueDeclareAsync(
-            //        queue: topic_queue_Name,
-            //        durable: true,      // queue survives broker restart
-            //        exclusive: false,   // can be accessed by other connections
-            //        autoDelete: false,
-            //        arguments: null
-            //    );
+            using var producer = new ProducerBuilder<string, string>(config).Build();
 
-            //    string message = Convert.ToString(messageObj);
-            //    var body = Encoding.UTF8.GetBytes(message);
-            //    // Publish message to the queue
-            //    await channel.BasicPublishAsync(
-            //        exchange: "",
-            //        routingKey: topic_queue_Name,
-            //        body: body
-            //    );
-            //}
+            //string topic = "Xango.Messaging.EmailOrder";
+            string topic = topic_queue_Name;
+            string key = "Email";
+            //string value = "Hello, Kafka from C#!";
+
+            _response.IsSuccess = true;
             return _response;
         }
     }

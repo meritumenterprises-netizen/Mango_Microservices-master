@@ -1,7 +1,6 @@
-﻿using Mango.Web.Models;
-using Mango.Web.Service.IService;
+﻿using Mango.Web.Service.IService;
 using Mango.Web.Utility;
-using Xango.Services.Dto;
+using Xango.Models.Dto;
 
 namespace Mango.Web.Service
 {
@@ -17,28 +16,28 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.PUT,
+                ApiType = ApiType.PUT,
                 Data = orderHeaderDto,
                 Url = SD.OrderAPIBase + "/api/order/CancelOrder"
             });
         }
 
 
-        public async Task<ResponseDto?> CreateOrder(CartDto cartDto)
+        public async Task<ResponseDto?> CreateOrder(Xango.Models.Dto.CartDto cartDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = cartDto,
                 Url = SD.OrderAPIBase + "/api/order/CreateOrder"
             });
         }
 
-        public async Task<ResponseDto?> CreateStripeSession(StripeRequestDto stripeRequestDto)
+        public async Task<ResponseDto?> CreateStripeSession(Xango.Models.Dto.StripeRequestDto stripeRequestDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = stripeRequestDto,
                 Url = SD.OrderAPIBase + "/api/order/CreateStripeSession"
             });
@@ -48,7 +47,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.GET,
+                ApiType = ApiType.GET,
                 Url = SD.OrderAPIBase + "/api/order/GetAll?status=" + status + "&userid=" + userId
             });
         }
@@ -57,7 +56,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = email,
                 Url = SD.AuthAPIBase + "/api/order/GetUser"
             });
@@ -67,7 +66,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.GET,
+                ApiType = ApiType.GET,
                 Url = SD.OrderAPIBase + "/api/order/GetOrder/" + orderId
             });
         }
@@ -76,7 +75,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = newStatus,
                 Url = SD.OrderAPIBase + "/api/order/UpdateOrderStatus/" + orderId
             });
@@ -86,7 +85,7 @@ namespace Mango.Web.Service
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = orderHeaderId,
                 Url = SD.OrderAPIBase + "/api/order/ValidateStripeSession"
             });

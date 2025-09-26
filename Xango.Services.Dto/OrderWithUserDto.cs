@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Xango.Models.Dto
 {
-    public class ServiceDto
+    public class OrderWithUserDto
     {
-        public string ServiceName { get; set; } = string.Empty; 
-        public string ServiceUrl { get; set; } = string.Empty; 
-
+        public UserDto User { get; set; } 
+        public OrderHeaderDto OrderHeader { get; set; }
     }
 }

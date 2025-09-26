@@ -1,11 +1,11 @@
-﻿using IdentityModel;
-using Mango.Web.Models;
+﻿using Abp.Web.Mvc.Models;
+using IdentityModel;
 using Mango.Web.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
-using Xango.Services.Dto;
+using Xango.Models.Dto;
 
 namespace Mango.Web.Controllers
 {
@@ -104,7 +104,7 @@ namespace Mango.Web.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(model: new { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }

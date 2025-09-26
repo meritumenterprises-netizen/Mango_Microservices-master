@@ -1,9 +1,7 @@
-﻿using Mango.Web.Models;
-using Mango.Web.Service.IService;
+﻿using Mango.Web.Service.IService;
 using Mango.Web.Utility;
 using Newtonsoft.Json;
-using System.Web.Providers.Entities;
-using Xango.Services.Dto;
+using Xango.Models.Dto;
 
 namespace Mango.Web.Service
 {
@@ -27,7 +25,7 @@ namespace Mango.Web.Service
         {
             var responseDto = await _baseService.SendAsync(new RequestDto
             {
-                ApiType = SD.ApiType.GET,
+                ApiType = ApiType.GET,
                 Data = "",
                 Url = SD.AuthAPIBase + "/api/auth/GetUser/" + email
             });
@@ -35,41 +33,41 @@ namespace Mango.Web.Service
             return userDto;
         }
 
-        public async Task<ResponseDto?> AssignRoleAsync(RegistrationRequestDto registrationRequestDto)
+        public async Task<ResponseDto?> AssignRoleAsync(Xango.Models.Dto.RegistrationRequestDto registrationRequestDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = registrationRequestDto,
                 Url = SD.AuthAPIBase + "/api/auth/AssignRole"
             });
         }
 
-        public async Task<ResponseDto?> LoginAsync(LoginRequestDto loginRequestDto)
+        public async Task<ResponseDto?> LoginAsync(Xango.Models.Dto.LoginRequestDto loginRequestDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = loginRequestDto,
                 Url = SD.AuthAPIBase + "/api/auth/login"
             }, withBearer: false);
         }
 
-        public async Task<ResponseDto?> RegisterAsync(RegistrationRequestDto registrationRequestDto)
+        public async Task<ResponseDto?> RegisterAsync(Xango.Models.Dto.RegistrationRequestDto registrationRequestDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = registrationRequestDto,
                 Url = SD.AuthAPIBase + "/api/auth/register"
             }, withBearer: false);
         }
 
-        public async Task<ResponseDto?> LogoutAsync(LogoutRequestDto logoutRequestDto)
+        public async Task<ResponseDto?> LogoutAsync(Xango.Models.Dto.LogoutRequestDto logoutRequestDto)
         {
             return await _baseService.SendAsync(new RequestDto()
             {
-                ApiType = SD.ApiType.POST,
+                ApiType = ApiType.POST,
                 Data = logoutRequestDto,
                 Url = SD.AuthAPIBase + "/api/auth/logout"
             });

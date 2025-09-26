@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
+using Xango.Services.Dto;
 using Mango.Services.CouponAPI.Data;
 using Mango.Services.CouponAPI.Models;
-using Mango.Services.CouponAPI.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Xango.Services.Dto;
+using Xango.Models.Dto;
 
 namespace Mango.Services.CouponAPI.Controllers
 {
@@ -83,7 +83,7 @@ namespace Mango.Services.CouponAPI.Controllers
         {
             try
             {
-                couponDto.CouponId = null;
+                couponDto.CouponId = 0;
                 Coupon obj = _mapper.Map<Coupon>(couponDto);
                 _db.Coupons.Add(obj);
                 _db.SaveChanges();

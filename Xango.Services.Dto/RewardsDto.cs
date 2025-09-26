@@ -1,4 +1,4 @@
-﻿namespace Mango.Services.OrderAPI.Models.Dto
+﻿namespace Xango.Models.Dto
 {
     public class RewardsDto
     {
