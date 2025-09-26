@@ -50,11 +50,11 @@ namespace Mango.Services.AuthAPI.Controllers
             var loginResponseDto = (LoginResponseDto)response.Result; 
             var userDto = loginResponseDto.User;
 
-            if (userDto == null)
+            if (userDto == null || userDto.Email != model.UserName)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Username or password is incorrect";
-                return BadRequest(_response);
+                return NotFound(_response);
             }
             var user = _authService.GetUser(userDto.Email).Result;  
             _response.Result = JsonConvert.SerializeObject(userDto);
@@ -97,9 +97,16 @@ namespace Mango.Services.AuthAPI.Controllers
         [HttpGet("GetUser/{email}")]
         public async Task<IActionResult> GetUser(string email)
         {
-            var userDto = JsonConvert.DeserializeObject<UserDto>( _authService.GetUser(email).Result.Result.ToString());
+            var responseDto = await _authService.GetUser(email);
+            var loginResponseDto = (LoginResponseDto)responseDto.Result;
+            if (loginResponseDto== null || loginResponseDto.User.Email.ToLower() != email.ToLower())
+            {
+                _response.IsSuccess = false;
+                _response.Message = "User not found";
+                return NotFound(_response);
+            }
             _response.IsSuccess = true;
-            _response.Result = JsonConvert.SerializeObject(userDto);
+            _response.Result = JsonConvert.SerializeObject(loginResponseDto.User);
             return Ok(_response);
         }
     }

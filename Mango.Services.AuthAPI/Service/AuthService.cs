@@ -36,43 +36,20 @@ namespace Mango.Services.AuthAPI.Service
                 };
                 return response;
             }
-            return new ResponseDto();
-        }
-
-        public async Task<ResponseDto?> CurrentUser(string email)
-        {
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
-            if (user != null)
+            return new ResponseDto()
             {
-                var response = new ResponseDto()
-                {
-                    IsSuccess = true,
-                    Result = JsonConvert.SerializeObject(new UserDto() { ID = user.Id, Name = user.Name, Email = user.Email, PhoneNumber = user.PhoneNumber })
-                };
-                return response;
-            }
-            return new ResponseDto();
+                IsSuccess = false,
+                Message = $"User {email} not found",
+                Result = JsonConvert.SerializeObject(
+                    new UserDto()
+                    {
+                        ID = "",
+                        Name = "",
+                        Email = "",
+                        PhoneNumber = ""
+                    })
+            };
         }
-
-        //public async Task<ResponseDto?> AssignRole(string email, string roleName)
-        //{
-        //    var responseDto = new ResponseDto();
-        //    var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
-        //    if (user != null)
-        //    {
-        //        if (!_roleManager.RoleExistsAsync(roleName).GetAwaiter().GetResult())
-        //        {
-        //            //create role if it does not exist
-        //            _roleManager.CreateAsync(new IdentityRole(roleName)).GetAwaiter().GetResult();
-        //        }
-        //        await _userManager.AddToRoleAsync(user, roleName);
-        //        responseDto.IsSuccess = true;
-        //        return responseDto;
-        //    }
-        //    responseDto.IsSuccess = false;
-        //    return responseDto;
-
-        //}
 
         public async Task<ResponseDto> Login(LoginRequestDto loginRequestDto)
         {

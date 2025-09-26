@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Mango.Services.AuthAPI.Controllers;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Newtonsoft.Json;
@@ -36,6 +38,28 @@ namespace AuthServiceTest
         }
 
         [Fact]
+        public async Task LoginUser_Failure()
+        {
+            var mockService = new Mock<IAuthService>();
+            mockService.Setup(service => service.Login(It.IsAny<LoginRequestDto>()))
+                .ReturnsAsync(new ResponseDto
+                {
+                    IsSuccess = true,
+                    Result = new LoginResponseDto
+                    {
+                        Token = "dummy_token",
+                        User = new UserDto() { ID = "f8a32fe6-9866-4f9f-9062-36a2680ae020", Name = "Piotr Łuczak", PhoneNumber = "783 622 481", Email = "pluczak99@gmail.com" }
+                    }
+                });
+            IMapper mapper = Xango.Services.AuthAPI.MappingConfig.RegisterMaps().CreateMapper();
+            var controller = new AuthAPIController(mockService.Object, null, mapper);
+            var result = await controller.Login(new LoginRequestDto { UserName = "piotrpluczak99@gmail.com", Password = "Password1!" });
+            var logoutResponseDto = (ResponseDto)((NotFoundObjectResult)result).Value;
+            Assert.False(logoutResponseDto.IsSuccess);
+            Assert.Equal(logoutResponseDto.Message, "Username or password is incorrect");
+        }
+
+        [Fact]
         public async Task LooutUser_Success()
         {
             var mockService = new Mock<IAuthService>();
@@ -57,6 +81,54 @@ namespace AuthServiceTest
             Assert.IsType<OkObjectResult>(okResult);
             Assert.True(logoutResponseDto.IsSuccess);
             Assert.Equal("Logout successful", logoutResponseDto.Message);
+        }
+
+        [Fact]
+        public async Task GetUser_Success()
+        {
+            var mockService = new Mock<IAuthService>();
+            mockService.Setup(service => service.GetUser(It.IsAny<string>()))
+                .ReturnsAsync(new ResponseDto
+                {
+                    IsSuccess = true,
+                    Result = new LoginResponseDto
+                    {
+                        Token = "dummy_token",
+                        User = new UserDto() { ID = "f8a32fe6-9866-4f9f-9062-36a2680ae020", Name = "Piotr Łuczak", PhoneNumber = "783 622 481", Email = "pluczak99@gmail.com" }
+                    }
+                });
+            IMapper mapper = Xango.Services.AuthAPI.MappingConfig.RegisterMaps().CreateMapper();
+            var controller = new AuthAPIController(mockService.Object, null, mapper);
+            var result = await controller.GetUser("pluczak99@gmail.com");
+            var resultResponseDto = (ResponseDto)((OkObjectResult)result).Value;
+            var userDto = JsonConvert.DeserializeObject<UserDto>(Convert.ToString(resultResponseDto.Result));
+            Assert.IsType<OkObjectResult>(result);
+            Assert.True(resultResponseDto.IsSuccess);
+            Assert.IsType<UserDto>(userDto); 
+        }
+
+        [Fact]
+        public async Task GetUser_Failure()
+        {
+            var mockService = new Mock<IAuthService>();
+            mockService.Setup(service => service.GetUser(It.IsAny<string>()))
+                .ReturnsAsync(new ResponseDto
+                {
+                    IsSuccess = true,
+                    Result = new LoginResponseDto
+                    {
+                        Token = "dummy_token",
+                        User = new UserDto() { ID = "f8a32fe6-9866-4f9f-9062-36a2680ae020", Name = "Piotr Łuczak", PhoneNumber = "783 622 481", Email = "nonepluczak99@gmail.com" }
+                    }
+                });
+            IMapper mapper = Xango.Services.AuthAPI.MappingConfig.RegisterMaps().CreateMapper();
+            var controller = new AuthAPIController(mockService.Object, null, mapper);
+
+            var result = controller.GetUser("piotrpluczak99@gmail.com");
+            var resultResponseDto = (ResponseDto)((result.Result as NotFoundObjectResult).Value);
+            Assert.Equal(resultResponseDto.Message, "User not found");
+            Assert.False(resultResponseDto.IsSuccess);
+
         }
     }
 }
