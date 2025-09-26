@@ -110,14 +110,6 @@ namespace Mango.Web.Controllers
             return View(obj);
         }
 
-
-        //public async Task<IActionResult> Logout()
-        //{
-        //    await HttpContext.SignOutAsync();
-        //    _tokenProvider.ClearToken();
-        //    return RedirectToAction("Index","Home");
-        //}
-
         private async Task<IActionResult> SignInUser(LoginResponseDto model)
         {
             var handler = new JwtSecurityTokenHandler();
