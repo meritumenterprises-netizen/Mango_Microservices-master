@@ -23,7 +23,7 @@ namespace Mango.Web.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
             LoginRequestDto loginRequestDto = new();
             return View(loginRequestDto);
@@ -63,7 +63,7 @@ namespace Mango.Web.Controllers
 
 
         [HttpGet]
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
             var roleList = new List<SelectListItem>()
             {
@@ -117,7 +117,7 @@ namespace Mango.Web.Controllers
         //    return RedirectToAction("Index","Home");
         //}
 
-        private async Task SignInUser(LoginResponseDto model)
+        private async Task<IActionResult> SignInUser(LoginResponseDto model)
         {
             var handler = new JwtSecurityTokenHandler();
 
@@ -141,6 +141,7 @@ namespace Mango.Web.Controllers
 
             var principal = new ClaimsPrincipal(identity);
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            return Ok();
         }
 
     }
