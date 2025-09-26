@@ -32,10 +32,8 @@ namespace Xango.Services.MessagingAPI.Controllers
 
             using var producer = new ProducerBuilder<string, string>(config).Build();
 
-            //string topic = "Xango.Messaging.EmailOrder";
             string topic = topic_queue_Name;
             string key = "Email";
-            //string value = "Hello, Kafka from C#!";
 
             producer.Produce("Xango.Messaging.Email", new Message<string, string> { Key = key, Value = messageObj.ToString() },
                 (deliveryReport) =>
@@ -51,6 +49,7 @@ namespace Xango.Services.MessagingAPI.Controllers
                 });
 
             _response.IsSuccess = true;
+            _response.Message = "Message published successfully";
             return _response;
         }
     }
