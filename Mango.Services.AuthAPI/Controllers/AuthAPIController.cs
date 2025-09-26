@@ -37,7 +37,7 @@ namespace Mango.Services.AuthAPI.Controllers
                 _response.Message = errorMessage;
                 return BadRequest(_response);
             }
-            var userDto = _authService.CurrentUser(model.Email).Result;
+            var userDto = _authService.GetUser(model.Email).Result;
             _response.IsSuccess = true;
             _response.Message = "Registration successful";
             return Ok(_response);
@@ -53,7 +53,7 @@ namespace Mango.Services.AuthAPI.Controllers
                 _response.Message = "Username or password is incorrect";
                 return BadRequest(_response);
             }
-            var user = _authService.CurrentUser(loginResponse.User.Email).Result;  
+            var user = _authService.GetUser(loginResponse.User.Email).Result;  
             _response.Result = loginResponse;
             _response.IsSuccess = true;
             return Ok(_response);

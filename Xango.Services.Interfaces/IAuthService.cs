@@ -10,7 +10,6 @@ namespace Xango.Services.Interfaces
         Task<ResponseDto?> AssignRole(RegistrationRequestDto registrationRequestDto);
 
         Task<ResponseDto> GetUser(string email);
-        Task<ResponseDto> CurrentUser(string email);
 
     }
 }

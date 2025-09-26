@@ -85,10 +85,5 @@ namespace Mango.Web.Service
             });
         }
 
-        public async Task<ResponseDto> CurrentUser(string email)
-        {
-            throw new NotImplementedException();
-        }
-
     }
 }
