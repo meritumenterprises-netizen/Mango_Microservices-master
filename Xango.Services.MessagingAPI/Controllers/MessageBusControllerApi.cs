@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Mvc;
-using RabbitMQ.Client;
 using System.Text;
 using Xango.Models.Dto;
 using Confluent.Kafka;
@@ -36,6 +35,19 @@ namespace Xango.Services.MessagingAPI.Controllers
             string topic = topic_queue_Name;
             string key = "Email";
             //string value = "Hello, Kafka from C#!";
+
+            producer.Produce("Xango.Messaging.Email", new Message<string, string> { Key = key, Value = messageObj.ToString() },
+                (deliveryReport) =>
+                {
+                    if (deliveryReport.Error.IsError)
+                    {
+                        Console.WriteLine($"Delivery Error: {deliveryReport.Error.Reason}");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Delivered message to {deliveryReport.TopicPartitionOffset}");
+                    }
+                });
 
             _response.IsSuccess = true;
             return _response;
