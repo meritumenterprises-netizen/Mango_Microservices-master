@@ -94,7 +94,7 @@ namespace Mango.Services.AuthAPI.Controllers
         [HttpGet("GetUser/{email}")]
         public async Task<IActionResult> GetUser(string email)
         {
-            var userDto = await _authService.CurrentUser(email);
+            var userDto = JsonConvert.DeserializeObject<UserDto>( _authService.GetUser(email).Result.Result.ToString());
             _response.IsSuccess = true;
             _response.Result = JsonConvert.SerializeObject(userDto);
             return Ok(_response);
