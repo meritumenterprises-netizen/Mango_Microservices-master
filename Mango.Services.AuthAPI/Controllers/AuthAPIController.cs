@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Mango.Services.AuthAPI.Service.IService;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+
 using Newtonsoft.Json;
-using System.Web;
 using Xango.Models.Dto;
+using Xango.Services.Dto;
 using Xango.Services.Interfaces;
 
 namespace Mango.Services.AuthAPI.Controllers
@@ -16,6 +16,7 @@ namespace Mango.Services.AuthAPI.Controllers
         private readonly IAuthService _authService;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
+        //private readonly ITokenProvider _tokenProvider;
 
         protected ResponseDto _response;
         public AuthAPIController(IAuthService authService, IConfiguration configuration, IMapper mapper)
@@ -24,45 +25,43 @@ namespace Mango.Services.AuthAPI.Controllers
             _configuration = configuration;
             _mapper = mapper;
             _response = new();
+            //_tokenProvider = tokenProvider;
+
         }
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegistrationRequestDto model)
         {
-            var responseDto = JsonConvert.DeserializeObject<ResponseDto>(_authService.Register(model).Result.Result.ToString());
-            var errorMessage = responseDto.Message;
-            if (!string.IsNullOrEmpty(errorMessage))
+            var result = await _authService.Register(model);
+            if (result.IsSuccess == false)
             {
-                _response.IsSuccess = false;
-                _response.Message = errorMessage;
-                return BadRequest(_response);
+                var response = new ResponseDto()
+                {
+                    IsSuccess = false,
+                    Message = "User registration failed",
+                    Result = ""
+                };
+                return BadRequest(response);
             }
-            var userDto = _authService.GetUser(model.Email).Result;
             _response.IsSuccess = true;
             _response.Message = "Registration successful";
+            _response.Result = result.Result;
             return Ok(_response);
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequestDto model)
         {
-            var response = await _authService.Login(model);
-            var loginResponseDto = (LoginResponseDto)response.Result; 
-            var userDto = loginResponseDto.User;
-
-            if (userDto == null || userDto.Email != model.UserName)
+            var responseDto = await _authService.Login(model);
+            LoginResponseDto loginResponse = DtoConverter.ToDto<LoginResponseDto>(responseDto);
+            if (loginResponse.User == null)
             {
                 _response.IsSuccess = false;
                 _response.Message = "Username or password is incorrect";
-                return NotFound(_response);
+                return BadRequest(_response);
             }
-            var user = _authService.GetUser(userDto.Email).Result;  
-            _response.Result = JsonConvert.SerializeObject(userDto);
-            _response.IsSuccess = true;
+            _response.Result = DtoConverter.ToJson(loginResponse);
             return Ok(_response);
-
-            return Ok(_response);
-
         }
 
         [HttpPost("AssignRole")]
@@ -86,28 +85,31 @@ namespace Mango.Services.AuthAPI.Controllers
 
         }
 
-        [HttpPost("Logout")]
-        public async Task<IActionResult> Logout([FromBody] LogoutRequestDto model)
-        {
-            _response.IsSuccess = true;
-            _response.Message = "Logout successful";
-            return Ok(_response);
-        }
-
         [HttpGet("GetUser/{email}")]
         public async Task<IActionResult> GetUser(string email)
         {
             var responseDto = await _authService.GetUser(email);
-            var loginResponseDto = (LoginResponseDto)responseDto.Result;
-            if (loginResponseDto== null || loginResponseDto.User.Email.ToLower() != email.ToLower())
+            var userDto = DtoConverter.ToDto<UserDto>(responseDto);
+            if (userDto == null || userDto.Email.ToLower() != email.ToLower())
             {
                 _response.IsSuccess = false;
                 _response.Message = "User not found";
                 return NotFound(_response);
             }
             _response.IsSuccess = true;
-            _response.Result = JsonConvert.SerializeObject(loginResponseDto.User);
+            _response.Result =  DtoConverter.ToJson<UserDto>(userDto);
             return Ok(_response);
+        }
+
+        [HttpGet("Logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var responseDto = new ResponseDto();
+            await HttpContext.SignOutAsync();
+            //_tokenProvider.ClearToken();
+            responseDto.IsSuccess = true;
+            responseDto.Message = "Logged out successfully";
+            return Ok(responseDto);
         }
     }
 }

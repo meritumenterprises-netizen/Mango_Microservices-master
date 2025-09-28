@@ -5,7 +5,7 @@ namespace Xango.Services.Interfaces
     public interface IAuthService
     {
         Task<ResponseDto?> Login(LoginRequestDto loginRequestDto);
-        Task<ResponseDto?> Logout(LogoutRequestDto logoutRequestDto);
+        Task<ResponseDto?> Logout();
         Task<ResponseDto?> Register(RegistrationRequestDto registrationRequestDto);
         Task<ResponseDto?> AssignRole(RegistrationRequestDto registrationRequestDto);
 

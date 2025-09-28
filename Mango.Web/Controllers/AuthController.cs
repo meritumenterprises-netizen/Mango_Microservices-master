@@ -8,16 +8,17 @@ using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Xango.Models.Dto;
+using Xango.Services.Dto;
 using Xango.Services.Interfaces;
 
 namespace Mango.Web.Controllers
 {
-    public class AuthAPIController : Controller
+    public class AuthController : Controller
     {
         private readonly IAuthService _authService;
         private readonly ITokenProvider _tokenProvider;
 
-        public AuthAPIController(IAuthService authService, ITokenProvider tokenProvider)
+        public AuthController(IAuthService authService, ITokenProvider tokenProvider)
         {
             _authService = authService;
             _tokenProvider = tokenProvider;
@@ -37,10 +38,8 @@ namespace Mango.Web.Controllers
 
             if (responseDto != null && responseDto.IsSuccess)
             {
-                LoginResponseDto loginResponseDto =
-                    JsonConvert.DeserializeObject<LoginResponseDto>(Convert.ToString(responseDto.Result));
-
-                await SignInUser(loginResponseDto);
+                LoginResponseDto loginResponseDto = DtoConverter.ToDto<LoginResponseDto>(responseDto);
+                 SignInUser(loginResponseDto);
                 _tokenProvider.SetToken(loginResponseDto.Token);
                 TempData.Remove("error");
                 return RedirectToAction("Index", "Home");
@@ -48,20 +47,19 @@ namespace Mango.Web.Controllers
             else
             {
                 TempData["error"] = responseDto.Message;
-                return View(obj);
+                //return View(obj);
+                return RedirectToAction("Index", "Home");
             }
         }
 
-        public async Task<IActionResult> Logout(LogoutRequestDto obj)
+        [HttpGet]
+        public async Task<IActionResult> Logout()
         {
-            obj.UserName = User?.Identity?.Name;
-            ResponseDto responseDto = await _authService.Logout(obj);
             await HttpContext.SignOutAsync();
             _tokenProvider.ClearToken();
             TempData.Remove("error");
             return RedirectToAction("Index", "Home");
         }
-
 
         [HttpGet]
         public async Task<IActionResult> Register()
@@ -79,7 +77,7 @@ namespace Mango.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegistrationRequestDto obj)
         {
-            ResponseDto result = await _authService.Register(obj);
+            ResponseDto result =  _authService.Register(obj).Result;
             ResponseDto assingRole;
 
             if (result != null && result.IsSuccess)
@@ -88,7 +86,7 @@ namespace Mango.Web.Controllers
                 {
                     obj.Role = SD.RoleCustomer;
                 }
-                assingRole = await _authService.AssignRole(obj);
+                assingRole =  _authService.AssignRole(obj).Result;
                 if (assingRole != null && assingRole.IsSuccess)
                 {
                     TempData["success"] = "Registration Successful";
@@ -110,7 +108,8 @@ namespace Mango.Web.Controllers
             return View(obj);
         }
 
-        private async Task<IActionResult> SignInUser(LoginResponseDto model)
+        [HttpPost]
+        public async Task<IActionResult> SignInUser(LoginResponseDto model)
         {
             var handler = new JwtSecurityTokenHandler();
 
@@ -133,7 +132,8 @@ namespace Mango.Web.Controllers
 
 
             var principal = new ClaimsPrincipal(identity);
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+            HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
             return Ok();
         }
 

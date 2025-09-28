@@ -14,20 +14,20 @@ namespace Mango.Web.Service
             _baseService = baseService;
         }
 
-        public async Task<ResponseDto?> GetCurrentUser(HttpRequest request)
-        {
+        //public async Task<ResponseDto?> GetCurrentUser(HttpRequest request)
+        //{
 
-            var userDto = new UserDto()
-            {
-                Email = request.HttpContext.User.Identity.Name
-            };
-            var responseDto = new ResponseDto()
-            {
-                IsSuccess = true,
-                Result = JsonConvert.SerializeObject(userDto)
-            };
-            return responseDto;
-        }
+        //    var userDto = new UserDto()
+        //    {
+        //        Email = request.HttpContext.User.Identity.Name
+        //    };
+        //    var responseDto = new ResponseDto()
+        //    {
+        //        IsSuccess = true,
+        //        Result = JsonConvert.SerializeObject(userDto)
+        //    };
+        //    return responseDto;
+        //}
 
         public async Task<ResponseDto?> GetUser(string email)
         {
@@ -40,7 +40,7 @@ namespace Mango.Web.Service
             var responseDto = new ResponseDto()
             {
                 IsSuccess = true,
-                Result = JsonConvert.DeserializeObject<UserDto>(Convert.ToString(requestDto?.Result.ToString()))
+                Result = requestDto?.Result.ToString()
             };
             return responseDto;
         }
@@ -75,12 +75,12 @@ namespace Mango.Web.Service
             }, withBearer: false);
         }
 
-        public async Task<ResponseDto?> Logout(Xango.Models.Dto.LogoutRequestDto logoutRequestDto)
+        public async Task<ResponseDto?> Logout()
         {
             return await _baseService.SendAsync(new RequestDto()
             {
                 ApiType = ApiType.POST,
-                Data = logoutRequestDto,
+                Data = "",
                 Url = SD.AuthAPIBase + "/api/auth/logout"
             });
         }

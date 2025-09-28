@@ -76,7 +76,7 @@ namespace AuthServiceTest
             IMapper mapper = Xango.Services.AuthAPI.MappingConfig.RegisterMaps().CreateMapper();
             var controller = new AuthAPIController(mockService.Object, null, mapper);
             var result = await controller.Login(new LoginRequestDto { UserName = "pluczak99@gmail.com", Password = "Password1!" });
-            var okResult = await controller.Logout(new LogoutRequestDto() { UserName = "pluczak99@gmail.com" });
+            var okResult = await controller.Logout();
             var logoutResponseDto = (ResponseDto)((OkObjectResult)okResult).Value;
             Assert.IsType<OkObjectResult>(okResult);
             Assert.True(logoutResponseDto.IsSuccess);

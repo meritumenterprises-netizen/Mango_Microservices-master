@@ -1,9 +1,11 @@
 ﻿using Mango.Services.AuthAPI.Data;
 using Mango.Services.AuthAPI.Models;
 using Mango.Services.AuthAPI.Service.IService;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
+using Xango.Services.Dto;
 using Xango.Services.Interfaces;
 
 namespace Mango.Services.AuthAPI.Service
@@ -119,20 +121,15 @@ namespace Mango.Services.AuthAPI.Service
                 }
                 else
                 {
-                    return new ResponseDto() { IsSuccess = false, Message = result.Errors.FirstOrDefault().Description };
+                    return ResponseProducer.ErrorResponse(message: $"User {user.Email} could not be created");
                 }
 
             }
             catch (Exception ex)
             {
-                return new ResponseDto() { IsSuccess = false, Message = ex.Message};
+                return ResponseProducer.ErrorResponse(message: ex.Message, stackTrace: ex.StackTrace);
             }
-            return new ResponseDto() { IsSuccess = false };
-        }
-
-        public async Task<ResponseDto?> Logout(LogoutRequestDto logoutRequestDto)
-        {
-            throw new NotImplementedException();
+            return ResponseProducer.OkResponse();
         }
 
         public async Task<ResponseDto?> AssignRole(RegistrationRequestDto registrationRequestDto)
@@ -141,18 +138,26 @@ namespace Mango.Services.AuthAPI.Service
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == registrationRequestDto.Email.ToLower());
             if (user != null)
             {
-                if (!_roleManager.RoleExistsAsync(registrationRequestDto.Role).GetAwaiter().GetResult())
+                var roleExists = await _roleManager.RoleExistsAsync(registrationRequestDto.Role);
+                if (!roleExists)
                 {
                     //create role if it does not exist
                     _roleManager.CreateAsync(new IdentityRole(registrationRequestDto.Role)).GetAwaiter().GetResult();
                 }
-                _userManager.AddToRoleAsync(user,registrationRequestDto.Role);
+                await _userManager.AddToRoleAsync(user,registrationRequestDto.Role);
                 responseDto.IsSuccess = true;
+                responseDto.Result = DtoConverter.ToJson<ResponseDto>(responseDto);
                 return responseDto;
             }
             responseDto.IsSuccess = false;
             responseDto.Message = "User does not exist";
             return responseDto;
+        }
+
+        public async Task<ResponseDto?> Logout()
+        {
+            //throw new NotImplementedException();
+            return new ResponseDto();
         }
     }
 }
