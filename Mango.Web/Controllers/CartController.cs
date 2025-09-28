@@ -33,8 +33,8 @@ namespace Mango.Web.Controllers
         public async Task<IActionResult> Checkout()
         {
             var responseDto = await _authService.GetUser(User.Identity.Name);
-            UserDto userDto = JsonConvert.DeserializeObject<UserDto>(JsonConvert.SerializeObject(responseDto.Result));
-            var cartDto = JsonConvert.DeserializeObject<CartDto>(_cartService.GetCartByUserId(userDto.ID.ToString()).Result.Result.ToString());
+            UserDto userDto = DtoConverter.ToDto<UserDto>(responseDto);
+            var cartDto = DtoConverter.ToDto<CartDto>(await _cartService.GetCartByUserId(userDto.ID));
             return View(cartDto);
         }
 
