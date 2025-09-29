@@ -65,10 +65,5 @@ namespace Mango.Web.Service
                 Url = SD.AuthAPIBase + "/api/auth/logout"
             });
         }
-
-        public async Task<ResponseDto?> CurrentUser()
-        {
-            throw new NotImplementedException();
-        }
     }
 }
