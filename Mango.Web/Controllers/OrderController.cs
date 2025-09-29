@@ -9,6 +9,7 @@ using Stripe;
 using Stripe.Checkout;
 using System.IdentityModel.Tokens.Jwt;
 using Xango.Models.Dto;
+using Xango.Services.Dto;
 using Xango.Services.Interfaces;
 
 namespace Mango.Web.Controllers
@@ -50,7 +51,7 @@ namespace Mango.Web.Controllers
             var response = await _orderService.GetOrder(orderId);
             if (response != null && response.IsSuccess)
             {
-                orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
+                orderHeaderDto = DtoConverter.ToDto<OrderHeaderDto>(response);
                 orderHeaderDto.OrderTotalWithCurrency = orderHeaderDto.OrderTotal.ToString("C2");
 
             }
@@ -113,7 +114,7 @@ namespace Mango.Web.Controllers
             ResponseDto response = _orderService.GetAll(userId, status).GetAwaiter().GetResult();
             if (response != null && response.IsSuccess)
             {
-                list = JsonConvert.DeserializeObject<List<OrderHeaderDto>>(Convert.ToString(response.Result));
+                list = DtoConverter.ToDto<List<OrderHeaderDto>>(response);
                 foreach (var order in list)
                 {
                     order.OrderTotalWithCurrency = order.OrderTotal.ToString("C2");

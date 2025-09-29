@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Text;
 using Xango.Models.Dto;
+using Xango.Services.Dto;
 
 namespace Mango.Web.Service
 {
@@ -100,7 +101,7 @@ namespace Mango.Web.Service
                         return new() { IsSuccess = false, Message = "Internal Server Error", StackTrace = await apiResponse.Content.ReadAsStringAsync() };
                     default:
                         var apiContent = await apiResponse.Content.ReadAsStringAsync();
-                        var apiResponseDto = JsonConvert.DeserializeObject<ResponseDto>(apiContent);
+                        var apiResponseDto = DtoConverter.ToDto<ResponseDto>(new ResponseDto() { Result = apiContent });
                         return apiResponseDto;
                 }
             }

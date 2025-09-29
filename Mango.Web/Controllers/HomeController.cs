@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using Xango.Models.Dto;
+using Xango.Services.Dto;
 using Xango.Services.Interfaces;
 
 namespace Mango.Web.Controllers
@@ -29,7 +30,7 @@ namespace Mango.Web.Controllers
 
             if (response != null && response.IsSuccess)
             {
-                list = JsonConvert.DeserializeObject<List<ProductDto>>(Convert.ToString(response.Result));
+                list = DtoConverter.ToDto<List<ProductDto>>(response);
             }
             else
             {
@@ -48,7 +49,7 @@ namespace Mango.Web.Controllers
 
             if (response != null && response.IsSuccess)
             {
-                model = JsonConvert.DeserializeObject<ProductDto>(Convert.ToString(response.Result));
+                model = DtoConverter.ToDto<ProductDto>(response);
             }
             else
             {

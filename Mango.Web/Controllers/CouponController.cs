@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
+using Xango.Services.Dto;
 using Xango.Services.Interfaces;    
 
 namespace Mango.Web.Controllers
@@ -23,7 +24,7 @@ namespace Mango.Web.Controllers
 
             if (response != null && response.IsSuccess)
             {
-                list = JsonConvert.DeserializeObject<List<CouponDto>>(Convert.ToString(response.Result));
+                list = DtoConverter.ToDto<List<CouponDto>>(response);
             }
             else
             {
@@ -64,7 +65,7 @@ namespace Mango.Web.Controllers
 
             if (response != null && response.IsSuccess)
             {
-                CouponDto? model = JsonConvert.DeserializeObject<CouponDto>(Convert.ToString(response.Result));
+                CouponDto model = DtoConverter.ToDto<CouponDto>(response);
                 return View(model);
             }
             else

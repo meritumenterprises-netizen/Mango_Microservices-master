@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
+using Xango.Services.Dto;
 using Xango.Services.Interfaces;
 
 namespace Mango.Web.Controllers
@@ -23,7 +24,7 @@ namespace Mango.Web.Controllers
 
             if (response != null && response.IsSuccess)
             {
-                list = JsonConvert.DeserializeObject<List<ProductDto>>(response.Result.ToString());
+                list = DtoConverter.ToDto<List<ProductDto>>(response);
             }
             else
             {
@@ -80,7 +81,7 @@ namespace Mango.Web.Controllers
 
             if (response != null && response.IsSuccess)
             {
-                ProductDto? model = JsonConvert.DeserializeObject<ProductDto>(Convert.ToString(response.Result));
+                ProductDto? model = DtoConverter.ToDto<ProductDto>(response);
                 return View(nameof(ProductEdit), model);
             }
             else
