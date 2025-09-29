@@ -10,14 +10,23 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{ADB819A7-64B4-4AFF-BA2B-69EFB3F6577A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xango.Services.CouponAPI", "Mango.Services.CouponAPI\Xango.Services.CouponAPI.csproj", "{D283E2FF-B718-4229-AD4A-489D925C4C22}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F} = {8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xango.Web", "Mango.Web\Xango.Web.csproj", "{B7012943-4F4D-4DEA-B93D-63F446118BC1}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xango.Services.AuthAPI", "Mango.Services.AuthAPI\Xango.Services.AuthAPI.csproj", "{98180658-F43A-479A-8F03-AA6F1829D38A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xango.Services.ProductAPI", "Mango.Services.ProductAPI\Xango.Services.ProductAPI.csproj", "{7AAFE55B-3F8E-4FB9-9E67-15E07E410C02}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F} = {8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xango.Services.ShoppingCartAPI", "Mango.Services.ShoppingCartAPI\Xango.Services.ShoppingCartAPI.csproj", "{4F47DFCC-813E-47D1-ACE0-36828D9E8E4C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F} = {8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xango.Services.OrderAPI", "Mango.Services.OrderAPI\Xango.Services.OrderAPI.csproj", "{8DC40FF4-5BD2-4961-836E-7B418DEED3B9}"
 EndProject

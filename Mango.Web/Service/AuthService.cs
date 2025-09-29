@@ -3,6 +3,7 @@ using Xango.Services.Interfaces;
 using Mango.Web.Utility;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
+using Xango.Services.Dto;
 
 namespace Mango.Web.Service
 {
@@ -14,21 +15,6 @@ namespace Mango.Web.Service
             _baseService = baseService;
         }
 
-        //public async Task<ResponseDto?> GetCurrentUser(HttpRequest request)
-        //{
-
-        //    var userDto = new UserDto()
-        //    {
-        //        Email = request.HttpContext.User.Identity.Name
-        //    };
-        //    var responseDto = new ResponseDto()
-        //    {
-        //        IsSuccess = true,
-        //        Result = JsonConvert.SerializeObject(userDto)
-        //    };
-        //    return responseDto;
-        //}
-
         public async Task<ResponseDto?> GetUser(string email)
         {
             var requestDto= await _baseService.SendAsync(new RequestDto
@@ -37,12 +23,7 @@ namespace Mango.Web.Service
                 Data = "",
                 Url = SD.AuthAPIBase + "/api/auth/GetUser/" + email
             });
-            var responseDto = new ResponseDto()
-            {
-                IsSuccess = true,
-                Result = requestDto?.Result.ToString()
-            };
-            return responseDto;
+            return ResponseProducer.OkResponse(requestDto.Result);
         }
 
         public async Task<ResponseDto?> AssignRole(Xango.Models.Dto.RegistrationRequestDto registrationRequestDto)
@@ -85,5 +66,9 @@ namespace Mango.Web.Service
             });
         }
 
+        public async Task<ResponseDto?> CurrentUser()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

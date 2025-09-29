@@ -1,6 +1,8 @@
 ﻿using Mango.Services.AuthAPI.Data;
 using Mango.Services.AuthAPI.Models;
 using Mango.Services.AuthAPI.Service.IService;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Newtonsoft.Json;
@@ -16,14 +18,16 @@ namespace Mango.Services.AuthAPI.Service
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public AuthService(AppDbContext db, IJwtTokenGenerator jwtTokenGenerator,
-            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IHttpContextAccessor ctx)
         {
             _db = db;
             _jwtTokenGenerator = jwtTokenGenerator;
             _userManager = userManager;
             _roleManager = roleManager;
+            _httpContextAccessor = ctx;
         }
 
         public async Task<ResponseDto?> GetUser(string email)
@@ -34,7 +38,7 @@ namespace Mango.Services.AuthAPI.Service
                 var response = new ResponseDto()
                 {
                     IsSuccess = true,
-                    Result = JsonConvert.SerializeObject(new UserDto() { ID = user.Id, Name = user.Name, Email = user.Email, PhoneNumber = user.PhoneNumber })
+                    Result = DtoConverter.ToJson<UserDto>(new UserDto() { ID = user.Id, Name = user.Name, Email = user.Email, PhoneNumber = user.PhoneNumber })
                 };
                 return response;
             }
@@ -141,10 +145,9 @@ namespace Mango.Services.AuthAPI.Service
                 var roleExists = await _roleManager.RoleExistsAsync(registrationRequestDto.Role);
                 if (!roleExists)
                 {
-                    //create role if it does not exist
-                    _roleManager.CreateAsync(new IdentityRole(registrationRequestDto.Role)).GetAwaiter().GetResult();
+                    await _roleManager.CreateAsync(new IdentityRole(registrationRequestDto.Role));
                 }
-                await _userManager.AddToRoleAsync(user,registrationRequestDto.Role);
+                await _userManager.AddToRoleAsync(user, registrationRequestDto.Role);
                 responseDto.IsSuccess = true;
                 responseDto.Result = DtoConverter.ToJson<ResponseDto>(responseDto);
                 return responseDto;
@@ -156,8 +159,9 @@ namespace Mango.Services.AuthAPI.Service
 
         public async Task<ResponseDto?> Logout()
         {
-            //throw new NotImplementedException();
             return new ResponseDto();
         }
+        
     }
+
 }

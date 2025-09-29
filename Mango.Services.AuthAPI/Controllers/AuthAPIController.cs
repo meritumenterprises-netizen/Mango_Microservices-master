@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using Newtonsoft.Json;
@@ -16,7 +17,6 @@ namespace Mango.Services.AuthAPI.Controllers
         private readonly IAuthService _authService;
         private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
-        //private readonly ITokenProvider _tokenProvider;
 
         protected ResponseDto _response;
         public AuthAPIController(IAuthService authService, IConfiguration configuration, IMapper mapper)
@@ -25,8 +25,6 @@ namespace Mango.Services.AuthAPI.Controllers
             _configuration = configuration;
             _mapper = mapper;
             _response = new();
-            //_tokenProvider = tokenProvider;
-
         }
 
         [HttpPost("register")]
@@ -97,19 +95,8 @@ namespace Mango.Services.AuthAPI.Controllers
                 return NotFound(_response);
             }
             _response.IsSuccess = true;
-            _response.Result =  DtoConverter.ToJson<UserDto>(userDto);
+            _response.Result = DtoConverter.ToJson<UserDto>(userDto);
             return Ok(_response);
-        }
-
-        [HttpGet("Logout")]
-        public async Task<IActionResult> Logout()
-        {
-            var responseDto = new ResponseDto();
-            await HttpContext.SignOutAsync();
-            //_tokenProvider.ClearToken();
-            responseDto.IsSuccess = true;
-            responseDto.Message = "Logged out successfully";
-            return Ok(responseDto);
         }
     }
 }
