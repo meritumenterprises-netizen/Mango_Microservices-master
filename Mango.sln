@@ -52,8 +52,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.Interfaces",
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservices", "Microservices", "{93124727-AAF7-4047-BC08-006CF8E31074}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthServiceTest", "AuthServiceTest\AuthServiceTest.csproj", "{70307F75-9D78-44AF-A9BE-86FC4EA02280}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -100,10 +98,6 @@ Global
 		{8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{70307F75-9D78-44AF-A9BE-86FC4EA02280}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{70307F75-9D78-44AF-A9BE-86FC4EA02280}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{70307F75-9D78-44AF-A9BE-86FC4EA02280}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{70307F75-9D78-44AF-A9BE-86FC4EA02280}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -126,7 +120,6 @@ Global
 		{D9D3E35F-4441-4359-B8D3-62FE7F83C299} = {ADB819A7-64B4-4AFF-BA2B-69EFB3F6577A}
 		{8FC90AC9-CCCD-4B58-A681-37A7B7E0FB4F} = {D9D3E35F-4441-4359-B8D3-62FE7F83C299}
 		{93124727-AAF7-4047-BC08-006CF8E31074} = {ADB819A7-64B4-4AFF-BA2B-69EFB3F6577A}
-		{70307F75-9D78-44AF-A9BE-86FC4EA02280} = {62954A90-B3DD-4AA8-8A5C-6AA12C249684}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {929D2BC7-133A-46CF-89C4-0315B8019576}
