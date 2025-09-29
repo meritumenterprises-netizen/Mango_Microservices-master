@@ -107,12 +107,7 @@ namespace Mango.Web.Service
             }
             catch (Exception ex)
             {
-                var dto = new ResponseDto
-                {
-                    Message = ex.Message.ToString(),
-                    IsSuccess = false
-                };
-                return dto;
+                return ResponseProducer.ErrorResponse(ex.Message, ex.StackTrace);
             }
         }
     }
