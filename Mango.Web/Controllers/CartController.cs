@@ -59,7 +59,7 @@ namespace Mango.Web.Controllers
             cart.CartHeader.Name = cartDto.CartHeader.Name;
 
             var response = await _orderService.CreateOrder(cart);
-            OrderHeaderDto orderHeaderDto = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
+            OrderHeaderDto orderHeaderDto = DtoConverter.ToDto<OrderHeaderDto>(response);
             orderHeaderDto.OrderTotalWithCurrency = orderHeaderDto.OrderTotal.ToString("C2");
 
             if (response != null && response.IsSuccess)
@@ -77,8 +77,7 @@ namespace Mango.Web.Controllers
                 };
 
                 var stripeResponse = await _orderService.CreateStripeSession(stripeRequestDto);
-                StripeRequestDto stripeResponseResult = JsonConvert.DeserializeObject<StripeRequestDto>
-                                            (Convert.ToString(stripeResponse.Result));
+                StripeRequestDto stripeResponseResult = DtoConverter.ToDto<StripeRequestDto>(stripeResponse);
                 Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
 
                 return new StatusCodeResult(303);
@@ -91,7 +90,7 @@ namespace Mango.Web.Controllers
             ResponseDto? response = await _orderService.ValidateStripeSession(orderId);
             if (response != null & response.IsSuccess)
             {
-                OrderHeaderDto orderHeader = JsonConvert.DeserializeObject<OrderHeaderDto>(Convert.ToString(response.Result));
+                OrderHeaderDto orderHeader = DtoConverter.ToDto<OrderHeaderDto>(response);
                 var cartDto = _cartService.GetCartByUserId(orderHeader.UserId);
                 _cartService.DeleteCart(orderHeader.UserId);
                 if (orderHeader.Status == SD.Status_Approved)
