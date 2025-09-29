@@ -83,8 +83,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                return ResponseProducer.ErrorResponse(ex.Message);
             }
             return _response;
         }
@@ -103,8 +102,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.ToString();
+                return ResponseProducer.ErrorResponse(ex.Message);
             }
             return _response;
         }
@@ -154,8 +152,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.Message = ex.Message.ToString();
-                _response.IsSuccess = false;
+                return ResponseProducer.ErrorResponse(ex.Message);
             }
             return _response;
         }
@@ -177,8 +174,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.ToString();
+                return ResponseProducer.ErrorResponse(ex.Message);
             }
             return _response;
         }
@@ -207,8 +203,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.Message = ex.Message.ToString();
-                _response.IsSuccess = false;
+                return ResponseProducer.ErrorResponse(ex.Message);
             }
             return _response;
         }

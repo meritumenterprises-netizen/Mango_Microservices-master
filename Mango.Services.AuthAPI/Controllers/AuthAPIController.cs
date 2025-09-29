@@ -33,13 +33,7 @@ namespace Mango.Services.AuthAPI.Controllers
             var result = await _authService.Register(model);
             if (result.IsSuccess == false)
             {
-                var response = new ResponseDto()
-                {
-                    IsSuccess = false,
-                    Message = "User registration failed",
-                    Result = ""
-                };
-                return BadRequest(response);
+                return BadRequest(ResponseProducer.ErrorResponse("User registration failed"));
             }
             _response.IsSuccess = true;
             _response.Message = "Registration successful";
@@ -54,9 +48,7 @@ namespace Mango.Services.AuthAPI.Controllers
             LoginResponseDto loginResponse = DtoConverter.ToDto<LoginResponseDto>(responseDto);
             if (loginResponse.User == null)
             {
-                _response.IsSuccess = false;
-                _response.Message = "Username or password is incorrect";
-                return BadRequest(_response);
+                return BadRequest(ResponseProducer.ErrorResponse("Username or password is incorrect"));
             }
             _response.Result = DtoConverter.ToJson(loginResponse);
             return Ok(_response);

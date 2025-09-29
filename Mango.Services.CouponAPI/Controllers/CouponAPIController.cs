@@ -36,9 +36,7 @@ namespace Mango.Services.CouponAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
-                _response.StackTrace = ex.StackTrace;
+                return ResponseProducer.ErrorResponse(ex.Message, stackTrace: ex.StackTrace);
             }
             return _response;
         }
@@ -54,8 +52,7 @@ namespace Mango.Services.CouponAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                return ResponseProducer.ErrorResponse(message: ex.Message, stackTrace: ex.StackTrace);
             }
             return _response;
         }
@@ -71,8 +68,7 @@ namespace Mango.Services.CouponAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                return ResponseProducer.ErrorResponse(ex.Message);
             }
             return _response;
         }
@@ -103,8 +99,7 @@ namespace Mango.Services.CouponAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                return ResponseProducer.ErrorResponse(ex.Message);
             }
             return _response;
         }
@@ -124,8 +119,7 @@ namespace Mango.Services.CouponAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                return ResponseProducer.ErrorResponse(ex.Message);
             }
             return _response;
         }
@@ -146,8 +140,7 @@ namespace Mango.Services.CouponAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                return ResponseProducer.ErrorResponse(ex.Message);
             }
             return _response;
         }

@@ -38,8 +38,7 @@ namespace Mango.Services.ProductAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                return ResponseProducer.ErrorResponse(ex.Message);
             }
             return _response;
         }
@@ -56,8 +55,7 @@ namespace Mango.Services.ProductAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                return ResponseProducer.ErrorResponse(ex.Message);
             }
             return _response;
         }
@@ -106,8 +104,7 @@ namespace Mango.Services.ProductAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                return ResponseProducer.ErrorResponse(ex.Message);
             }
             return _response;
         }
@@ -153,8 +150,7 @@ namespace Mango.Services.ProductAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                return ResponseProducer.ErrorResponse(ex.Message);
             }
             return _response;
         }
@@ -184,8 +180,7 @@ namespace Mango.Services.ProductAPI.Controllers
             }
             catch (Exception ex)
             {
-                _response.IsSuccess = false;
-                _response.Message = ex.Message;
+                return ResponseProducer.ErrorResponse(ex.Message);
             }
             return _response;
         }
