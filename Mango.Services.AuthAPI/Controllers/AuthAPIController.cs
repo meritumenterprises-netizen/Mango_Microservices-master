@@ -75,9 +75,7 @@ namespace Mango.Services.AuthAPI.Controllers
             var assignRoleSuccessful = responseDto.IsSuccess;
             if (!assignRoleSuccessful)
             {
-                _response.IsSuccess = false;
-                _response.Message = "Error encountered";
-                return BadRequest(_response);
+                return BadRequest(ResponseProducer.ErrorResponse("Error encountered"));
             }
             return Ok(_response);
 
@@ -90,13 +88,9 @@ namespace Mango.Services.AuthAPI.Controllers
             var userDto = DtoConverter.ToDto<UserDto>(responseDto);
             if (userDto == null || userDto.Email.ToLower() != email.ToLower())
             {
-                _response.IsSuccess = false;
-                _response.Message = "User not found";
-                return NotFound(_response);
+                return NotFound(ResponseProducer.ErrorResponse("User not found"));
             }
-            _response.IsSuccess = true;
-            _response.Result = DtoConverter.ToJson<UserDto>(userDto);
-            return Ok(_response);
+            return Ok(ResponseProducer.OkResponse(result: userDto));
         }
     }
 }
