@@ -52,7 +52,6 @@ namespace Mango.Services.ProductAPI.Controllers
             {
                 Product obj = _db.Products.First(u => u.ProductId == id);
                 _response.Result = _mapper.Map<ProductDto>(obj);
-                //_messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Message), _configuration.GetValue<string>("TopicAndQueueNames:ProductRetrievedQueue"));
             }
             catch (Exception ex)
             {
@@ -177,7 +176,6 @@ namespace Mango.Services.ProductAPI.Controllers
                 _db.SaveChanges();
                 _response.IsSuccess = true;
                 _response.Message = "Product deleted successfully";
-                //_messageBus.PublishMessage(JsonConvert.SerializeObject(obj), _configuration.GetValue<string>("TopicAndQueueNames:ProductDeletedQueue"));
             }
             catch (Exception ex)
             {

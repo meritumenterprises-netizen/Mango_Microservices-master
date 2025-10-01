@@ -29,6 +29,9 @@
 					<th>
 						Price
 					</th>
+					<th>
+						In Stock
+					</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -44,6 +47,9 @@
 						</td>
 						<td>
 							@((item.Price).ToString("c"))
+						</td>
+						<td>
+							@((item.StockInventory))
 						</td>
 						<td>
 							<a class="btn btn-success" asp-action="ProductEdit" asp-route-productId="@item.ProductId">
