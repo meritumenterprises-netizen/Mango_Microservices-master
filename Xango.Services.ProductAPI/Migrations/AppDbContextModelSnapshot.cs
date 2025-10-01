@@ -16,7 +16,7 @@ namespace Mango.Services.ProductAPI.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0-preview.3.23174.2")
+                .HasAnnotation("ProductVersion", "9.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -50,6 +50,9 @@ namespace Mango.Services.ProductAPI.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
+                    b.Property<int>("StockInventory")
+                        .HasColumnType("int");
+
                     b.HasKey("ProductId");
 
                     b.ToTable("Products");
@@ -62,7 +65,8 @@ namespace Mango.Services.ProductAPI.Migrations
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/603x403",
                             Name = "Samosa",
-                            Price = 15.0
+                            Price = 15.0,
+                            StockInventory = 0
                         },
                         new
                         {
@@ -71,7 +75,8 @@ namespace Mango.Services.ProductAPI.Migrations
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/602x402",
                             Name = "Paneer Tikka",
-                            Price = 13.99
+                            Price = 13.99,
+                            StockInventory = 0
                         },
                         new
                         {
@@ -80,7 +85,8 @@ namespace Mango.Services.ProductAPI.Migrations
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/601x401",
                             Name = "Sweet Pie",
-                            Price = 10.99
+                            Price = 10.99,
+                            StockInventory = 0
                         },
                         new
                         {
@@ -89,7 +95,8 @@ namespace Mango.Services.ProductAPI.Migrations
                             Description = " Quisque vel lacus ac magna, vehicula sagittis ut non lacus.<br/> Vestibulum arcu turpis, maximus malesuada neque. Phasellus commodo cursus pretium.",
                             ImageUrl = "https://placehold.co/600x400",
                             Name = "Pav Bhaji",
-                            Price = 15.0
+                            Price = 15.0,
+                            StockInventory = 0
                         });
                 });
 #pragma warning restore 612, 618
