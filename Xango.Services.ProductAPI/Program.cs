@@ -1,10 +1,11 @@
 using AutoMapper;
-using Xango.Services.ProductAPI;
-using Xango.Services.ProductAPI.Data;
-using Xango.Services.ProductAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Xango.Services.ProductAPI;
+using Xango.Services.ProductAPI.Data;
+using Xango.Services.ProductAPI.Extensions;
+using Xango.Services.Token;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 });
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
+//builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddControllers();

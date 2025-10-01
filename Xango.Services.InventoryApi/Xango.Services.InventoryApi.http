@@ -1,6 +1,0 @@
-@Xango.Services.InventoryApi_HostAddress = http://localhost:5172
-
-GET {{Xango.Services.InventoryApi_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

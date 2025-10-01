@@ -12,6 +12,7 @@ using Xango.Services.Interfaces;
 
 namespace Xango.Web.Controllers
 {
+    [ApiController]
     public class CartController : Controller
     {
         private readonly ICartService _cartService;

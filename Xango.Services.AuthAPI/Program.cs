@@ -6,6 +6,7 @@ using Xango.Services.AuthAPI.Service.IService;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Xango.Services.Token;
 
 using Xango.Services.AuthAPI;
 
@@ -22,6 +23,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 builder.Services.AddControllers();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 
 builder.Services.AddSingleton(mapper);

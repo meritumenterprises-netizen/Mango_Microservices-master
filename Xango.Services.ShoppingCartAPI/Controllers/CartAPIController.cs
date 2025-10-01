@@ -38,7 +38,6 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
 
         }
         [HttpGet("GetCart/{userId}")]
-        [Authorize]
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         public async Task<ResponseDto> GetCart(string userId)
         {

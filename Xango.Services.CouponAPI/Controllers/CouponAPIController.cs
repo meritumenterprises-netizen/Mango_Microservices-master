@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Xango.Models.Dto;
 using Xango.Services.Dto.Utilities;
 
-namespace Xango.Services.CouponAPI.Controllers
+namespace Mango.Services.CouponAPI.Controllers
 {
     [Route("api/coupon")]
     [ApiController]

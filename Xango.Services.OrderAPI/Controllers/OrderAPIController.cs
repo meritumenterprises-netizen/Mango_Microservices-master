@@ -18,7 +18,6 @@ namespace Mango.Services.OrderAPI.Controllers
 {
     [Route("api/order")]
     [ApiController]
-    [Authorize]
     public class OrderAPIController : ControllerBase
     {
         protected ResponseDto _response;
@@ -66,6 +65,7 @@ namespace Mango.Services.OrderAPI.Controllers
 
         [HttpGet("GetOrder/{id:int}")]
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        [Authorize]
         public ResponseDto? Get(int id)
         {
             try
@@ -102,6 +102,7 @@ namespace Mango.Services.OrderAPI.Controllers
         }
 
         [HttpPost("CreateOrder")]
+        [Authorize]
         public async Task<ResponseDto> CreateOrder([FromBody] CartDto cartDto)
         {
             try

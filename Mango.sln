@@ -45,8 +45,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.ShoppingCart
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.OrderAPI", "Xango.Services.OrderAPI\Xango.Services.OrderAPI.csproj", "{1DAA55EA-0313-FE93-795A-7DB51C42CA70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.InventoryApi", "Xango.Services.InventoryApi\Xango.Services.InventoryApi.csproj", "{8A9421D7-56CD-4007-9C0E-CFC06BD657DB}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,10 +95,6 @@ Global
 		{1DAA55EA-0313-FE93-795A-7DB51C42CA70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DAA55EA-0313-FE93-795A-7DB51C42CA70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DAA55EA-0313-FE93-795A-7DB51C42CA70}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8A9421D7-56CD-4007-9C0E-CFC06BD657DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8A9421D7-56CD-4007-9C0E-CFC06BD657DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8A9421D7-56CD-4007-9C0E-CFC06BD657DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8A9421D7-56CD-4007-9C0E-CFC06BD657DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -124,7 +118,6 @@ Global
 		{CBDFC0BF-17B9-154C-7EAC-121D4F0CD33A} = {93124727-AAF7-4047-BC08-006CF8E31074}
 		{9275E714-BDB0-8AC9-FCC5-9292AF3C5290} = {93124727-AAF7-4047-BC08-006CF8E31074}
 		{1DAA55EA-0313-FE93-795A-7DB51C42CA70} = {93124727-AAF7-4047-BC08-006CF8E31074}
-		{8A9421D7-56CD-4007-9C0E-CFC06BD657DB} = {93124727-AAF7-4047-BC08-006CF8E31074}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {929D2BC7-133A-46CF-89C4-0315B8019576}
