@@ -6,6 +6,9 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using Xango.Services.InventoryApi.Data;
+using Xango.Services.InventoryApi;
+using Xango.Services.InventoryApi.Service.IService;
+using Xango.Services.InventoryApi.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +19,9 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+builder.Services.AddSingleton(mapper);
+
 builder.Services.AddMvc();
 builder.Services.AddControllers();
 
@@ -24,6 +30,7 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
 
 builder.Services.AddSwaggerGen(option =>
 {
