@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Xango.Services.ProductAPI.Models
+namespace Xango.Services.InventoryApi.Model
 {
     public class Product
     {

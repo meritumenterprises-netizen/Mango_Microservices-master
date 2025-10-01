@@ -1,8 +1,7 @@
 using AutoMapper;
-///using Mango.MessageBus;
-using Mango.Services.ProductAPI;
-using Mango.Services.ProductAPI.Data;
-using Mango.Services.ProductAPI.Extensions;
+using Xango.Services.ProductAPI;
+using Xango.Services.ProductAPI.Data;
+using Xango.Services.ProductAPI.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
