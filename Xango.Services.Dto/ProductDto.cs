@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 
 namespace Xango.Models.Dto
 {
@@ -13,6 +14,8 @@ namespace Xango.Models.Dto
         public string? ImageLocalPath { get; set; }
         public IFormFile? Image { get; set; }
         public int Count { get; set; } = 1;
+
+        [Range(0,1000, ErrorMessage = "Inventory must be between 0 and 1000")]
         public int StockInventory { get; set; }
 
     }
