@@ -10,7 +10,7 @@ using Xango.Models.Dto;
 using Xango.Services.Dto;
 using Xango.Services.Interfaces;
 //using Xango.Web.BaseService;
-using Xango.Services.Token;
+//using Xango.Services.Token;
 
 
 namespace Mango.Web.Controllers
@@ -18,12 +18,12 @@ namespace Mango.Web.Controllers
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
-        private readonly ITokenProvider _tokenProvider;
+        //private readonly ITokenProvider _tokenProvider;
 
-        public AuthController(IAuthService authService, ITokenProvider tokenProvider)
+        public AuthController(IAuthService authService /*ITokenProvider tokenProvider*/)
         {
             _authService = authService;
-            _tokenProvider = tokenProvider;
+            //_tokenProvider = tokenProvider;
         }
 
         [HttpGet]
@@ -42,7 +42,7 @@ namespace Mango.Web.Controllers
             {
                 LoginResponseDto loginResponseDto = DtoConverter.ToDto<LoginResponseDto>(response);
                  SignInUser(loginResponseDto);
-                _tokenProvider.SetToken(loginResponseDto.Token);
+                //_tokenProvider.SetToken(loginResponseDto.Token);
                 TempData.Remove("error");
                 return RedirectToAction("Index", "Home");
             }
@@ -58,7 +58,7 @@ namespace Mango.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            _tokenProvider.ClearToken();
+            //_tokenProvider.ClearToken();
             TempData.Remove("error");
             return RedirectToAction("Index", "Home");
         }

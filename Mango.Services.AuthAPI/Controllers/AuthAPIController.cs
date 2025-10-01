@@ -73,7 +73,7 @@ namespace Mango.Services.AuthAPI.Controllers
 
         }
 
-        [HttpGet("GetUser/{email}")]
+        [HttpGet("GetUser/{email}")] 
         public async Task<IActionResult> GetUser(string email)
         {
             var userDto = await _authService.GetUser(email);
