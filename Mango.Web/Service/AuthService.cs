@@ -1,11 +1,9 @@
 ﻿using Xango.Services.Interfaces;
-using Mango.Web.Utility;
-using Newtonsoft.Json;
 using Xango.Models.Dto;
-using Mango.Web.Service.IService;
 using Xango.Services.Dto.Utilities;
+using Xango.Web.Service.IService;
 
-namespace Mango.Web.Service
+namespace Xango.Web.Service
 {
     public class AuthService : IAuthService
     {

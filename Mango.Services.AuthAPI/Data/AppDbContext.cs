@@ -1,8 +1,8 @@
-﻿using Mango.Services.AuthAPI.Models;
+﻿using Xango.Services.AuthAPI.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace Mango.Services.AuthAPI.Data
+namespace Xango.Services.AuthAPI.Data
 {
     public class AppDbContext : IdentityDbContext<ApplicationUser>
     {

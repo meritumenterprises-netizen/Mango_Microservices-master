@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Mango.Services.AuthAPI.Models;
+using Xango.Services.AuthAPI.Models;
 using Xango.Models.Dto;
 
 namespace Xango.Services.AuthAPI

@@ -1,6 +1,4 @@
 ﻿using AutoMapper;
-//using Mango.Services.OrderAPI.Models;
-using Xango.Models.Dto;
 
 namespace Xango.Web.Mapping
 {

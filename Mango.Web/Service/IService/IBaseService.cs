@@ -1,7 +1,6 @@
-﻿//using Mango.Web.Models;
-using Xango.Models.Dto;
+﻿using Xango.Models.Dto;
 
-namespace Mango.Web.Service.IService
+namespace Xango.Web.Service.IService
 {
     public interface IBaseService
     {

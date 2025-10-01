@@ -1,12 +1,12 @@
-﻿using Mango.Services.AuthAPI.Data;
-using Mango.Services.AuthAPI.Models;
-using Mango.Services.AuthAPI.Service.IService;
+﻿using Xango.Services.AuthAPI.Data;
+using Xango.Services.AuthAPI.Models;
+using Xango.Services.AuthAPI.Service.IService;
 using Microsoft.AspNetCore.Identity;
 using AutoMapper;
 using Xango.Models.Dto;
 using Xango.Services.Dto;
 
-namespace Mango.Services.AuthAPI.Service
+namespace Xango.Services.AuthAPI.Service
 {
     public class AuthService : IAuthService
     {

@@ -1,18 +1,12 @@
 ﻿using AutoMapper;
-//using Mango.Services.OrderAPI.Models;
-using Mango.Web.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
-//using Stripe;
-//using Stripe.Checkout;
 using System.IdentityModel.Tokens.Jwt;
 using Xango.Models.Dto;
 using Xango.Services.Dto.Utilities;
 using Xango.Services.Interfaces;
-//using Xango.Web.BaseService;
 
-namespace Mango.Web.Controllers
+namespace Xango.Web.Controllers
 {
     public class OrderController : Controller
     {

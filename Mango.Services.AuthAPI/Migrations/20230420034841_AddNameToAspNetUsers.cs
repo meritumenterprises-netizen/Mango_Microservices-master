@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Mango.Services.AuthAPI.Migrations
+namespace Xango.Services.AuthAPI.Migrations
 {
     /// <inheritdoc />
     public partial class AddNameToAspNetUsers : Migration

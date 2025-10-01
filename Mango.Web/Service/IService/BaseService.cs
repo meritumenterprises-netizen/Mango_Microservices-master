@@ -1,13 +1,11 @@
-﻿//using Mango.Web.Models;
-using Mango.Web.Service.IService;
+﻿using Xango.Web.Service.IService;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text;
 using Xango.Models.Dto;
 using Xango.Services.Token;
-//using static Mango.Web.Utility.SD;
 
-namespace Mango.Web.BaseService
+namespace Xango.Web.BaseService
 {
     public class BaseService : IBaseService
     {

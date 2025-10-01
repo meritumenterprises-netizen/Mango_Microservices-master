@@ -1,5 +1,5 @@
 ﻿
-using Mango.Web.Utility;
+using Xango.Web.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
@@ -10,7 +10,7 @@ using Xango.Services.Interfaces;
 //using Xango.Web.BaseService;
 
 
-namespace Mango.Web.Controllers
+namespace Xango.Web.Controllers
 {
     public class CartController : Controller
     {

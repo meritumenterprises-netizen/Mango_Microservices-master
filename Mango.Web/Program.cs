@@ -1,14 +1,14 @@
 using AutoMapper;
-using Mango.Web.Service;
+using Xango.Web.Service;
 
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Xango.Models.Dto;
 using Xango.Services.Interfaces;
 using Xango.Web.Mapping;
-//using Xango.Web.BaseService;
+
 using Xango.Services.Token;
-using Mango.Web.Service.IService;
-using Mango.Web.BaseService;
+using Xango.Web.Service.IService;
+using Xango.Web.BaseService;
 
 
 var builder = WebApplication.CreateBuilder(args);

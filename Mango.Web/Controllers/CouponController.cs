@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Xango.Models.Dto;
 using Xango.Services.Dto.Utilities;
 using Xango.Services.Interfaces;
 
-namespace Mango.Web.Controllers
+namespace Xango.Web.Controllers
 {
     public class CouponController : Controller
     {

@@ -1,6 +1,6 @@
 ﻿using Xango.Models.Dto;
 
-namespace Mango.Services.AuthAPI.Service.IService
+namespace Xango.Services.AuthAPI.Service.IService
 {
     public interface IAuthService
     {

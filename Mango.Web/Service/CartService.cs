@@ -1,11 +1,8 @@
-﻿using Mango.Web.Service.IService;
-using Mango.Web.Utility;
-using Xango.Models.Dto;
+﻿using Xango.Models.Dto;
 using Xango.Services.Interfaces;
+using Xango.Web.Service.IService;
 
-//using Xango.Web.BaseService;
-
-namespace Mango.Web.Service
+namespace Xango.Web.Service
 {
     public class CartService : ICartService
     {

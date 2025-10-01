@@ -7,9 +7,9 @@ using System.Diagnostics;
 using Xango.Models.Dto;
 using Xango.Services.Dto.Utilities;
 using Xango.Services.Interfaces;
-//using Xango.Web.BaseService;
 
-namespace Mango.Web.Controllers
+
+namespace Xango.Web.Controllers
 {
     public class HomeController : Controller
     {

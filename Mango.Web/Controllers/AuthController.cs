@@ -9,21 +9,16 @@ using System.Security.Claims;
 using Xango.Models.Dto;
 using Xango.Services.Dto.Utilities;
 using Xango.Services.Interfaces;
-//using Xango.Web.BaseService;
-//using Xango.Services.Token;
 
-
-namespace Mango.Web.Controllers
+namespace Xango.Web.Controllers
 {
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
-        //private readonly ITokenProvider _tokenProvider;
 
-        public AuthController(IAuthService authService /*ITokenProvider tokenProvider*/)
+        public AuthController(IAuthService authService)
         {
             _authService = authService;
-            //_tokenProvider = tokenProvider;
         }
 
         [HttpGet]

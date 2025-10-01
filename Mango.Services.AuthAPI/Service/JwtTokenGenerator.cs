@@ -1,12 +1,12 @@
-﻿using Mango.Services.AuthAPI.Models;
-using Mango.Services.AuthAPI.Service.IService;
+﻿using Xango.Services.AuthAPI.Models;
+using Xango.Services.AuthAPI.Service.IService;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Mango.Services.AuthAPI.Service
+namespace Xango.Services.AuthAPI.Service
 {
     public class JwtTokenGenerator : IJwtTokenGenerator
     {
