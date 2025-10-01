@@ -35,7 +35,7 @@ namespace Mango.Services.AuthAPI.Service
         public async Task<UserDto> GetUser(string email)
         {
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
-            if (user != null)
+            if (user == null)
             {
                 return new UserDto()
                 {
