@@ -5,12 +5,21 @@ using Mango.Services.OrderAPI.Extensions;
 using Mango.Services.OrderAPI.Utility;
 using Mango.Services.ShoppingCartAPI.Service;
 using Mango.Services.ShoppingCartAPI.Service.IService;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
+using Mango.Services.OrderAPI.Extensions;
 using Xango.Services.Token;
 
 var builder = WebApplication.CreateBuilder(args);
+IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+builder.Services.AddSingleton(mapper);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+
 
 // Add services to the container.
 
@@ -19,6 +28,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
@@ -28,10 +38,6 @@ new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
-builder.Services.AddSingleton(mapper);
-builder.Services.AddScoped<ITokenProvider, TokenProvider>();
-//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -57,9 +63,8 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
-builder.AddAppAuthetication();
 
-builder.Services.AddAuthentication();
+builder.AddAppAuthetication();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();

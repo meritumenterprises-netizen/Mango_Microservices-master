@@ -29,7 +29,7 @@ namespace Mango.Services.ProductAPI.Controllers
         }
 
         [HttpGet]
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        //[ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         public ResponseDto Get()
         {
             try

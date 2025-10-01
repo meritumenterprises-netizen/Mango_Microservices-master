@@ -39,7 +39,7 @@ namespace Mango.Services.OrderAPI.Controllers
         }
 
         [HttpGet("GetAll")]
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
+        [Authorize]
         public ResponseDto? GetAll(string userId, string status = "all")
         {
             try
@@ -64,7 +64,6 @@ namespace Mango.Services.OrderAPI.Controllers
         }
 
         [HttpGet("GetOrder/{id:int}")]
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         [Authorize]
         public ResponseDto? Get(int id)
         {
@@ -81,6 +80,7 @@ namespace Mango.Services.OrderAPI.Controllers
         }
 
         [HttpGet("CancelOrder/{id:int}")]
+        [Authorize]
         public async Task<ResponseDto> CancelOrder(int id)
         {
             try
@@ -103,7 +103,7 @@ namespace Mango.Services.OrderAPI.Controllers
 
         [HttpPost("CreateOrder")]
         [Authorize]
-        public async Task<ResponseDto> CreateOrder([FromBody] CartDto cartDto)
+        public async Task<ResponseDto> CreateOrder(CartDto cartDto)
         {
             try
             {
@@ -188,6 +188,7 @@ namespace Mango.Services.OrderAPI.Controllers
         }
 
         [HttpPost("ValidateStripeSession")]
+        [Authorize]
         public async Task<ResponseDto> ValidateStripeSession([FromBody] int orderHeaderId)
         {
             try
@@ -224,6 +225,7 @@ namespace Mango.Services.OrderAPI.Controllers
         }
 
         [HttpPost("UpdateOrderStatus/{orderId:int}")]
+        [Authorize]
         public async Task<ResponseDto> UpdateOrderStatus(int orderId, [FromBody] string newStatus)
         {
             try

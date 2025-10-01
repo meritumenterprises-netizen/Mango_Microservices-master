@@ -12,7 +12,7 @@ using Xango.Services.Interfaces;
 
 namespace Xango.Web.Controllers
 {
-    [ApiController]
+    
     public class CartController : Controller
     {
         private readonly ICartService _cartService;
@@ -25,7 +25,7 @@ namespace Xango.Web.Controllers
             _authService = authService;
         }
 
-        [Authorize]
+        [HttpGet]
         public async Task<IActionResult> CartIndex()
         {
             return View(await LoadCartDtoBasedOnLoggedInUser());
@@ -52,6 +52,7 @@ namespace Xango.Web.Controllers
 
         [HttpPost]
         [ActionName("Checkout")]
+        [Authorize]
         public async Task<IActionResult> Checkout(CartDto cartDto)
         {
 
