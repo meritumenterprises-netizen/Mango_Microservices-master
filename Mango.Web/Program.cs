@@ -39,6 +39,7 @@ builder.Services.AddScoped<IBaseService, BaseService>();
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 

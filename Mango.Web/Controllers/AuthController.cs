@@ -108,7 +108,6 @@ namespace Mango.Web.Controllers
 
             ViewBag.RoleList = roleList;
             return RedirectToAction("Index", "Home");
-            //return View(obj);
         }
 
         [HttpPost]
