@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
 using Xango.Services.Dto;
-using Xango.Services.Interfaces;
+using Mango.Services.AuthAPI.Service.IService;
 
 namespace Mango.Services.AuthAPI.Controllers
 {
@@ -31,26 +31,27 @@ namespace Mango.Services.AuthAPI.Controllers
         public async Task<IActionResult> Register([FromBody] RegistrationRequestDto model)
         {
             var result = await _authService.Register(model);
-            if (result.IsSuccess == false)
+            if (string.IsNullOrEmpty(result))
             {
                 return BadRequest(ResponseProducer.ErrorResponse("User registration failed"));
             }
             _response.IsSuccess = true;
             _response.Message = "Registration successful";
-            _response.Result = result.Result;
             return Ok(_response);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequestDto model)
+        public async Task<IActionResult> Login(LoginRequestDto model)
         {
-            var responseDto = await _authService.Login(model);
-            LoginResponseDto loginResponse = DtoConverter.ToDto<LoginResponseDto>(responseDto);
+            var loginResponse = await _authService.Login(model);
             if (loginResponse.User == null)
             {
-                return BadRequest(ResponseProducer.ErrorResponse("Username or password is incorrect"));
+                _response.IsSuccess = false;
+                _response.Message = "Username or password is incorrect";
+                return BadRequest(_response);
             }
-            _response.Result = DtoConverter.ToJson(loginResponse);
+            //_response.Result = DtoConverter.ToJson<LoginResponseDto>(loginResponse);
+            _response.Result = loginResponse;
             return Ok(_response);
         }
 
@@ -63,9 +64,8 @@ namespace Mango.Services.AuthAPI.Controllers
                 Password = model.Password,
                 Role = model.Role
             };
-            var responseDto = await _authService.AssignRole(registrationDto);
-            var assignRoleSuccessful = responseDto.IsSuccess;
-            if (!assignRoleSuccessful)
+            var result = await _authService.AssignRole(model.Email,model.Role.ToUpper());
+            if (!result)
             {
                 return BadRequest(ResponseProducer.ErrorResponse("Error encountered"));
             }
@@ -76,8 +76,7 @@ namespace Mango.Services.AuthAPI.Controllers
         [HttpGet("GetUser/{email}")]
         public async Task<IActionResult> GetUser(string email)
         {
-            var responseDto = await _authService.GetUser(email);
-            var userDto = DtoConverter.ToDto<UserDto>(responseDto);
+            var userDto = await _authService.GetUser(email);
             if (userDto == null || userDto.Email.ToLower() != email.ToLower())
             {
                 return NotFound(ResponseProducer.ErrorResponse("User not found"));

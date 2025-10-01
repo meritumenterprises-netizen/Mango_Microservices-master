@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
 using Xango.Services.Dto;
-using Xango.Services.Interfaces;
 
 namespace Mango.Services.AuthAPI.Service
 {
@@ -19,6 +19,7 @@ namespace Mango.Services.AuthAPI.Service
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        protected ResponseDto _response;
 
         public AuthService(AppDbContext db, IJwtTokenGenerator jwtTokenGenerator,
             UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IHttpContextAccessor ctx)
@@ -28,36 +29,28 @@ namespace Mango.Services.AuthAPI.Service
             _userManager = userManager;
             _roleManager = roleManager;
             _httpContextAccessor = ctx;
+            _response = new();
         }
 
-        public async Task<ResponseDto?> GetUser(string email)
+        public async Task<UserDto> GetUser(string email)
         {
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
             if (user != null)
             {
-                var response = new ResponseDto()
+                return new UserDto()
                 {
-                    IsSuccess = true,
-                    Result = DtoConverter.ToJson<UserDto>(new UserDto() { ID = user.Id, Name = user.Name, Email = user.Email, PhoneNumber = user.PhoneNumber })
                 };
-                return response;
             }
-            return new ResponseDto()
+            return new UserDto()
             {
-                IsSuccess = false,
-                Message = $"User {email} not found",
-                Result = JsonConvert.SerializeObject(
-                    new UserDto()
-                    {
-                        ID = "",
-                        Name = "",
-                        Email = "",
-                        PhoneNumber = ""
-                    })
+                ID = user.Id,
+                Email = user.Email,
+                Name = user.Name,
+                PhoneNumber = user.PhoneNumber
             };
         }
 
-        public async Task<ResponseDto> Login(LoginRequestDto loginRequestDto)
+        public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
             var responseDto = new ResponseDto();
             var user = _db.ApplicationUsers.FirstOrDefault(u => u.UserName.ToLower() == loginRequestDto.UserName.ToLower());
@@ -66,9 +59,7 @@ namespace Mango.Services.AuthAPI.Service
 
             if (user == null || isValid == false)
             {
-                responseDto.IsSuccess = false;
-                responseDto.Result = JsonConvert.SerializeObject(new LoginResponseDto() { User = null, Token = "" });
-                return responseDto;
+                return new LoginResponseDto() { User = null, Token = "" };
             }
 
             //if user was found , Generate JWT Token
@@ -88,12 +79,10 @@ namespace Mango.Services.AuthAPI.Service
                 User = userDTO,
                 Token = token
             };
-            responseDto.Result = JsonConvert.SerializeObject(loginResponseDto);
-
-            return responseDto;
+            return loginResponseDto;
         }
 
-        public async Task<ResponseDto?> Register(RegistrationRequestDto registrationRequestDto)
+        public async Task<string?> Register(RegistrationRequestDto registrationRequestDto)
         {
             ApplicationUser user = new()
             {
@@ -119,49 +108,36 @@ namespace Mango.Services.AuthAPI.Service
                         PhoneNumber = userToReturn.PhoneNumber
                     };
 
-                    var responseDto = await AssignRole(new RegistrationRequestDto() { Email = user.Email, Role = registrationRequestDto.Role });
-                    return responseDto;
+                    return "Registration successful";
 
                 }
                 else
                 {
-                    return ResponseProducer.ErrorResponse(message: $"User {user.Email} could not be created");
+                    return result.Errors.FirstOrDefault().Description;
                 }
 
             }
             catch (Exception ex)
             {
-                return ResponseProducer.ErrorResponse(message: ex.Message, stackTrace: ex.StackTrace);
+
             }
-            return ResponseProducer.OkResponse();
+            return "Error Encountered";
         }
 
-        public async Task<ResponseDto?> AssignRole(RegistrationRequestDto registrationRequestDto)
+        public async Task<bool> AssignRole(string email, string role)
         {
-            var responseDto = new ResponseDto();
-            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == registrationRequestDto.Email.ToLower());
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
             if (user != null)
             {
-                var roleExists = await _roleManager.RoleExistsAsync(registrationRequestDto.Role);
+                var roleExists = await _roleManager.RoleExistsAsync(role);
                 if (!roleExists)
                 {
-                    await _roleManager.CreateAsync(new IdentityRole(registrationRequestDto.Role));
+                    await _roleManager.CreateAsync(new IdentityRole(role));
                 }
-                await _userManager.AddToRoleAsync(user, registrationRequestDto.Role);
-                responseDto.IsSuccess = true;
-                responseDto.Result = DtoConverter.ToJson<ResponseDto>(responseDto);
-                return responseDto;
+                await _userManager.AddToRoleAsync(user, role);
+                return true;
             }
-            responseDto.IsSuccess = false;
-            responseDto.Message = "User does not exist";
-            return responseDto;
+            return false;
         }
-
-        public async Task<ResponseDto?> Logout()
-        {
-            return new ResponseDto();
-        }
-        
     }
-
 }

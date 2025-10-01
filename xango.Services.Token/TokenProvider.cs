@@ -1,8 +1,7 @@
-﻿using Mango.Web.Service.IService;
-using Mango.Web.Utility;
+﻿using Microsoft.AspNetCore.Http;
 using Xango.Models.Dto;
 
-namespace Mango.Web.Service
+namespace Xango.Services.Token
 {
     public class TokenProvider : ITokenProvider
     {

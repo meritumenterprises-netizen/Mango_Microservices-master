@@ -1,11 +1,13 @@
-﻿using Mango.Web.Service.IService;
+﻿//using Mango.Web.Models;
+using Mango.Web.Service.IService;
 using Newtonsoft.Json;
 using System.Net;
 using System.Text;
 using Xango.Models.Dto;
-using Xango.Services.Dto;
+using Xango.Services.Token;
+//using static Mango.Web.Utility.SD;
 
-namespace Mango.Web.Service
+namespace Mango.Web.BaseService
 {
     public class BaseService : IBaseService
     {
@@ -69,6 +71,11 @@ namespace Mango.Web.Service
                         message.Content = new StringContent(JsonConvert.SerializeObject(requestDto.Data), Encoding.UTF8, "application/json");
                     }
                 }
+
+
+
+
+
                 HttpResponseMessage? apiResponse = null;
 
                 switch (requestDto.ApiType)
@@ -98,16 +105,21 @@ namespace Mango.Web.Service
                     case HttpStatusCode.Unauthorized:
                         return new() { IsSuccess = false, Message = "Unauthorized" };
                     case HttpStatusCode.InternalServerError:
-                        return new() { IsSuccess = false, Message = "Internal Server Error", StackTrace = await apiResponse.Content.ReadAsStringAsync() };
+                        return new() { IsSuccess = false, Message = "Internal Server Error" };
                     default:
                         var apiContent = await apiResponse.Content.ReadAsStringAsync();
-                        var apiResponseDto = DtoConverter.ToDto<ResponseDto>(new ResponseDto() { Result = apiContent });
+                        var apiResponseDto = JsonConvert.DeserializeObject<ResponseDto>(apiContent);
                         return apiResponseDto;
                 }
             }
             catch (Exception ex)
             {
-                return ResponseProducer.ErrorResponse(ex.Message, ex.StackTrace);
+                var dto = new ResponseDto
+                {
+                    Message = ex.Message.ToString(),
+                    IsSuccess = false
+                };
+                return dto;
             }
         }
     }

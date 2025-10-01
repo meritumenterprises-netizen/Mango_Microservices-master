@@ -1,5 +1,4 @@
-﻿using Mango.Web.Service.IService;
-using Mango.Web.Utility;
+﻿
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +9,9 @@ using System.Security.Claims;
 using Xango.Models.Dto;
 using Xango.Services.Dto;
 using Xango.Services.Interfaces;
+//using Xango.Web.BaseService;
+using Xango.Services.Token;
+
 
 namespace Mango.Web.Controllers
 {
@@ -34,11 +36,11 @@ namespace Mango.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequestDto obj)
         {
-            ResponseDto responseDto = await _authService.Login(obj);
+            ResponseDto response = await _authService.Login(obj);
 
-            if (responseDto != null && responseDto.IsSuccess)
+            if (response != null && response.IsSuccess)
             {
-                LoginResponseDto loginResponseDto = DtoConverter.ToDto<LoginResponseDto>(responseDto);
+                LoginResponseDto loginResponseDto = DtoConverter.ToDto<LoginResponseDto>(response);
                  SignInUser(loginResponseDto);
                 _tokenProvider.SetToken(loginResponseDto.Token);
                 TempData.Remove("error");
@@ -46,9 +48,9 @@ namespace Mango.Web.Controllers
             }
             else
             {
-                TempData["error"] = responseDto.Message;
-                //return View(obj);
-                return RedirectToAction("Index", "Home");
+                TempData["error"] = response.Message;
+                return View(obj);
+                //return RedirectToAction("Index", "Home");
             }
         }
 
@@ -105,7 +107,8 @@ namespace Mango.Web.Controllers
             };
 
             ViewBag.RoleList = roleList;
-            return View(obj);
+            return RedirectToAction("Index", "Home");
+            //return View(obj);
         }
 
         [HttpPost]

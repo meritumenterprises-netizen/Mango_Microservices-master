@@ -6,7 +6,6 @@ using Mango.Services.AuthAPI.Service.IService;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Xango.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,12 +20,12 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFramework
 builder.Services.AddControllers();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
 //builder.Services.AddScoped<ITokenProvider, TokenProvider>();
-builder.Services.AddScoped<IAuthService, Mango.Services.AuthAPI.Service.AuthService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 IMapper mapper = Xango.Services.AuthAPI.MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

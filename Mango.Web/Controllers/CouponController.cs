@@ -1,9 +1,8 @@
-﻿using Mango.Web.Service.IService;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
 using Xango.Services.Dto;
-using Xango.Services.Interfaces;    
+using Xango.Services.Interfaces;
 
 namespace Mango.Web.Controllers
 {
