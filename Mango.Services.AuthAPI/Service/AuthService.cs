@@ -89,17 +89,9 @@ namespace Mango.Services.AuthAPI.Service
                 if (result.Succeeded)
                 {
                     var userToReturn = _db.ApplicationUsers.First(u => u.UserName == registrationRequestDto.Email);
-                    
-                    UserDto userDto = new()
-                    {
-                        Email = userToReturn.Email,
-                        Id = userToReturn.Id,
-                        Name = userToReturn.Name,
-                        PhoneNumber = userToReturn.PhoneNumber
-                    };
+                    var userDto = _mapper.Map<UserDto>(userToReturn);
 
                     return "Registration successful";
-
                 }
                 else
                 {
