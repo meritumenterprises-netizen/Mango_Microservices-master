@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Xango.Services.Dto;
 using Mango.Services.CouponAPI.Data;
 using Mango.Services.CouponAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Xango.Models.Dto;
+using Xango.Services.Dto.Utilities;
 
 namespace Mango.Services.CouponAPI.Controllers
 {

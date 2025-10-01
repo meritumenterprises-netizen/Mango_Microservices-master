@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 
 using Newtonsoft.Json;
 using Xango.Models.Dto;
-using Xango.Services.Dto;
 using Mango.Services.AuthAPI.Service.IService;
+using Xango.Services.Dto.Utilities;
 
 namespace Mango.Services.AuthAPI.Controllers
 {

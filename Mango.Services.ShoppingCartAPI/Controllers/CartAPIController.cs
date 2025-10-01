@@ -6,13 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Xango.Models.Dto;
-using Xango.Services.Dto;
-using Xango.Services.Dto;
 using Newtonsoft.Json;
-
-using Xango.Services.Dto;
 using Xango.Services.ShoppingCartAPI.Service.IService;
 using Xango.Models.Dto;
+using Xango.Services.Dto.Utilities;
 
 namespace Mango.Services.ShoppingCartAPI.Controllers
 {

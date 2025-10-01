@@ -7,7 +7,7 @@ using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Xango.Models.Dto;
-using Xango.Services.Dto;
+using Xango.Services.Dto.Utilities;
 using Xango.Services.Interfaces;
 //using Xango.Web.BaseService;
 //using Xango.Services.Token;

@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Xango.Services.Dto
+namespace Xango.Services.Dto.Utilities
 {
     public class MyLogger : ILogger
     {

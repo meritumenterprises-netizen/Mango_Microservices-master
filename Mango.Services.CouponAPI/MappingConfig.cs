@@ -2,7 +2,7 @@
 using Xango.Models.Dto;
 using Mango.Services.CouponAPI.Models;
 
-using LoggerFactory = Xango.Services.Dto.LoggerFactory;
+using LoggerFactory = Xango.Services.Dto.Utilities.LoggerFactory;
 
 namespace Mango.Services.CouponAPI
 {

@@ -2,7 +2,6 @@
 using Mango.Services.OrderAPI.Data;
 using Mango.Services.OrderAPI.Models;
 using Mango.Services.OrderAPI.Utility;
-using Xango.Services.Dto;
 using Mango.Services.ShoppingCartAPI.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +11,7 @@ using StackExchange.Redis;
 using Stripe;
 using Stripe.Checkout;
 using Xango.Models.Dto;
+using Xango.Services.Dto.Utilities;
 
 
 namespace Mango.Services.OrderAPI.Controllers

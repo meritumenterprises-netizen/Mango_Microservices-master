@@ -2,8 +2,8 @@
 using Mango.Web.Utility;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
-using Xango.Services.Dto;
 using Mango.Web.Service.IService;
+using Xango.Services.Dto.Utilities;
 
 namespace Mango.Web.Service
 {

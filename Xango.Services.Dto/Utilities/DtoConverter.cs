@@ -1,6 +1,6 @@
 ﻿using Xango.Models.Dto;
 using Newtonsoft.Json;
-namespace Xango.Services.Dto
+namespace Xango.Services.Dto.Utilities
 {
     public static class DtoConverter
     {
@@ -8,7 +8,7 @@ namespace Xango.Services.Dto
             where T : class, new()
         {
             if (response== null)
-                return default(T);
+                return default;
 
 #pragma warning disable CS8603 // Possible null reference return.
             return JsonConvert.DeserializeObject<T>(Convert.ToString(response.Result));
