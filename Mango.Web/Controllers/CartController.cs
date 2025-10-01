@@ -35,7 +35,7 @@ namespace Mango.Web.Controllers
         {
             var responseDto = await _authService.GetUser(User.Identity.Name);
             UserDto userDto = DtoConverter.ToDto<UserDto>(responseDto);
-            var cartDto = DtoConverter.ToDto<CartDto>(await _cartService.GetCartByUserId(userDto.ID));
+            var cartDto = DtoConverter.ToDto<CartDto>(await _cartService.GetCartByUserId(userDto.Id));
             return View(cartDto);
         }
 
@@ -146,7 +146,7 @@ namespace Mango.Web.Controllers
             var userEmail = User.Claims.Where((claim) => claim.Type == "email").First().Value;
             var responseDto = await _authService.GetUser(userEmail);
             var userDto = DtoConverter.ToDto<UserDto>(responseDto);
-            ResponseDto? response = await _cartService.GetCartByUserId(userDto.ID);
+            ResponseDto? response = await _cartService.GetCartByUserId(userDto.Id);
             if (response != null & response.IsSuccess)
             {
                 CartDto cartDto = DtoConverter.ToDto<CartDto>(response);

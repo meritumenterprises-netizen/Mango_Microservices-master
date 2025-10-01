@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Mango.Services.AuthAPI.Models;
 using Xango.Models.Dto;
 
 namespace Xango.Services.AuthAPI
@@ -10,6 +11,7 @@ namespace Xango.Services.AuthAPI
             var mappingConfig = new MapperConfiguration(config =>
             {
                 config.CreateMap<LoginRequestDto, UserDto>();
+                config.CreateMap<UserDto, ApplicationUser>().ReverseMap();
             }, (ILoggerFactory)new Microsoft.Extensions.Logging.LoggerFactory());
             return mappingConfig;
         }

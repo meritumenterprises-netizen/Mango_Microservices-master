@@ -1,12 +1,8 @@
 ﻿using Mango.Services.AuthAPI.Data;
 using Mango.Services.AuthAPI.Models;
 using Mango.Services.AuthAPI.Service.IService;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
+using AutoMapper;
 using Xango.Models.Dto;
 using Xango.Services.Dto;
 
@@ -19,10 +15,11 @@ namespace Mango.Services.AuthAPI.Service
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IJwtTokenGenerator _jwtTokenGenerator;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMapper _mapper;
         protected ResponseDto _response;
 
         public AuthService(AppDbContext db, IJwtTokenGenerator jwtTokenGenerator,
-            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IHttpContextAccessor ctx)
+            UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager, IHttpContextAccessor ctx, IMapper mapper)
         {
             _db = db;
             _jwtTokenGenerator = jwtTokenGenerator;
@@ -30,6 +27,7 @@ namespace Mango.Services.AuthAPI.Service
             _roleManager = roleManager;
             _httpContextAccessor = ctx;
             _response = new();
+            _mapper = mapper;
         }
 
         public async Task<UserDto> GetUser(string email)
@@ -43,7 +41,7 @@ namespace Mango.Services.AuthAPI.Service
             }
             return new UserDto()
             {
-                ID = user.Id,
+                Id = user.Id,
                 Email = user.Email,
                 Name = user.Name,
                 PhoneNumber = user.PhoneNumber
@@ -65,18 +63,10 @@ namespace Mango.Services.AuthAPI.Service
             //if user was found , Generate JWT Token
             var roles = await _userManager.GetRolesAsync(user);
             var token = _jwtTokenGenerator.GenerateToken(user, roles);
-
-            UserDto userDTO = new()
-            {
-                Email = user.Email,
-                ID = user.Id,
-                Name = user.Name,
-                PhoneNumber = user.PhoneNumber
-            };
-
+            var userDto = _mapper.Map<UserDto>(user);
             LoginResponseDto loginResponseDto = new LoginResponseDto()
             {
-                User = userDTO,
+                User = userDto,
                 Token = token
             };
             return loginResponseDto;
@@ -99,11 +89,11 @@ namespace Mango.Services.AuthAPI.Service
                 if (result.Succeeded)
                 {
                     var userToReturn = _db.ApplicationUsers.First(u => u.UserName == registrationRequestDto.Email);
-
+                    
                     UserDto userDto = new()
                     {
                         Email = userToReturn.Email,
-                        ID = userToReturn.Id,
+                        Id = userToReturn.Id,
                         Name = userToReturn.Name,
                         PhoneNumber = userToReturn.PhoneNumber
                     };
@@ -119,9 +109,8 @@ namespace Mango.Services.AuthAPI.Service
             }
             catch (Exception ex)
             {
-
+                return "Error occurred: " + ex.Message;
             }
-            return "Error Encountered";
         }
 
         public async Task<bool> AssignRole(string email, string role)
