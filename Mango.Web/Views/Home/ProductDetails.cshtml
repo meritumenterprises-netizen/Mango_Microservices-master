@@ -28,8 +28,14 @@
                                 </div>
                             </div>
                             <div class="row mx-0">
-                                <input asp-for="Count" class="form-control" />
+                                <input asp-for="Count" id="count" class="form-control" />
                                 <span asp-validation-for="Count" class="text-danger"></span>
+                            </div>
+                            <div class="row col-lg-16" style="margin-top: 20px">
+                                <div class="row pl-3" style="text-align: right">
+                                    <span class="text-info text-success">In Stock: <span class="text-warning" style="font-size:large; text-align: right">@Model.StockInventory</span>
+                                    <span class="text-danger" id="errorMsg"></span>
+                                </div>
                             </div>
                         </div>
                     </div>
