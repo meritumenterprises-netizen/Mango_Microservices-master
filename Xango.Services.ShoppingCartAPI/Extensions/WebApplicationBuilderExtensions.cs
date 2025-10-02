@@ -30,7 +30,7 @@ namespace Mango.Services.ShoppingCartAPI.Extensions
                     ValidateIssuer = true,
                     ValidIssuer = issuer,
                     ValidAudience = audience,
-                    ValidateAudience = true
+                    ValidateAudience = false
                 };
             });
 

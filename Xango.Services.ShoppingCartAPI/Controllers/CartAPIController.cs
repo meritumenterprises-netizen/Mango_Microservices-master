@@ -15,6 +15,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
 {
     [Route("api/cart")]
     [ApiController]
+    [Authorize]
     public class CartAPIController : ControllerBase
     {
         private ResponseDto _response;
@@ -38,7 +39,6 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
 
         }
         [HttpGet("GetCart/{userId}")]
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         public async Task<ResponseDto> GetCart(string userId)
         {
             try
@@ -48,8 +48,7 @@ namespace Mango.Services.ShoppingCartAPI.Controllers
                 {
                     CartHeader = _mapper.Map<CartHeaderDto>(_db.CartHeaders.First(u => u.UserId== userId))
                 };
-                var userEmail = User.Claims.Where((claim) => claim.Type == "name").First().Value;
-                var userDto = await _authService.GetUser(userEmail);
+                var userDto = await _authService.GetUserById(userId);
                 cart.CartHeader.Name = userDto.Name;
                 cart.CartHeader.Email = userDto.Email;
                 cart.CartHeader.Phone = userDto.PhoneNumber;

@@ -48,6 +48,24 @@ namespace Xango.Services.AuthAPI.Service
             };
         }
 
+        public async Task<UserDto> GetUserById(string id)
+        {
+            var user = _db.ApplicationUsers.FirstOrDefault(u => u.Id == id);
+            if (user == null)
+            {
+                return new UserDto()
+                {
+                };
+            }
+            return new UserDto()
+            {
+                Id = user.Id,
+                Email = user.Email,
+                Name = user.Name,
+                PhoneNumber = user.PhoneNumber
+            };
+        }
+
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
         {
             var responseDto = new ResponseDto();

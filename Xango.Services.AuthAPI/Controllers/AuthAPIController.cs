@@ -80,5 +80,16 @@ namespace Xango.Services.AuthAPI.Controllers
             }
             return Ok(ResponseProducer.OkResponse(result: userDto));
         }
+
+        [HttpGet("GetUserById/{id}")]
+        public async Task<IActionResult> GetUserById(string id)
+        {
+            var userDto = await _authService.GetUserById(id);
+            if (userDto == null || userDto.Id != id)
+            {
+                return NotFound(ResponseProducer.ErrorResponse("User not found"));
+            }
+            return Ok(ResponseProducer.OkResponse(result: userDto));
+        }
     }
 }

@@ -30,7 +30,7 @@ namespace Xango.Services.ProductAPI.Extensions
                     ValidateIssuer = true,
                     ValidIssuer = issuer,
                     ValidAudience = audience,
-                    ValidateAudience = true
+                    ValidateAudience = false
                 };
             });
 

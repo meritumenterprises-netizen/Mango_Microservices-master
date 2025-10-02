@@ -11,7 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using Mango.Services.OrderAPI.Extensions;
 using Xango.Services.Token;
 
 var builder = WebApplication.CreateBuilder(args);

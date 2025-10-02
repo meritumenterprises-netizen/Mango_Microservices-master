@@ -24,6 +24,17 @@ namespace Xango.Web.Service
             return ResponseProducer.OkResponse(requestDto.Result);
         }
 
+        public async Task<ResponseDto?> GetUserById(string id)
+        {
+            var requestDto = await _baseService.SendAsync(new RequestDto
+            {
+                ApiType = ApiType.GET,
+                Data = "",
+                Url = SD.AuthAPIBase + "/api/auth/GetUserById/" + id
+            });
+            return ResponseProducer.OkResponse(requestDto.Result);
+        }
+
         public async Task<ResponseDto?> AssignRole(Xango.Models.Dto.RegistrationRequestDto registrationRequestDto)
         {
             return await _baseService.SendAsync(new RequestDto()

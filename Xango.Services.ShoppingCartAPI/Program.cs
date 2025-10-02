@@ -12,7 +12,6 @@ using Xango.Services.Token;
 using Xango.Services.ShoppingCartAPI.Service;
 using Xango.Services.ShoppingCartAPI.Service.IService;
 //using Xango.Services.ShoppingCartAPI.Service.IService;
-using Mango.Services.ShoppingCartAPI.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,11 +26,11 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+//builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 
 builder.Services.AddHttpClient("Product", u => u.BaseAddress =
 new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();

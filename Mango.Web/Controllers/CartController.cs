@@ -49,7 +49,6 @@ namespace Xango.Web.Controllers
             return View(await LoadCartDtoBasedOnLoggedInUser());
         }
 
-
         [HttpPost]
         [ActionName("Checkout")]
         [Authorize]
@@ -67,9 +66,7 @@ namespace Xango.Web.Controllers
 
             if (response != null && response.IsSuccess)
             {
-                //var responseDeletedCart = _cartService.DeleteCart(cart.CartHeader.UserId);
                 //get stripe session and redirect to stripe to place order
-                //
                 var domain = Request.Scheme + "://" + Request.Host.Value + "/";
 
                 StripeRequestDto stripeRequestDto = new()

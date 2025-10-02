@@ -25,5 +25,17 @@ namespace Xango.Services.ShoppingCartAPI.Service
             return new UserDto();
         }
 
+        public async Task<UserDto> GetUserById(string id)
+        {
+            var client = _httpClientFactory.CreateClient("Auth");
+            var response = await client.GetAsync($"/api/auth/GetUserById/" + id);
+            var resp = response.Content.ReadFromJsonAsync<ResponseDto>().Result;
+            if (resp != null && resp.IsSuccess)
+            {
+                return JsonConvert.DeserializeObject<UserDto>(Convert.ToString(resp.Result));
+            }
+            return new UserDto();
+        }
+
     }
 }

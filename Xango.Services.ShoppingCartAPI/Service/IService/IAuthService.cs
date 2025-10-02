@@ -6,5 +6,6 @@ namespace Xango.Services.ShoppingCartAPI.Service.IService
     {
         //UserDto GetUser(string email);
         Task<UserDto> GetUser(string userEmail);
+        Task<UserDto> GetUserById(string id);
     }
 }

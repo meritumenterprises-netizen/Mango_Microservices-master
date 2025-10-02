@@ -8,5 +8,6 @@ namespace Xango.Services.AuthAPI.Service.IService
         Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto);
         Task<bool> AssignRole(string email, string roleName);
         Task<UserDto> GetUser(string email);
+        Task<UserDto> GetUserById(string id);
     }
 }

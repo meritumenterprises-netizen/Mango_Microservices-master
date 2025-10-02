@@ -9,16 +9,19 @@ using System.Security.Claims;
 using Xango.Models.Dto;
 using Xango.Services.Dto.Utilities;
 using Xango.Services.Interfaces;
+using Xango.Services.Token;
 
 namespace Xango.Web.Controllers
 {
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
+        private readonly ITokenProvider _tokenProvider;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, ITokenProvider tokenProvider)
         {
             _authService = authService;
+            _tokenProvider = tokenProvider;
         }
 
         [HttpGet]
@@ -37,7 +40,7 @@ namespace Xango.Web.Controllers
             {
                 LoginResponseDto loginResponseDto = DtoConverter.ToDto<LoginResponseDto>(response);
                  SignInUser(loginResponseDto);
-                //_tokenProvider.SetToken(loginResponseDto.Token);
+                _tokenProvider.SetToken(loginResponseDto.Token);
                 TempData.Remove("error");
                 return RedirectToAction("Index", "Home");
             }
@@ -53,7 +56,7 @@ namespace Xango.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync();
-            //_tokenProvider.ClearToken();
+            _tokenProvider.ClearToken();
             TempData.Remove("error");
             return RedirectToAction("Index", "Home");
         }

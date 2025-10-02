@@ -30,7 +30,7 @@ namespace Mango.Services.OrderAPI.Extensions
                     ValidateIssuer = true,
                     ValidIssuer = issuer,
                     ValidAudience = audience,
-                    ValidateAudience = true
+                    ValidateAudience = false
                 };
             });
 

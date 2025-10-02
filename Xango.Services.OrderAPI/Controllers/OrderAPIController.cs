@@ -18,6 +18,7 @@ namespace Mango.Services.OrderAPI.Controllers
 {
     [Route("api/order")]
     [ApiController]
+    [Authorize]
     public class OrderAPIController : ControllerBase
     {
         protected ResponseDto _response;
@@ -45,6 +46,7 @@ namespace Mango.Services.OrderAPI.Controllers
             try
             {
                 IEnumerable<OrderHeader> objList;
+                
                 var userEmail = User.Claims.Where((claim) => claim.Type == "name").First().Value;
                 if (User.IsInRole(Xango.Models.Dto.SD.RoleAdmin))
                 {
@@ -102,7 +104,7 @@ namespace Mango.Services.OrderAPI.Controllers
         }
 
         [HttpPost("CreateOrder")]
-        [Authorize]
+        
         public async Task<ResponseDto> CreateOrder(CartDto cartDto)
         {
             try
