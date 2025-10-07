@@ -8,7 +8,6 @@ using Xango.Services.CouponAPI.Service.IService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Xango.Services.Token;
 
 using Xango.Services.ShoppingCartAPI.Service;
 using Xango.Services.Utility;

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Xango.Models.Dto;
 
-namespace Xango.Services.Token
+namespace Xango.Services.Utility
 {
     public class TokenProvider : ITokenProvider
     {

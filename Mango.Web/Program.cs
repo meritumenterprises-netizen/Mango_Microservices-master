@@ -5,7 +5,6 @@ using Xango.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Xango.Models.Dto;
 using Xango.Web.BaseService;
-using Xango.Services.Token;
 using AutoMapper;
 using Xango.Web.Mapping;
 using Xango.Services.Utility;

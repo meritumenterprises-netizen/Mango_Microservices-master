@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using Xango.Services.Token;
+using Xango.Services.Utility;
 
 using Xango.Services.ProductApi.Service;
 using Xango.Services.ProductAPI.Service.IService;

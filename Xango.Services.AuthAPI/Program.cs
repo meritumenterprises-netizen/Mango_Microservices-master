@@ -6,7 +6,7 @@ using Xango.Services.AuthAPI.Service.IService;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Xango.Services.Token;
+using Xango.Services.Utility;
 
 using Xango.Services.AuthAPI;
 

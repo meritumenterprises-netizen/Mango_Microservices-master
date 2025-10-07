@@ -7,7 +7,7 @@ using Xango.Services.InventoryApi;
 using Xango.Services.InventoryApi.Data;
 using Xango.Services.InventoryApi.Service;
 using Xango.Services.InventoryApi.Service.IService;
-using Xango.Services.Token;
+using Xango.Services.Utility;
 
 
 var builder = WebApplication.CreateBuilder(args);

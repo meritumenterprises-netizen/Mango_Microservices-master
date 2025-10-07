@@ -9,7 +9,6 @@ using System.Security.Claims;
 using Xango.Models.Dto;
 using Xango.Services.Utility;
 using Xango.Services.Interfaces;
-using Xango.Services.Token;
 
 namespace Xango.Web.Controllers
 {
