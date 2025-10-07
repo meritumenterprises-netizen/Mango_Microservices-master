@@ -28,7 +28,7 @@
                                 </div>
                             </div>
                             <div class="row mx-0">
-                                <input asp-for="Count" id="count" class="form-control" />
+                                <input asp-for="Count" id="count" class="form-control" min="1" max="@Model.StockInventory"/>
                                 <span asp-validation-for="Count" class="text-danger"></span>
                             </div>
                             <div class="row col-lg-16" style="margin-top: 20px">

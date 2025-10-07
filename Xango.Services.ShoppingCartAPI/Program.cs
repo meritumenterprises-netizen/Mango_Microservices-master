@@ -2,16 +2,17 @@ using AutoMapper;
 using Mango.Services.ShoppingCartAPI;
 using Mango.Services.ShoppingCartAPI.Data;
 using Mango.Services.ShoppingCartAPI.Extensions;
-using Mango.Services.ShoppingCartAPI.Service;
-using Mango.Services.ShoppingCartAPI.Service.IService;
 using Mango.Services.ShoppingCartAPI.Utility;
+using Mango.Services.ShoppingCartAPI.Service.IService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Xango.Services.Token;
-using Xango.Services.ShoppingCartAPI.Service;
+
 using Xango.Services.ShoppingCartAPI.Service.IService;
-//using Xango.Services.ShoppingCartAPI.Service.IService;
+using Xango.Services.ShoppingCartAPI.Service;
+using Mango.Services.ShoppingCartAPI.Service;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,14 +24,14 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 });
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
-//builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 
 builder.Services.AddHttpClient("Product", u => u.BaseAddress =
 new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();

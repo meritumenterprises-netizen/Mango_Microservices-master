@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Xango.Models.Dto;
+using Xango.Services.Dto;
 using Xango.Services.Dto.Utilities;
 using Xango.Services.InventoryApi.Data;
 using Xango.Services.InventoryApi.Service.IService;
@@ -11,24 +12,39 @@ namespace Xango.Services.InventoryApi.Controllers
     
     [Route("api/inventory")]
     [ApiController]
-    public class ServiceIntentoryController : Controller
+    public class ServiceInventoryController : Controller
     {
+        private AppDbContext _db;
         private IMapper _mapper;
         private IInventoryService _inventoryService;
-
-        public ServiceIntentoryController(AppDbContext db, IMapper mapper, IInventoryService inventoryService)
+        
+        public ServiceInventoryController(AppDbContext db, IMapper mapper, IInventoryService inventoryService)
         {
             _mapper = mapper;
             _inventoryService = inventoryService;
+            _db = db;
         }
 
-
-        [HttpPost("setproductinstock")]
-        public async Task<ResponseDto> SetProductInStock (int  productId, int stockSize)
+        [HttpPost("returnqty")]
+        public async Task<ResponseDto> ReturnQty(int productId, int quantity)
         {
             try
             {
-                var productDto = await _inventoryService.SetProductInStock(productId, stockSize);
+                var productDto = await _inventoryService.ReturnQty(productId, quantity);
+                return ResponseProducer.OkResponse(productDto);
+            }
+            catch (Exception ex)
+            {
+                return ResponseProducer.ErrorResponse(ex.Message);
+            }
+        }
+
+        [HttpPost("setproductinstock")]
+        public async Task<ResponseDto> SetProductInStock (InventoryQuantityDto inventoryQuantity)
+        {
+            try
+            {
+                var productDto = await _inventoryService.SetProductInStock(inventoryQuantity.ProductId, inventoryQuantity.Quantity);
                 return ResponseProducer.OkResponse(productDto);
             }
             catch (Exception ex)
@@ -66,11 +82,11 @@ namespace Xango.Services.InventoryApi.Controllers
         }
 
         [HttpPost("subtractfromstock")]
-        public async Task<ResponseDto> SubtractFromStock(int productId, int quantity)
+        public async Task<ResponseDto> SubtractFromStock(InventoryQuantityDto inventoryQuantity)
         {
             try
             {
-                var productDto = await _inventoryService.SubtractFromStock(productId, quantity);
+                var productDto = await _inventoryService.SubtractFromStock(inventoryQuantity.ProductId,inventoryQuantity.Quantity);
                 return ResponseProducer.OkResponse(productDto);
             }
             catch (Exception ex)

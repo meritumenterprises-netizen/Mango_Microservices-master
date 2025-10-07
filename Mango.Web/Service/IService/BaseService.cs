@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using Xango.Models.Dto;
 using Xango.Services.Token;
+using Xango.Services.Dto.Utilities;
 
 namespace Xango.Web.BaseService
 {
@@ -89,20 +90,25 @@ namespace Xango.Web.BaseService
 
                 apiResponse = await client.SendAsync(message);
 
+                ResponseDto responseDto = new();
                 switch (apiResponse.StatusCode)
                 {
                     case HttpStatusCode.NotFound:
-                        return new() { IsSuccess = false, Message = "Not Found" };
+                        responseDto = ResponseProducer.ErrorResponse("Not Found");
+                        return responseDto;
                     case HttpStatusCode.Forbidden:
-                        return new() { IsSuccess = false, Message = "Access Denied" };
+                        responseDto = ResponseProducer.ErrorResponse("Access Denied");
+                        return responseDto;
                     case HttpStatusCode.Unauthorized:
-                        return new() { IsSuccess = false, Message = "Unauthorized" };
+                        responseDto = ResponseProducer.ErrorResponse("Unauthorized");
+                        return responseDto;
                     case HttpStatusCode.InternalServerError:
-                        return new() { IsSuccess = false, Message = "Internal Server Error", StackTrace = await apiResponse.Content.ReadAsStringAsync() };
+                        responseDto = ResponseProducer.ErrorResponse("Internal Server Error", await apiResponse.Content.ReadAsStringAsync());
+                        return responseDto;
                     default:
                         var apiContent = await apiResponse.Content.ReadAsStringAsync();
-                        var apiResponseDto = JsonConvert.DeserializeObject<ResponseDto>(apiContent);
-                        return apiResponseDto;
+                        responseDto = JsonConvert.DeserializeObject<ResponseDto>(apiContent);
+                        return responseDto;
                 }
             }
             catch (Exception ex)

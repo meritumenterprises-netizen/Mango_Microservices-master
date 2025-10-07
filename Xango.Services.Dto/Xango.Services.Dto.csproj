@@ -11,7 +11,9 @@
     <PackageReference Include="AutoMapper.Collection" Version="11.0.0" />
     <PackageReference Include="AutoMapper.Extensions.EnumMapping" Version="5.0.0" />
     <PackageReference Include="AutoMapper.Extensions.ExpressionMapping" Version="9.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.9" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
   </ItemGroup>
 

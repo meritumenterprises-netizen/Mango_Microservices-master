@@ -9,7 +9,9 @@
   <ItemGroup>
 	  <PackageReference Include="AutoMapper" Version="15.0.1" />
 	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+	  <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
+	  <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.9" />
 	  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
@@ -23,15 +25,13 @@
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-	  <PackageReference Include="StackExchange.Redis" Version="2.9.17" />
-	  <PackageReference Include="Stripe.net" Version="41.13.0" />
-	  <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.5" />
-	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.0.1" />
+	  <PackageReference Include="Stripe.net" Version="49.0.0" />
+	  <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
+	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Xango.Services.Dto\Xango.Services.Dto.csproj" />
-    <ProjectReference Include="..\Xango.Services.ProductAPI\Xango.Services.ProductAPI.csproj" />
     <ProjectReference Include="..\xango.Services.Token\Xxango.Services.Token.csproj" />
   </ItemGroup>
 

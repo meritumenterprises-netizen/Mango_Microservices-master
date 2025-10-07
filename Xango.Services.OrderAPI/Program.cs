@@ -3,22 +3,31 @@ using Mango.Services.OrderAPI;
 using Mango.Services.OrderAPI.Data;
 using Mango.Services.OrderAPI.Extensions;
 using Mango.Services.OrderAPI.Utility;
-using Mango.Services.ShoppingCartAPI.Service;
-using Mango.Services.ShoppingCartAPI.Service.IService;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
 using Xango.Services.Token;
 
+using Xango.Services.ProductApi.Service;
+using Mango.Services.ProductAPI.Service.IService;
+using Xango.Services.InventoryApi.Service;
+using Xango.Services.InventoryApi.Service.IService;
+
+
 var builder = WebApplication.CreateBuilder(args);
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 
+builder.Services.AddControllers();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+//builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddEndpointsApiExplorer();
 
 // Add services to the container.
 
@@ -28,14 +37,17 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 });
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient("Product", u => u.BaseAddress =
 new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddHttpClient("Inventory", u => u.BaseAddress =
+new Uri(builder.Configuration["ServiceUrls:InventoryAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+
+
 builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddSwaggerGen(option =>

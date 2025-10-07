@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Xango.Services.InventoryApi.Data;
 using Xango.Services.InventoryApi.Model;
 using Xango.Services.InventoryApi.Service.IService;
@@ -63,6 +64,20 @@ namespace Xango.Services.InventoryApi.Service
                 throw new Exception("Insufficient product quantity");
             }
             product.StockInventory -= quantity;
+            _db.SaveChanges();
+            product = _db.Products.FirstOrDefault(p => p.ProductId == productId);
+            var productDto = _mapper.Map<ProductDto>(product);
+            return productDto;
+        }
+
+        public async Task<ProductDto> ReturnQty(int productId, int quantity)
+        {
+            var product = _db.Products.FirstOrDefault(p => p.ProductId == productId);
+            if (product == null)
+            {
+                throw new Exception("No product with given id found");
+            }
+            product.StockInventory += quantity;
             _db.SaveChanges();
             product = _db.Products.FirstOrDefault(p => p.ProductId == productId);
             var productDto = _mapper.Map<ProductDto>(product);

@@ -2,17 +2,21 @@
 using Mango.Services.OrderAPI.Data;
 using Mango.Services.OrderAPI.Models;
 using Mango.Services.OrderAPI.Utility;
-using Mango.Services.ShoppingCartAPI.Service.IService;
+//using Mango.Services.ShoppingCartAPI.Service.IService;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
-using StackExchange.Redis;
 using Stripe;
 using Stripe.Checkout;
 using Xango.Models.Dto;
 using Xango.Services.Dto.Utilities;
-
+using Mango.Services.ProductAPI.Service.IService;
+using Xango.Services.InventoryApi.Service.IService;
+using Xango.Services.InventoryApi.Service;
+using Mango.Services.ProductAPI.Service;
+using IInventoryService = Xango.Services.InventoryApi.Service.IService;
 
 namespace Mango.Services.OrderAPI.Controllers
 {
@@ -26,17 +30,17 @@ namespace Mango.Services.OrderAPI.Controllers
         private readonly AppDbContext _db;
         private IProductService _productService;
         private readonly IConfiguration _configuration;
+        private Xango.Services.InventoryApi.Service.IService.IInventoryService _inventoryService;
 
-        public OrderAPIController(AppDbContext db,
-            IProductService productService, IMapper mapper, IConfiguration configuration
-            )
+        public OrderAPIController(AppDbContext db,IProductService productService, Xango.Services.InventoryApi.Service.IService.IInventoryService inventoryService, IMapper mapper, IConfiguration configuration)
+        
         {
             _db = db;
             _response = new ResponseDto();
             _productService = productService;
             _mapper = mapper;
             _configuration = configuration;
-
+            _inventoryService = inventoryService;
         }
 
         [HttpGet("GetAll")]
@@ -46,7 +50,7 @@ namespace Mango.Services.OrderAPI.Controllers
             try
             {
                 IEnumerable<OrderHeader> objList;
-                
+
                 var userEmail = User.Claims.Where((claim) => claim.Type == "name").First().Value;
                 if (User.IsInRole(Xango.Models.Dto.SD.RoleAdmin))
                 {
@@ -54,7 +58,7 @@ namespace Mango.Services.OrderAPI.Controllers
                 }
                 else
                 {
-                    objList = _db.OrderHeaders.AsNoTracking().Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).Where(u => (status == "all" || u.Status == status) && u.Email== userEmail);
+                    objList = _db.OrderHeaders.AsNoTracking().Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).Where(u => (status == "all" || u.Status == status) && u.Email == userEmail);
                 }
                 _response.Result = _mapper.Map<IEnumerable<OrderHeaderDto>>(objList);
             }
@@ -90,6 +94,10 @@ namespace Mango.Services.OrderAPI.Controllers
                 OrderHeader orderHeader = _db.OrderHeaders.First(u => u.OrderHeaderId == id);
                 if (orderHeader != null && orderHeader.Status == Xango.Models.Dto.SD.Status_Pending)
                 {
+                    foreach (var orderDetail in orderHeader.OrderDetails)
+                    {
+                        await _inventoryService.ReturnQty(orderDetail.ProductId, orderDetail.Count);
+                    }
                     orderHeader.Status = Xango.Models.Dto.SD.Status_Cancelled;
                     _db.SaveChanges();
                     _response.IsSuccess = true;
@@ -104,7 +112,7 @@ namespace Mango.Services.OrderAPI.Controllers
         }
 
         [HttpPost("CreateOrder")]
-        
+
         public async Task<ResponseDto> CreateOrder(CartDto cartDto)
         {
             try
@@ -113,6 +121,10 @@ namespace Mango.Services.OrderAPI.Controllers
                 orderHeaderDto.OrderTime = DateTime.Now;
                 orderHeaderDto.Status = Xango.Models.Dto.SD.Status_Pending;
                 orderHeaderDto.OrderDetails = _mapper.Map<IEnumerable<OrderDetailsDto>>(cartDto.CartDetails);
+                foreach (var orderDetail in orderHeaderDto.OrderDetails)
+                {
+                    await _inventoryService.SubtractFromStock(orderDetail.ProductId, orderDetail.Count);
+                }
                 orderHeaderDto.OrderTotal = Math.Round(orderHeaderDto.OrderTotal, 2);
                 OrderHeader orderCreated = _db.OrderHeaders.Add(_mapper.Map<OrderHeader>(orderHeaderDto)).Entity;
                 await _db.SaveChangesAsync();
@@ -237,7 +249,10 @@ namespace Mango.Services.OrderAPI.Controllers
                 {
                     if (newStatus == Xango.Models.Dto.SD.Status_Cancelled)
                     {
-                        // TODO: we will give refund
+                        foreach (var orderDetail in orderHeader.OrderDetails)
+                        {
+                            
+                        }
                     }
                     orderHeader.Status = newStatus;
                     _db.SaveChanges();

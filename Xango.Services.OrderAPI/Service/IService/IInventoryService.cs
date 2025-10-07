@@ -1,7 +1,6 @@
-﻿
-using Xango.Models.Dto;
+﻿using Xango.Models.Dto;
 
-namespace Xango.Services.Interfaces
+namespace Xango.Services.InventoryApi.Service.IService
 {
     public interface IInventoryService
     {

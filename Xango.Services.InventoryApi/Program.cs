@@ -1,14 +1,17 @@
 using AutoMapper;
+using Mango.Services.InventoryApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
-using Microsoft.EntityFrameworkCore;
-using Xango.Services.InventoryApi.Data;
 using Xango.Services.InventoryApi;
-using Xango.Services.InventoryApi.Service.IService;
+using Xango.Services.InventoryApi.Data;
 using Xango.Services.InventoryApi.Service;
+using Xango.Services.InventoryApi.Service.IService;
+using Xango.Services.Token;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +24,10 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 builder.Services.AddMvc();
 builder.Services.AddControllers();
@@ -30,7 +37,9 @@ builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<IInventoryService, InventoryService>();
+
 
 builder.Services.AddSwaggerGen(option =>
 {
@@ -57,7 +66,7 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-//builder.AddAppAuthetication();
+builder.AddAppAuthetication();
 builder.Services.AddAuthorization();
 
 
