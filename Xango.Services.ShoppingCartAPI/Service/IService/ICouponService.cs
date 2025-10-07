@@ -1,6 +1,6 @@
 ﻿
 using Xango.Models.Dto;
-namespace Mango.Services.ShoppingCartAPI.Service.IService
+namespace Xango.Services.CouponAPI.Service.IService
 {
     public interface ICouponService
     {

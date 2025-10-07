@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Mango.Services.ProductAPI.Migrations
+namespace Xango.Services.ProductAPI.Migrations
 {
     /// <inheritdoc />
     public partial class ServiceInventory : Migration

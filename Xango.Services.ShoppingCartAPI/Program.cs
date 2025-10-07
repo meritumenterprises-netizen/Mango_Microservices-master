@@ -1,17 +1,17 @@
 using AutoMapper;
-using Mango.Services.ShoppingCartAPI;
-using Mango.Services.ShoppingCartAPI.Data;
-using Mango.Services.ShoppingCartAPI.Extensions;
-using Mango.Services.ShoppingCartAPI.Utility;
-using Mango.Services.ShoppingCartAPI.Service.IService;
+using Xango.Services.ShoppingCartAPI;
+using Xango.Services.ShoppingCartAPI.Data;
+using Xango.Services.ShoppingCartAPI.Extensions;
+using Xango.Services.ShoppingCartAPI.Service.IService;
+using Xango.Services.CouponAPI.Service;
+using Xango.Services.CouponAPI.Service.IService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Xango.Services.Token;
 
-using Xango.Services.ShoppingCartAPI.Service.IService;
 using Xango.Services.ShoppingCartAPI.Service;
-using Mango.Services.ShoppingCartAPI.Service;
+using Xango.Services.ShoppingCartAPI.Utility;
 
 
 var builder = WebApplication.CreateBuilder(args);

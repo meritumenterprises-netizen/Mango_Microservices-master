@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Mango.Services.OrderAPI.Migrations
+namespace Xango.Services.OrderAPI.Migrations
 {
     /// <inheritdoc />
     public partial class AddOrderTables : Migration

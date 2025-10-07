@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Xango.Models.Dto;
-using Mango.Services.ProductAPI.Service.IService;
+using Xango.Services.ProductAPI.Service.IService;
 
 namespace Xango.Services.ProductApi.Service
 {

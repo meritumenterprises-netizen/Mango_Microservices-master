@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
 using Xango.Models.Dto;
 using Xango.Services.Dto;
-using Mango.Services.OrderAPI.Models;
+using Xango.Services.OrderAPI.Models;
 using System.Runtime.CompilerServices;
 
-namespace Mango.Services.OrderAPI
+namespace Xango.Services.OrderAPI
 {
     public class MappingConfig
     {

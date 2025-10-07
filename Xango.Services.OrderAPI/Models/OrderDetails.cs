@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Xango.Services.Dto;
 using Xango.Models.Dto;
 
-namespace Mango.Services.OrderAPI.Models
+namespace Xango.Services.OrderAPI.Models
 {
     public class OrderDetails
     {

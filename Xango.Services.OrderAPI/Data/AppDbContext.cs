@@ -1,7 +1,7 @@
-﻿using Mango.Services.OrderAPI.Models;
+﻿using Xango.Services.OrderAPI.Models;
 using Microsoft.EntityFrameworkCore;
 
-namespace Mango.Services.OrderAPI.Data
+namespace Xango.Services.OrderAPI.Data
 {
     public class AppDbContext : DbContext
     {

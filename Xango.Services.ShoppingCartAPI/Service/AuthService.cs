@@ -1,4 +1,4 @@
-﻿using Mango.Services.ShoppingCartAPI.Service.IService;
+﻿using Xango.Services.ShoppingCartAPI.Service.IService;
 using Newtonsoft.Json;
 using Xango.Services.ShoppingCartAPI.Service.IService;
 using Xango.Models.Dto;

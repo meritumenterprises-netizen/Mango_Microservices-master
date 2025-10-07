@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using System.Net.Http.Headers;
 
-namespace Mango.Services.ShoppingCartAPI.Utility
+namespace Xango.Services.ShoppingCartAPI.Utility
 {
     public class BackendApiAuthenticationHttpClientHandler : DelegatingHandler
     {

@@ -1,9 +1,7 @@
 using AutoMapper;
-using Mango.Services.InventoryApi.Extensions;
+using Xango.Services.InventoryApi.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Xango.Services.InventoryApi;
 using Xango.Services.InventoryApi.Data;

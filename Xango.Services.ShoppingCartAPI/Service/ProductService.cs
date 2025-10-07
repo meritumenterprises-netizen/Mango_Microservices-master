@@ -1,11 +1,11 @@
-﻿using Mango.Services.ShoppingCartAPI.Service.IService;
+﻿using Xango.Services.ShoppingCartAPI.Service.IService;
 using Newtonsoft.Json;
 using Xango.Services.Dto;
 using Xango.Models.Dto;
 
 using Xango.Models.Dto;
 
-namespace Mango.Services.ShoppingCartAPI.Service
+namespace Xango.Services.ShoppingCartAPI.Service
 {
     public class ProductService : IProductService
     {

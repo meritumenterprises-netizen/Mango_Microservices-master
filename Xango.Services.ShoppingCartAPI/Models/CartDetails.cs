@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Xango.Models.Dto;
 
-namespace Mango.Services.ShoppingCartAPI.Models
+namespace Xango.Services.ShoppingCartAPI.Models
 {
     public class CartDetails
     {

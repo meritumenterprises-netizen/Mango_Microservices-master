@@ -1,7 +1,7 @@
 using AutoMapper;
-using Mango.Services.OrderAPI;
-using Mango.Services.OrderAPI.Data;
-using Mango.Services.OrderAPI.Extensions;
+using Xango.Services.OrderAPI;
+using Xango.Services.OrderAPI.Data;
+using Xango.Services.OrderAPI.Extensions;
 using Mango.Services.OrderAPI.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@ using System.Text;
 using Xango.Services.Token;
 
 using Xango.Services.ProductApi.Service;
-using Mango.Services.ProductAPI.Service.IService;
+using Xango.Services.ProductAPI.Service.IService;
 using Xango.Services.InventoryApi.Service;
 using Xango.Services.InventoryApi.Service.IService;
 

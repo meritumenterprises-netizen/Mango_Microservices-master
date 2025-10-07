@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
-using Mango.Services.ShoppingCartAPI.Models;
+using Xango.Services.ShoppingCartAPI.Models;
 using LoggerFactory = Xango.Services.Dto.Utilities.LoggerFactory;
 using Xango.Models.Dto;
 
-namespace Mango.Services.ShoppingCartAPI
+namespace Xango.Services.ShoppingCartAPI
 {
     public class MappingConfig
     {

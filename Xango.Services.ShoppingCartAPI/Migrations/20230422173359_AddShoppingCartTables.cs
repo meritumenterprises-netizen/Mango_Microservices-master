@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Mango.Services.ShoppingCartAPI.Migrations
+namespace Xango.Services.ShoppingCartAPI.Migrations
 {
     /// <inheritdoc />
     public partial class AddShoppingCartTables : Migration

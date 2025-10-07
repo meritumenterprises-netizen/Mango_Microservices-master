@@ -1,7 +1,7 @@
 ﻿using Xango.Models.Dto;
 using Xango.Services.Dto;
 
-namespace Mango.Services.ShoppingCartAPI.Service.IService
+namespace Xango.Services.ShoppingCartAPI.Service.IService
 {
     public interface IProductService
     {

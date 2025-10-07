@@ -9,7 +9,7 @@ using Xango.Services.Dto.Utilities;
 using Xango.Services.ProductAPI.Data;
 
 
-namespace Mango.Services.ProductAPI.Controllers
+namespace Xango.Services.ProductAPI.Controllers
 {
     [Route("api/product")]
     [ApiController]

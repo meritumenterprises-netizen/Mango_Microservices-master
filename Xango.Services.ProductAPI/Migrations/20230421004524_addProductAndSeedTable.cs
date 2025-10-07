@@ -4,7 +4,7 @@
 
 #pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
 
-namespace Mango.Services.ProductAPI.Migrations
+namespace Xango.Services.ProductAPI.Migrations
 {
     /// <inheritdoc />
     public partial class addProductAndSeedTable : Migration

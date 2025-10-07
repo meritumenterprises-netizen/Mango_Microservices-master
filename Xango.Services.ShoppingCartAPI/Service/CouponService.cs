@@ -1,9 +1,9 @@
 ﻿using Xango.Models.Dto; 
-using Mango.Services.ShoppingCartAPI.Service.IService;
+using Xango.Services.CouponAPI.Service.IService;
 using Newtonsoft.Json;
 using Xango.Services.Dto;
 
-namespace Mango.Services.ShoppingCartAPI.Service
+namespace Xango.Services.CouponAPI.Service
 {
     public class CouponService : ICouponService
     {

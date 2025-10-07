@@ -26,11 +26,11 @@ namespace Xango.Services.InventoryApi.Controllers
         }
 
         [HttpPost("returnqty")]
-        public async Task<ResponseDto> ReturnQty(int productId, int quantity)
+        public async Task<ResponseDto> ReturnQty(InventoryQuantityDto quantity)
         {
             try
             {
-                var productDto = await _inventoryService.ReturnQty(productId, quantity);
+                var productDto = await _inventoryService.ReturnQty(quantity.ProductId, quantity.Quantity);
                 return ResponseProducer.OkResponse(productDto);
             }
             catch (Exception ex)

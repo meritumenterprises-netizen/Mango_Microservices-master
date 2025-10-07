@@ -1,8 +1,7 @@
 ﻿using AutoMapper;
-using Mango.Services.OrderAPI.Data;
-using Mango.Services.OrderAPI.Models;
+using Xango.Services.OrderAPI.Data;
+using Xango.Services.OrderAPI.Models;
 using Mango.Services.OrderAPI.Utility;
-//using Mango.Services.ShoppingCartAPI.Service.IService;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +11,10 @@ using Stripe;
 using Stripe.Checkout;
 using Xango.Models.Dto;
 using Xango.Services.Dto.Utilities;
-using Mango.Services.ProductAPI.Service.IService;
+using Xango.Services.ProductAPI.Service.IService;
 using Xango.Services.InventoryApi.Service.IService;
 using Xango.Services.InventoryApi.Service;
-using Mango.Services.ProductAPI.Service;
+using Xango.Services.ProductAPI.Service;
 using IInventoryService = Xango.Services.InventoryApi.Service.IService;
 
 namespace Mango.Services.OrderAPI.Controllers
@@ -244,14 +243,14 @@ namespace Mango.Services.OrderAPI.Controllers
         {
             try
             {
-                OrderHeader orderHeader = _db.OrderHeaders.First(u => u.OrderHeaderId == orderId);
+                OrderHeader orderHeader = _db.OrderHeaders.Include((od) => od.OrderDetails).First(u => u.OrderHeaderId == orderId);
                 if (orderHeader != null)
                 {
                     if (newStatus == Xango.Models.Dto.SD.Status_Cancelled)
                     {
                         foreach (var orderDetail in orderHeader.OrderDetails)
                         {
-                            
+                            _inventoryService.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                         }
                     }
                     orderHeader.Status = newStatus;
