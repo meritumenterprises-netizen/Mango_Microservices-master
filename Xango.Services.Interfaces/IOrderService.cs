@@ -12,5 +12,6 @@ namespace Xango.Services.Interfaces
         Task<ResponseDto?> UpdateOrderStatus(int orderId, string newStatus);
         Task<ResponseDto?> GetUser(string email);
 
+        Task<ResponseDto?> DeleteOrder(int orderId);
     }
 }

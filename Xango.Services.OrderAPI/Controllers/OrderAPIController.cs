@@ -105,6 +105,33 @@ namespace Xango.Services.OrderAPI.Controllers
             return _response;
         }
 
+        [HttpDelete("DeleteOrder/{id:int}")]
+        [Authorize]
+        public async Task<ResponseDto> DeleteOrder (int id)
+        {
+            try
+            {
+                OrderHeader orderHeader = _db.OrderHeaders.Include((d) => d.OrderDetails).First(u => u.OrderHeaderId == id);
+                if (orderHeader != null )
+                {
+                    foreach (var orderDetail in orderHeader.OrderDetails)
+                    {
+                        await _inventoryService.ReturnQty(orderDetail.ProductId, orderDetail.Count);
+                        _db.OrderDetails.Remove(orderDetail);
+                    }
+                    _db.OrderHeaders.Remove(orderHeader);
+                    _db.SaveChanges();
+                    _response.IsSuccess = true;
+                    _response.Message = "Order deleted successfully";
+                }
+            }
+            catch (Exception ex)
+            {
+                return ResponseProducer.ErrorResponse(ex.Message);
+            }
+            return _response;
+        }
+
         [HttpPost("CreateOrder")]
 
         public async Task<ResponseDto> CreateOrder(CartDto cartDto)

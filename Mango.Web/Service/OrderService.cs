@@ -91,5 +91,14 @@ namespace Xango.Web.Service
                 Url = SD.OrderAPIBase + "/api/order/ValidateStripeSession"
             });
         }
+
+        public async Task<ResponseDto?> DeleteOrder(int orderHeaderId)
+        {
+            return await _baseService.SendAsync(new RequestDto()
+            {
+                ApiType = ApiType.DELETE,
+                Url = SD.OrderAPIBase + "/api/order/DeleteOrder/" + orderHeaderId
+            });
+        }
     }
 }

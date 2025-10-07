@@ -18,7 +18,6 @@ namespace Xango.Web.Controllers
         {
             _orderService = orderService;
             _cartService = cartService;
-            //var config = new MapperConfiguration(cfg=> { }, null);
             _mapper = mapper;
         }
 
@@ -95,6 +94,12 @@ namespace Xango.Web.Controllers
             return RedirectToAction(nameof(OrderDetail), new { orderId = orderId });
         }
 
+        [HttpPost("DeleteOrder")]
+        public async Task<IActionResult> DeleteOrder(int orderId)
+        {
+            var response = await _orderService.DeleteOrder(orderId);
+            return RedirectToAction(nameof(OrderIndex));
+        }
 
         [HttpGet]
         public IActionResult GetAll(string status)
