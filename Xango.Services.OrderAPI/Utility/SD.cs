@@ -1,4 +1,4 @@
-﻿namespace Mango.Services.OrderAPI.Utility
+﻿namespace Xango.Services.OrderAPI.Utility
 {
     public class SD
     {

@@ -1,23 +1,17 @@
 ﻿using AutoMapper;
 using Xango.Services.OrderAPI.Data;
 using Xango.Services.OrderAPI.Models;
-using Mango.Services.OrderAPI.Utility;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
 using Stripe;
 using Stripe.Checkout;
 using Xango.Models.Dto;
 using Xango.Services.Dto.Utilities;
 using Xango.Services.ProductAPI.Service.IService;
-using Xango.Services.InventoryApi.Service.IService;
-using Xango.Services.InventoryApi.Service;
-using Xango.Services.ProductAPI.Service;
-using IInventoryService = Xango.Services.InventoryApi.Service.IService;
 
-namespace Mango.Services.OrderAPI.Controllers
+namespace Xango.Services.OrderAPI.Controllers
 {
     [Route("api/order")]
     [ApiController]

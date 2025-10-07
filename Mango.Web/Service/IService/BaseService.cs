@@ -22,7 +22,7 @@ namespace Xango.Web.BaseService
         {
             try
             {
-                HttpClient client = _httpClientFactory.CreateClient("MangoAPI");
+                HttpClient client = _httpClientFactory.CreateClient("XangoAPI");
                 HttpRequestMessage message = new();
                 if (requestDto.ContentType == ContentType.MultipartFormData)
                 {

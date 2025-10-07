@@ -6,10 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Xango.Models.Dto;
-using Newtonsoft.Json;
 using Xango.Services.CouponAPI.Service.IService;
-using Xango.Services.CouponAPI.Service;
-using Xango.Models.Dto;
 using Xango.Services.Dto.Utilities;
 
 namespace Xango.Services.ShoppingCartAPI.Controllers
