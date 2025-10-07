@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Xango.Services.InventoryApi.Model;
-using LoggerFactory = Xango.Services.Dto.Utilities.LoggerFactory;
+using Xango.Services.Utility;
 using Xango.Models.Dto;
 
 namespace Xango.Services.InventoryApi

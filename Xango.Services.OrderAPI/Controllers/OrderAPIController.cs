@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Stripe.Checkout;
 using Xango.Models.Dto;
-using Xango.Services.Dto.Utilities;
+using Xango.Services.Utility;
 using Xango.Services.ProductAPI.Service.IService;
 using Xango.Services.InventoryApi.Service.IService;
 

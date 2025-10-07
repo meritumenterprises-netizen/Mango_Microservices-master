@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Xango.Models.Dto;
 using Xango.Services.CouponAPI.Service.IService;
-using Xango.Services.Dto.Utilities;
+using Xango.Services.Utility;
 
 namespace Xango.Services.ShoppingCartAPI.Controllers
 {

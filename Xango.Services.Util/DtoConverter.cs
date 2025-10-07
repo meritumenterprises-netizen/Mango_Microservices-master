@@ -1,6 +1,6 @@
 ﻿using Xango.Models.Dto;
 using Newtonsoft.Json;
-namespace Xango.Services.Dto.Utilities
+namespace Xango.Services.Utility
 {
     public static class DtoConverter
     {

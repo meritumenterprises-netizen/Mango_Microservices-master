@@ -37,6 +37,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Xango.Services.Dto\Xango.Services.Dto.csproj" />
 		<ProjectReference Include="..\xango.Services.Token\Xxango.Services.Token.csproj" />
+		<ProjectReference Include="..\Xango.Services.Util\Xango.Services.Utility.csproj" />
 	</ItemGroup>
 
 </Project>

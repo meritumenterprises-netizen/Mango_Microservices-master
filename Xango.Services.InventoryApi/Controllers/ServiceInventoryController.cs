@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Xango.Models.Dto;
 using Xango.Services.Dto;
-using Xango.Services.Dto.Utilities;
+using Xango.Services.Utility;
 using Xango.Services.InventoryApi.Data;
 using Xango.Services.InventoryApi.Service.IService;
 

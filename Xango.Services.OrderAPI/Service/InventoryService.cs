@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Text;
 using Xango.Models.Dto;
 using Xango.Services.Dto;
-using Xango.Services.Dto.Utilities;
+using Xango.Services.Utility;
 using Xango.Services.InventoryApi.Service.IService;
 
 namespace Xango.Services.InventoryApi.Service

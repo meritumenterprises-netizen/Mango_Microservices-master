@@ -1,7 +1,7 @@
 ﻿using Xango.Models.Dto;
 
 
-namespace Xango.Services.Dto.Utilities
+namespace Xango.Services.Utility
 {
     public static class ResponseProducer
     {

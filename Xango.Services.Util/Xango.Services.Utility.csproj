@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Core" Version="2.3.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Xango.Services.Dto\Xango.Services.Dto.csproj" />
+  </ItemGroup>
+
 </Project>
