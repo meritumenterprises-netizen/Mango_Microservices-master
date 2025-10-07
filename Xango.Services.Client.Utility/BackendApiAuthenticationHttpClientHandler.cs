@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using System.Net.Http.Headers;
 
-namespace Xango.Services.Utility
+namespace Xango.Services.Server.Utility
 {
     public class BackendApiAuthenticationHttpClientHandler : DelegatingHandler
     {

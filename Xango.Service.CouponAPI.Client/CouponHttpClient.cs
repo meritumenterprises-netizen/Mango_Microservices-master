@@ -3,6 +3,10 @@ using Xango.Services.Interfaces;
 
 namespace Xango.Service.CouponAPI.Client
 {
+    public interface ICouponHttpClient
+    {
+
+    }
     public class CouponHttpClient  : HttpClient, ICouponService
     {
         readonly string _baseAddress;

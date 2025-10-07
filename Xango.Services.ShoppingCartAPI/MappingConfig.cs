@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Xango.Services.ShoppingCartAPI.Models;
-using Xango.Services.Utility;
 using Xango.Models.Dto;
 
 namespace Xango.Services.ShoppingCartAPI
