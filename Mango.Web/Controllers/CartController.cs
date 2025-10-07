@@ -5,9 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using Xango.Models.Dto;
-using Xango.Services.Utility;
+using Xango.Services.Dto;
 using Xango.Services.Interfaces;
-//using Xango.Web.BaseService;
+using Xango.Services.Client.Utility;
 
 
 namespace Xango.Web.Controllers

@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Mime;
-using System.Security.AccessControl;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net.Mime;
+using Xango.Services.Dto;
+using ContentType = Xango.Services.Dto.ContentType;
+
 
 namespace Xango.Models.Dto
 {

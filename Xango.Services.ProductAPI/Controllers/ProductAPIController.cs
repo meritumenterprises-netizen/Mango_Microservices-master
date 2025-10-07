@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
-using Xango.Services.Utility;
+using Xango.Services.Client.Utility;
 
 
 namespace Xango.Services.ProductAPI.Controllers

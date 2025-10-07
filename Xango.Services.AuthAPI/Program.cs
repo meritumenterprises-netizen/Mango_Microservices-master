@@ -3,10 +3,10 @@ using Xango.Services.AuthAPI.Data;
 using Xango.Services.AuthAPI.Models;
 using Xango.Services.AuthAPI.Service;
 using Xango.Services.AuthAPI.Service.IService;
+using Xango.Services.Server.Utility;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Xango.Services.Utility;
 
 using Xango.Services.AuthAPI;
 

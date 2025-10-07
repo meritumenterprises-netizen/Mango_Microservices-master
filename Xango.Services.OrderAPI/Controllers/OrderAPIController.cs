@@ -8,7 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Stripe.Checkout;
 using Xango.Models.Dto;
-using Xango.Services.Utility;
+using Xango.Services.Dto;
+using Xango.Services.Client.Utility;
 using Xango.Services.ProductAPI.Service.IService;
 using Xango.Services.InventoryApi.Service.IService;
 
@@ -46,7 +47,7 @@ namespace Xango.Services.OrderAPI.Controllers
                 IEnumerable<OrderHeader> objList;
 
                 var userEmail = User.Claims.Where((claim) => claim.Type == "name").First().Value;
-                if (User.IsInRole(Xango.Models.Dto.SD.RoleAdmin))
+                if (User.IsInRole(SD.RoleAdmin))
                 {
                     objList = _db.OrderHeaders.AsNoTracking().Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).Where(u => status == "all" || u.Status == status);
                 }
@@ -86,13 +87,13 @@ namespace Xango.Services.OrderAPI.Controllers
             try
             {
                 OrderHeader orderHeader = _db.OrderHeaders.First(u => u.OrderHeaderId == id);
-                if (orderHeader != null && orderHeader.Status == Xango.Models.Dto.SD.Status_Pending)
+                if (orderHeader != null && orderHeader.Status == SD.Status_Pending)
                 {
                     foreach (var orderDetail in orderHeader.OrderDetails)
                     {
                         await _inventoryService.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                     }
-                    orderHeader.Status = Xango.Models.Dto.SD.Status_Cancelled;
+                    orderHeader.Status = SD.Status_Cancelled;
                     _db.SaveChanges();
                     _response.IsSuccess = true;
                     _response.Message = "Order cancelled successfully";
@@ -140,7 +141,7 @@ namespace Xango.Services.OrderAPI.Controllers
             {
                 OrderHeaderDto orderHeaderDto = _mapper.Map<OrderHeaderDto>(cartDto.CartHeader);
                 orderHeaderDto.OrderTime = DateTime.Now;
-                orderHeaderDto.Status = Xango.Models.Dto.SD.Status_Pending;
+                orderHeaderDto.Status = SD.Status_Pending;
                 orderHeaderDto.OrderDetails = _mapper.Map<IEnumerable<OrderDetailsDto>>(cartDto.CartDetails);
                 foreach (var orderDetail in orderHeaderDto.OrderDetails)
                 {
@@ -241,7 +242,7 @@ namespace Xango.Services.OrderAPI.Controllers
                 {
                     //then payment was successful
                     orderHeader.PaymentIntentId = paymentIntent.Id;
-                    orderHeader.Status = Xango.Models.Dto.SD.Status_Approved;
+                    orderHeader.Status = SD.Status_Approved;
                     _db.SaveChanges();
                     RewardsDto rewardsDto = new()
                     {
@@ -268,7 +269,7 @@ namespace Xango.Services.OrderAPI.Controllers
                 OrderHeader orderHeader = _db.OrderHeaders.Include((od) => od.OrderDetails).First(u => u.OrderHeaderId == orderId);
                 if (orderHeader != null)
                 {
-                    if (newStatus == Xango.Models.Dto.SD.Status_Cancelled)
+                    if (newStatus == SD.Status_Cancelled)
                     {
                         foreach (var orderDetail in orderHeader.OrderDetails)
                         {

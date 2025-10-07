@@ -1,6 +1,7 @@
 ﻿using Xango.Models.Dto;
 using Xango.Services.Interfaces;
 using Xango.Web.Service.IService;
+using Xango.Services.Dto;
 
 namespace Xango.Web.Service
 {

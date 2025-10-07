@@ -51,6 +51,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Service.CouponAPI.Cli
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.Utility", "Xango.Services.Util\Xango.Services.Utility.csproj", "{B66D61C9-2677-4038-A4A5-01DA0CE79C84}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.Client.Utility", "Xango.Services.Client.Utility\Xango.Services.Client.Utility.csproj", "{F3843B2D-005F-4593-94FA-5676915165B6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Serrvices.Server.Utility", "Xango.Serrvices.Server.Utility\Xango.Serrvices.Server.Utility.csproj", "{9694DD98-D81F-4A8D-AA34-CBF0C6DB3266}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -109,6 +113,14 @@ Global
 		{B66D61C9-2677-4038-A4A5-01DA0CE79C84}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B66D61C9-2677-4038-A4A5-01DA0CE79C84}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B66D61C9-2677-4038-A4A5-01DA0CE79C84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3843B2D-005F-4593-94FA-5676915165B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3843B2D-005F-4593-94FA-5676915165B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3843B2D-005F-4593-94FA-5676915165B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3843B2D-005F-4593-94FA-5676915165B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9694DD98-D81F-4A8D-AA34-CBF0C6DB3266}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9694DD98-D81F-4A8D-AA34-CBF0C6DB3266}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9694DD98-D81F-4A8D-AA34-CBF0C6DB3266}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9694DD98-D81F-4A8D-AA34-CBF0C6DB3266}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -135,6 +147,8 @@ Global
 		{8C19D64C-29AC-4997-9035-6664E2B8CA97} = {93124727-AAF7-4047-BC08-006CF8E31074}
 		{CB7861E2-C57F-4C83-8E60-82A637A88274} = {8C19D64C-29AC-4997-9035-6664E2B8CA97}
 		{B66D61C9-2677-4038-A4A5-01DA0CE79C84} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{F3843B2D-005F-4593-94FA-5676915165B6} = {ADB819A7-64B4-4AFF-BA2B-69EFB3F6577A}
+		{9694DD98-D81F-4A8D-AA34-CBF0C6DB3266} = {ADB819A7-64B4-4AFF-BA2B-69EFB3F6577A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {929D2BC7-133A-46CF-89C4-0315B8019576}

@@ -1,4 +1,4 @@
-﻿namespace Xango.Models.Dto
+﻿namespace Xango.Services.Dto
 {
     public enum ApiType
     {

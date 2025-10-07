@@ -3,7 +3,9 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Text;
 using Xango.Models.Dto;
-using Xango.Services.Utility;
+using Xango.Services.Dto;
+using Xango.Services.Server.Utility;
+using Xango.Services.Client.Utility;
 
 namespace Xango.Web.BaseService
 {

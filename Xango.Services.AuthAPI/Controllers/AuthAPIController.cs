@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 
 using Xango.Models.Dto;
 using Xango.Services.AuthAPI.Service.IService;
-using Xango.Services.Utility;
+using Xango.Services.Client.Utility;
 
 namespace Xango.Services.AuthAPI.Controllers
 {

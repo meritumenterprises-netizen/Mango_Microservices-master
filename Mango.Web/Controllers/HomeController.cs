@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using Xango.Models.Dto;
-using Xango.Services.Utility;
+using Xango.Services.Client.Utility;
 using Xango.Services.Interfaces;
 
 

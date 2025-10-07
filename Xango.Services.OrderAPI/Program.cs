@@ -2,7 +2,6 @@ using AutoMapper;
 using Xango.Services.OrderAPI;
 using Xango.Services.OrderAPI.Data;
 using Xango.Services.OrderAPI.Extensions;
-using Xango.Services.OrderAPI.Utility;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -13,7 +12,7 @@ using Xango.Services.ProductApi.Service;
 using Xango.Services.ProductAPI.Service.IService;
 using Xango.Services.InventoryApi.Service;
 using Xango.Services.InventoryApi.Service.IService;
-using Xango.Services.Utility;
+using Xango.Services.Server.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();

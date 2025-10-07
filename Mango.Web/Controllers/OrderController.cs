@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.IdentityModel.Tokens.Jwt;
 using Xango.Models.Dto;
-using Xango.Services.Utility;
+using Xango.Services.Client.Utility;
 using Xango.Services.Interfaces;
+using Xango.Services.Dto;
 
 namespace Xango.Web.Controllers
 {

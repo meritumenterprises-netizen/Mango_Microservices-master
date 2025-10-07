@@ -7,8 +7,10 @@ using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using Xango.Models.Dto;
-using Xango.Services.Utility;
+using Xango.Services.Server.Utility;
 using Xango.Services.Interfaces;
+using Xango.Services.Dto;
+using Xango.Services.Client.Utility;
 
 namespace Xango.Web.Controllers
 {

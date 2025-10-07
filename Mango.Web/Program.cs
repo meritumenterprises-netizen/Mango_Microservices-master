@@ -7,7 +7,8 @@ using Xango.Models.Dto;
 using Xango.Web.BaseService;
 using AutoMapper;
 using Xango.Web.Mapping;
-using Xango.Services.Utility;
+using Xango.Services.Server.Utility;
+using Xango.Services.Dto;
 
 var builder = WebApplication.CreateBuilder(args);
 

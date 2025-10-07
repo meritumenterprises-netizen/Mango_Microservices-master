@@ -1,6 +1,6 @@
 ﻿using Xango.Models.Dto;
 
-namespace Xango.Services.Utility
+namespace Xango.Services.Server.Utility
 {
     public interface ITokenProvider
     {

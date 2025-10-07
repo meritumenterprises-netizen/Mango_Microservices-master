@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Xango.Models.Dto;
-using Xango.Services.Utility;
+using Xango.Services.Client.Utility;
 using Xango.Services.Interfaces;
 
 namespace Xango.Web.Controllers

@@ -7,8 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Xango.Services.Interfaces\Xango.Services.Interfaces.csproj" />
-    <ProjectReference Include="..\Xango.Services.InventoryApi\Xango.Services.InventoryApi.csproj" />
+    <ProjectReference Include="..\Xango.Services.Dto\Xango.Services.Dto.csproj" />
   </ItemGroup>
 
 </Project>
