@@ -163,7 +163,6 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
                 _db.CartHeaders.Remove(cartFromDb);
                 await _db.SaveChangesAsync();
                 _response.Result = true;
-                //_messageBus.PublishMessage(JsonConvert.SerializeObject(cartFromDb), _configuration.GetValue<string>("TopicAndQueueNames:ShoppingCartDeletedQueue"));
             }
             catch (Exception ex)
             {

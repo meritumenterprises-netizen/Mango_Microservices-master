@@ -10,6 +10,7 @@ using Stripe.Checkout;
 using Xango.Models.Dto;
 using Xango.Services.Dto.Utilities;
 using Xango.Services.ProductAPI.Service.IService;
+using Xango.Services.InventoryApi.Service.IService;
 
 namespace Xango.Services.OrderAPI.Controllers
 {
@@ -23,9 +24,9 @@ namespace Xango.Services.OrderAPI.Controllers
         private readonly AppDbContext _db;
         private IProductService _productService;
         private readonly IConfiguration _configuration;
-        private Xango.Services.InventoryApi.Service.IService.IInventoryService _inventoryService;
+        private IInventoryService _inventoryService;
 
-        public OrderAPIController(AppDbContext db,IProductService productService, Xango.Services.InventoryApi.Service.IService.IInventoryService inventoryService, IMapper mapper, IConfiguration configuration)
+        public OrderAPIController(AppDbContext db,IProductService productService, IInventoryService inventoryService, IMapper mapper, IConfiguration configuration)
         
         {
             _db = db;

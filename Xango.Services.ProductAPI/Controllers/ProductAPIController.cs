@@ -100,7 +100,6 @@ namespace Xango.Services.ProductAPI.Controllers
                 _db.Products.Update(product);
                 _db.SaveChanges();
                 _response.Result = _mapper.Map<ProductDto>(product);
-                //_messageBus.PublishMessage(JsonConvert.SerializeObject(_response.Result), _configuration.GetValue<string>("TopicAndQueueNames:ProductCreatedQueue"));
             }
             catch (Exception ex)
             {
