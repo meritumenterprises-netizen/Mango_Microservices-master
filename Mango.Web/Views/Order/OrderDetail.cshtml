@@ -119,7 +119,7 @@
                                 {
                                     <button asp-action="CancelOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-danger form-control my-1">Cancel Order</button>
                                 }
-                                <button asp-action="DeleteOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-danger form-control my-1">Delete Order</button>
+                                <button asp-action="DeleteOrder" asp-route-orderId="@Model.OrderHeaderId" type="submit" class="btn btn-secondary form-control my-1" onclick="return confirm('Are you sure you want to delete this order?');">Delete Order</button>
                             }
                         </div>
                     </div>

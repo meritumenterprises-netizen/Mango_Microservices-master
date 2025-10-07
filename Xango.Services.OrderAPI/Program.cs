@@ -13,7 +13,7 @@ using Xango.Services.ProductApi.Service;
 using Xango.Services.ProductAPI.Service.IService;
 using Xango.Services.InventoryApi.Service;
 using Xango.Services.InventoryApi.Service.IService;
-
+using Xango.Services.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();

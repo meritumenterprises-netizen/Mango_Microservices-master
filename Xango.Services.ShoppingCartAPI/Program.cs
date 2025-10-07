@@ -11,7 +11,7 @@ using Microsoft.OpenApi.Models;
 using Xango.Services.Token;
 
 using Xango.Services.ShoppingCartAPI.Service;
-using Xango.Services.ShoppingCartAPI.Utility;
+using Xango.Services.Utility;
 
 
 var builder = WebApplication.CreateBuilder(args);
