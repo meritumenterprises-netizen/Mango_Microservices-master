@@ -1,5 +1,5 @@
 ﻿
-using Xango.Web.Utility;
+using Xango.Services.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;

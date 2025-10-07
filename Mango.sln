@@ -51,7 +51,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clients", "Clients", "{8C19
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Service.CouponAPI.Client", "Xango.Service.CouponAPI.Client\Xango.Service.CouponAPI.Client.csproj", "{CB7861E2-C57F-4C83-8E60-82A637A88274}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.Util", "Xango.Services.Util\Xango.Services.Util.csproj", "{B66D61C9-2677-4038-A4A5-01DA0CE79C84}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.Utility", "Xango.Services.Util\Xango.Services.Utility.csproj", "{B66D61C9-2677-4038-A4A5-01DA0CE79C84}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
