@@ -1,12 +1,12 @@
 ﻿using AutoMapper;
-using Mango.Services.CouponAPI.Data;
-using Mango.Services.CouponAPI.Models;
+using Xango.Services.CouponAPI.Data;
+using Xango.Services.CouponAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Xango.Models.Dto;
 using Xango.Services.Dto.Utilities;
 
-namespace Mango.Services.CouponAPI.Controllers
+namespace Xango.Services.CouponAPI.Controllers
 {
     [Route("api/coupon")]
     [ApiController]

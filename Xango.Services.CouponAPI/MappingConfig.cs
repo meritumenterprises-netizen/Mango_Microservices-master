@@ -1,10 +1,9 @@
 ﻿using AutoMapper;
 using Xango.Models.Dto;
-using Mango.Services.CouponAPI.Models;
+using Xango.Services.CouponAPI.Models;
 
-using LoggerFactory = Xango.Services.Dto.Utilities.LoggerFactory;
 
-namespace Mango.Services.CouponAPI
+namespace Xango.Services.CouponAPI
 {
     public class MappingConfig
     {
@@ -12,8 +11,7 @@ namespace Mango.Services.CouponAPI
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<CouponDto, Coupon>();
-                config.CreateMap<Coupon, CouponDto>();
+                config.CreateMap<CouponDto, Coupon>().ReverseMap();
             }, (ILoggerFactory)new LoggerFactory());
             return mappingConfig;
         }

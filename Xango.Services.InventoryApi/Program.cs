@@ -5,13 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System.Reflection;
 using Xango.Services.InventoryApi;
 using Xango.Services.InventoryApi.Data;
 using Xango.Services.InventoryApi.Service;
 using Xango.Services.InventoryApi.Service.IService;
 using Xango.Services.Token;
-using System.Reflection;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
