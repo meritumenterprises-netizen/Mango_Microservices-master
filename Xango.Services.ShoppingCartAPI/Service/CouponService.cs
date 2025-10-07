@@ -1,7 +1,6 @@
 ﻿using Xango.Models.Dto; 
 using Xango.Services.CouponAPI.Service.IService;
 using Newtonsoft.Json;
-using Xango.Services.Dto;
 
 namespace Xango.Services.CouponAPI.Service
 {

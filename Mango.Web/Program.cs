@@ -9,6 +9,7 @@ using AutoMapper;
 using Xango.Web.Mapping;
 using Xango.Services.Server.Utility;
 using Xango.Services.Dto;
+using Xango.Services.Client.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
 

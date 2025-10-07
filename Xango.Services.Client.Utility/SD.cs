@@ -1,19 +1,6 @@
-﻿namespace Xango.Services.Dto
+﻿namespace Xango.Services.Client.Utility
 {
-    public enum ApiType
-    {
-        GET,
-        POST,
-        PUT,
-        DELETE
-    }
-
-    public enum ContentType
-    {
-        Json,
-        MultipartFormData,
-    }
-
+    
     public class SD
     {
         public static string CouponAPIBase { get; set; }

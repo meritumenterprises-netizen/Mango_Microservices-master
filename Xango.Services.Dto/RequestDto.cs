@@ -1,6 +1,5 @@
 ﻿using System.Net.Mime;
 using Xango.Services.Dto;
-using ContentType = Xango.Services.Dto.ContentType;
 
 
 namespace Xango.Models.Dto
