@@ -37,8 +37,7 @@ namespace Xango.Service.CouponAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-
-            var resp = await client.PostAsync("api/coupon", StringContentUTF8.AsJsonString<CouponDto>(couponDto));
+            var resp = client.PostAsync("/api/coupon", StringContentUTF8.AsJsonString<CouponDto>(couponDto)).GetAwaiter().GetResult();
             if (resp != null & resp.IsSuccessStatusCode)
             {
                 return ResponseProducer.OkResponse(resp);
@@ -52,10 +51,11 @@ namespace Xango.Service.CouponAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var resp = await client.DeleteAsync("api/coupon" + id);
-            if (resp != null & resp.IsSuccessStatusCode)
+            var response = client.DeleteAsync("/api/coupon/" + id).GetAwaiter().GetResult();
+            response.EnsureSuccessStatusCode();
+            if (response != null & response.IsSuccessStatusCode)
             {
-                return ResponseProducer.OkResponse(resp);
+                return ResponseProducer.OkResponse(new ResponseDto());
             }
             return ResponseProducer.ErrorResponse("Could not delete a coupon");
         }
@@ -108,13 +108,14 @@ namespace Xango.Service.CouponAPI.Client
             return ResponseProducer.ErrorResponse("Could not find coupon");
         }
 
+        // Probably not used in the UI
         public async Task<ResponseDto?> UpdateCoupons(CouponDto couponDto)
         {
             var client = _httpClientFactory.CreateClient("Coupon");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.PutAsync("/api/coupon", StringContentUTF8.AsJsonString<CouponDto>(couponDto)).GetAwaiter().GetResult();
+            var response = client.PutAsync("/api/coupon/", StringContentUTF8.AsJsonString<CouponDto>(couponDto)).GetAwaiter().GetResult();
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto>().Result;
             if (resp != null && resp.IsSuccess)
