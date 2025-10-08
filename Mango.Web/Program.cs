@@ -10,6 +10,7 @@ using Xango.Web.Mapping;
 using Xango.Services.Server.Utility;
 using Xango.Services.Dto;
 using Xango.Services.Client.Utility;
+using Xango.Service.CouponAPI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,13 +40,13 @@ builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<IInventoryService, InventoryService>();
+builder.Services.AddScoped<ICouponHttpClient, CouponHttpClient>();
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 
 
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 builder.Services.AddRazorPages();
-
 
 builder.Services.AddAuthorization();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

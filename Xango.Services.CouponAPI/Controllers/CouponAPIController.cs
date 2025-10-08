@@ -27,7 +27,7 @@ namespace Xango.Services.CouponAPI.Controllers
         }
 
         [HttpGet]
-        public ResponseDto Get()
+        public async Task<ResponseDto> Get()
         {
             try
             {

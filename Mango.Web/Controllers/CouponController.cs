@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Xango.Models.Dto;
+using Xango.Service.CouponAPI.Client;
 using Xango.Services.Client.Utility;
 using Xango.Services.Interfaces;
 
@@ -8,7 +9,7 @@ namespace Xango.Web.Controllers
     public class CouponController : Controller
     {
         private readonly ICouponService _couponService;
-        public CouponController(ICouponService couponService)
+        public CouponController(ICouponService couponService, ICouponHttpClient client)
         {
             _couponService = couponService;
         }

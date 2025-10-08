@@ -40,6 +40,7 @@ namespace Xango.Services.OrderAPI.Controllers
 
         [HttpGet("GetAll")]
         [Authorize]
+        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any, NoStore = true)]
         public ResponseDto? GetAll(string userId, string status = "all")
         {
             try
