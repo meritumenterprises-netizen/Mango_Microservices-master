@@ -1,13 +1,15 @@
 ﻿
-using Xango.Services.Utility;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using Xango.Models.Dto;
+using Xango.Service.ShoppingCartAPI.Client;
+using Xango.Services.Client.Utility;
 using Xango.Services.Dto;
 using Xango.Services.Interfaces;
-using Xango.Services.Client.Utility;
+using Xango.Services.Utility;
+using Xango.Web.Service;
 
 
 namespace Xango.Web.Controllers
@@ -15,14 +17,14 @@ namespace Xango.Web.Controllers
     
     public class CartController : Controller
     {
-        private readonly ICartService _cartService;
         private readonly IOrderService _orderService;
         private readonly IAuthService _authService;
-        public CartController(ICartService cartService, IOrderService orderService, IAuthService authService)
+        private readonly IShoppingCartHttpClient _shoppingCartClient;
+        public CartController(IOrderService orderService, IAuthService authService, IShoppingCartHttpClient shoppingCartHttpClient)
         {
-            _cartService = cartService;
             _orderService = orderService;
             _authService = authService;
+            _shoppingCartClient = shoppingCartHttpClient;
         }
 
         [HttpGet]
@@ -36,17 +38,19 @@ namespace Xango.Web.Controllers
         {
             var responseDto = await _authService.GetUser(User.Identity.Name);
             UserDto userDto = DtoConverter.ToDto<UserDto>(responseDto);
-            var cartDto = DtoConverter.ToDto<CartDto>(await _cartService.GetCartByUserId(userDto.Id));
+            var cartDto = DtoConverter.ToDto<CartDto>(await _shoppingCartClient.GetCartByUserId(userDto.Id));
+            //var cartDto = DtoConverter.ToDto<CartDto>(await _cartService.GetCartByUserId(userDto.Id));
             return View(cartDto);
         }
 
         [Authorize]
-        [ActionName("CancelOrder")]
+        [ActionName("DeleteCart")]
         public async Task<IActionResult> DeleteCart()
         {
-            //CartDto cart = await LoadCartDtoBasedOnLoggedInUser();
-            //await _cartService.DeleteCart(cart.CartHeader.UserId);
-            return View(await LoadCartDtoBasedOnLoggedInUser());
+            var responseDto = await _authService.GetUser(User.Identity.Name);
+            UserDto userDto = DtoConverter.ToDto<UserDto>(responseDto);
+            var response = await _shoppingCartClient.DeleteCart(userDto.Id);
+            return Redirect("/");
         }
 
         [HttpPost]
@@ -91,8 +95,8 @@ namespace Xango.Web.Controllers
             if (response != null & response.IsSuccess)
             {
                 OrderHeaderDto orderHeader = DtoConverter.ToDto<OrderHeaderDto>(response);
-                var cartDto = _cartService.GetCartByUserId(orderHeader.UserId);
-                _cartService.DeleteCart(orderHeader.UserId);
+                var cartDto = _shoppingCartClient.GetCartByUserId(orderHeader.UserId);
+                _shoppingCartClient.DeleteCart(orderHeader.UserId);
                 if (orderHeader.Status == SD.Status_Approved)
                 {
                     return View(orderId);
@@ -105,7 +109,8 @@ namespace Xango.Web.Controllers
         public async Task<IActionResult> Remove(int cartDetailsId)
         {
             var userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
-            ResponseDto? response = await _cartService.RemoveFromCart(cartDetailsId);
+            //ResponseDto? response = await _cartService.RemoveFromCart(cartDetailsId);
+            ResponseDto? response = await _shoppingCartClient.RemoveFromCart(cartDetailsId);
             if (response != null & response.IsSuccess)
             {
                 TempData["success"] = "Cart updated successfully";
@@ -117,8 +122,7 @@ namespace Xango.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> ApplyCoupon(CartDto cartDto)
         {
-
-            ResponseDto? response = await _cartService.ApplyCoupon(cartDto);
+            ResponseDto? response = await _shoppingCartClient.ApplyCoupon(cartDto);
             if (response != null & response.IsSuccess)
             {
                 TempData["success"] = "Cart updated successfully";
@@ -131,7 +135,7 @@ namespace Xango.Web.Controllers
         public async Task<IActionResult> RemoveCoupon(CartDto cartDto)
         {
             cartDto.CartHeader.CouponCode = "";
-            ResponseDto? response = await _cartService.ApplyCoupon(cartDto);
+            ResponseDto? response = await _shoppingCartClient.ApplyCoupon(cartDto);
             if (response != null & response.IsSuccess)
             {
                 TempData["success"] = "Cart updated successfully";
@@ -145,7 +149,8 @@ namespace Xango.Web.Controllers
             var userEmail = User.Claims.Where((claim) => claim.Type == "email").First().Value;
             var responseDto = await _authService.GetUser(userEmail);
             var userDto = DtoConverter.ToDto<UserDto>(responseDto);
-            ResponseDto? response = await _cartService.GetCartByUserId(userDto.Id);
+            ResponseDto? response = await _shoppingCartClient.GetCartByUserId(userDto.Id);
+            //ResponseDto? response = await _cartService.GetCartByUserId(userDto.Id);
             if (response != null & response.IsSuccess)
             {
                 CartDto cartDto = DtoConverter.ToDto<CartDto>(response);

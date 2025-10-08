@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System.Diagnostics;
 using Xango.Models.Dto;
 using Xango.Service.ProductAPI.Client;
+using Xango.Service.ShoppingCartAPI.Client;
 using Xango.Services.Client.Utility;
 using Xango.Services.Interfaces;
 
@@ -14,12 +15,12 @@ namespace Xango.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ICartService _cartService;
         private readonly IProductHttpClient _productHttpClient;
-        public HomeController(ICartService cartService, IProductHttpClient productHttpClient)
+        private readonly IShoppingCartHttpClient _shoppingCartHttpClient;
+        public HomeController(IProductHttpClient productHttpClient, IShoppingCartHttpClient shoppingCartHttpClient)
         {
-            _cartService = cartService;
             _productHttpClient = productHttpClient;
+            _shoppingCartHttpClient = shoppingCartHttpClient;
         }
 
 
@@ -83,7 +84,8 @@ namespace Xango.Web.Controllers
             List<CartDetailsDto> cartDetailsDtos = new() { cartDetails };
             cartDto.CartDetails = cartDetailsDtos;
 
-            ResponseDto? response = await _cartService.UpsertCart(cartDto);
+            //ResponseDto? response = await _cartService.UpsertCart(cartDto);
+            ResponseDto? response = await _shoppingCartHttpClient.UpsertCart(cartDto);
 
             if (response != null && response.IsSuccess)
             {

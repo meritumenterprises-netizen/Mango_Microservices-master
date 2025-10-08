@@ -7,20 +7,21 @@ using Xango.Services.Client.Utility;
 using Xango.Services.Interfaces;
 using Xango.Services.Dto;
 using Xango.Service.InventoryAPI.Client;
+using Xango.Service.ShoppingCartAPI.Client;
 
 namespace Xango.Web.Controllers
 {
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
-        private readonly ICartService _cartService;
+        private readonly IShoppingCartHttpClient _shoppingCartHttpClient;
         private readonly IMapper _mapper;
         private readonly IInventoryttpClient _inventoryttpClient;   
 
-        public OrderController(IOrderService orderService, ICartService cartService, IMapper mapper, IInventoryttpClient inventoryClient)
+        public OrderController(IOrderService orderService, IShoppingCartHttpClient shoppingCartHttpClient, IMapper mapper, IInventoryttpClient inventoryClient)
         {
             _orderService = orderService;
-            _cartService = cartService;
+            _shoppingCartHttpClient = shoppingCartHttpClient;
             _mapper = mapper;
             _inventoryttpClient = inventoryClient;
         }
