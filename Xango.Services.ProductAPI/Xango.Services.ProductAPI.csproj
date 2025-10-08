@@ -14,6 +14,23 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\ProductImages\1.jpg" />
+    <Content Remove="wwwroot\ProductImages\16.jpg" />
+    <Content Remove="wwwroot\ProductImages\17.jpg" />
+    <Content Remove="wwwroot\ProductImages\18.jpg" />
+    <Content Remove="wwwroot\ProductImages\19.jpg" />
+    <Content Remove="wwwroot\ProductImages\2.jpg" />
+    <Content Remove="wwwroot\ProductImages\20.jpeg" />
+    <Content Remove="wwwroot\ProductImages\21.jpg" />
+    <Content Remove="wwwroot\ProductImages\22.jpg" />
+    <Content Remove="wwwroot\ProductImages\23.jpg" />
+    <Content Remove="wwwroot\ProductImages\24.jpg" />
+    <Content Remove="wwwroot\ProductImages\3.jpg" />
+    <Content Remove="wwwroot\ProductImages\4.jpg" />
+    <Content Remove="wwwroot\ProductImages\6.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
 	  <PackageReference Include="AutoMapper" Version="15.0.1" />
 	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
