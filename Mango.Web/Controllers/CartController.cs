@@ -40,7 +40,6 @@ namespace Xango.Web.Controllers
             var responseDto = await _authService.GetUser(User.Identity.Name);
             UserDto userDto = DtoConverter.ToDto<UserDto>(responseDto);
             var cartDto = DtoConverter.ToDto<CartDto>(await _shoppingCartClient.GetCartByUserId(userDto.Id));
-            //var cartDto = DtoConverter.ToDto<CartDto>(await _cartService.GetCartByUserId(userDto.Id));
             return View(cartDto);
         }
 
@@ -65,7 +64,6 @@ namespace Xango.Web.Controllers
             cart.CartHeader.Email = cartDto.CartHeader.Email;
             cart.CartHeader.Name = cartDto.CartHeader.Name;
 
-            //var response = await _orderService.CreateOrder(cart);
             var response = await _orderHttpClient.CreateOrder(cart);
             OrderHeaderDto orderHeaderDto = DtoConverter.ToDto<OrderHeaderDto>(response);
             orderHeaderDto.OrderTotalWithCurrency = orderHeaderDto.OrderTotal.ToString("C2");
@@ -82,7 +80,6 @@ namespace Xango.Web.Controllers
                     OrderHeader = orderHeaderDto
                 };
 
-                //var stripeResponse = await _orderService.CreateStripeSession(stripeRequestDto);
                 var stripeResponse = await _orderHttpClient.CreateStripeSession(stripeRequestDto);
                 StripeRequestDto stripeResponseResult = DtoConverter.ToDto<StripeRequestDto>(stripeResponse);
                 Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);

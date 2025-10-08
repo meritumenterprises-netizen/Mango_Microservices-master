@@ -60,7 +60,6 @@ namespace Xango.Web.Controllers
 
         public async Task<IActionResult> DeleteProduct(int productId)
         {
-            //var response = await _productService.DeleteProduct(productId);
             var response = await _productHttpClient.DeleteProduct(productId);
 
             if (response != null && response.IsSuccess)

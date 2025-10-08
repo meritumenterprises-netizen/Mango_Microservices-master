@@ -116,7 +116,6 @@ namespace Xango.Web.Controllers
             {
                 userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
             }
-            //ResponseDto response = _orderService.GetAll(userId, status).GetAwaiter().GetResult();
             ResponseDto response = await _orderHttpClient.GetAll(userId, status);
             if (response != null && response.IsSuccess)
             {

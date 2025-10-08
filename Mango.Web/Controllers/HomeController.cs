@@ -84,7 +84,6 @@ namespace Xango.Web.Controllers
             List<CartDetailsDto> cartDetailsDtos = new() { cartDetails };
             cartDto.CartDetails = cartDetailsDtos;
 
-            //ResponseDto? response = await _cartService.UpsertCart(cartDto);
             ResponseDto? response = await _shoppingCartHttpClient.UpsertCart(cartDto);
 
             if (response != null && response.IsSuccess)
