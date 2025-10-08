@@ -48,7 +48,6 @@ namespace Xango.Services.AuthAPI.Controllers
                 _response.Message = "Username or password is incorrect";
                 return BadRequest(_response);
             }
-            //_response.Result = DtoConverter.ToJson<LoginResponseDto>(loginResponse);
             _response.Result = loginResponse;
             return Ok(_response);
         }
@@ -71,7 +70,7 @@ namespace Xango.Services.AuthAPI.Controllers
 
         }
 
-        [HttpGet("GetUser/{email}")] 
+        [HttpGet("GetUser/{email}")]
         public async Task<IActionResult> GetUser(string email)
         {
             var userDto = await _authService.GetUser(email);
