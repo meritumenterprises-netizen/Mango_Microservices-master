@@ -23,7 +23,7 @@ builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
-builder.Services.AddScoped<IProductService, ProductService>();
+//builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IInventoryttpClient, InventoryHttpClient>();
 
 

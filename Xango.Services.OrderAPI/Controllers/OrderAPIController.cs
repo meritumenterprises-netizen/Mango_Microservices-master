@@ -25,17 +25,15 @@ namespace Xango.Services.OrderAPI.Controllers
         protected ResponseDto _response;
         private IMapper _mapper;
         private readonly AppDbContext _db;
-        private IProductService _productService;
+        
         private readonly IConfiguration _configuration;
-        //private IInventoryService _inventoryService;
         private readonly IInventoryttpClient _inventoryClient;
 
-        public OrderAPIController(AppDbContext db,IProductService productService, IInventoryttpClient inventoryClient, IMapper mapper, IConfiguration configuration)
+        public OrderAPIController(AppDbContext db,IInventoryttpClient inventoryClient, IMapper mapper, IConfiguration configuration)
         
         {
             _db = db;
             _response = new ResponseDto();
-            _productService = productService;
             _mapper = mapper;
             _configuration = configuration;
             _inventoryClient = inventoryClient;

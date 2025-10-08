@@ -128,13 +128,14 @@ namespace Xango.Services.ProductAPI.Controllers
                     ProductDto.ImageLocalPath = Path.Combine(Path.GetFileNameWithoutExtension(Path.GetTempFileName()), ".jpg");
 
                     var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), ProductDto.ImageLocalPath);
-                    FileInfo file = new FileInfo(oldFilePathDirectory);
+
+                    string fileName = product.ProductId + ".jpg";
+                    FileInfo file = new FileInfo(Path.GetDirectoryName(oldFilePathDirectory) + fileName);
                     if (file.Exists)
                     {
                         file.Delete();
                     }
 
-                    string fileName = product.ProductId + ".jpg";
                     string filePath = @"wwwroot\ProductImages\" + fileName;
                     var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
                     try
