@@ -107,22 +107,5 @@ namespace Xango.Service.CouponAPI.Client
             }
             return ResponseProducer.ErrorResponse("Could not find coupon");
         }
-
-        // Probably not used in the UI
-        public async Task<ResponseDto?> UpdateCoupons(CouponDto couponDto)
-        {
-            var client = _httpClientFactory.CreateClient("Coupon");
-            client.BaseAddress = new Uri(_baseUri);
-            var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.PutAsync("/api/coupon/", StringContentUTF8.AsJsonString<CouponDto>(couponDto)).GetAwaiter().GetResult();
-            response.EnsureSuccessStatusCode();
-            var resp = response.Content.ReadFromJsonAsync<ResponseDto>().Result;
-            if (resp != null && resp.IsSuccess)
-            {
-                return ResponseProducer.OkResponse(resp);
-            }
-            return ResponseProducer.ErrorResponse("Could not find coupon");
-        }
     }
 }

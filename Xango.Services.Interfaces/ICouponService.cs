@@ -8,7 +8,6 @@ namespace Xango.Services.Interfaces
         Task<ResponseDto?> GetAllCoupons();
         Task<ResponseDto?> GetCouponById(int id);
         Task<ResponseDto?> CreateCoupons(CouponDto couponDto);
-        Task<ResponseDto?> UpdateCoupons(CouponDto couponDto);
         Task<ResponseDto?> DeleteCoupons(int id);
     }
 }
