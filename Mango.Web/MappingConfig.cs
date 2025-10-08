@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using Xango.Models.Dto;
+using Xango.Services.Dto;
 
 namespace Xango.Web.Mapping
 {

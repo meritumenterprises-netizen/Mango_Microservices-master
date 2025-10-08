@@ -26,17 +26,14 @@ builder.Services.AddHttpClient();
 
 
 builder.Services.AddHttpClient<IAuthService, AuthService>();
-builder.Services.AddHttpClient<IOrderService, OrderService>();
-//builder.Services.AddHttpClient<IInventoryService, InventoryService>();
 SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
 SD.OrderAPIBase = builder.Configuration["ServiceUrls:OrderAPI"];
 SD.ShoppingCartAPIBase = builder.Configuration["ServiceUrls:ShoppingCartAPI"];
 SD.AuthAPIBase = builder.Configuration["ServiceUrls:AuthAPI"];
 SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"];
 SD.InventoryAPIBase = builder.Configuration["ServiceUrls:InventoryAPI"];
-builder.Services.AddScoped<IOrderService, OrderService>();
+
 builder.Services.AddScoped<IAuthService, AuthService>();
-//builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICouponHttpClient, CouponHttpClient>();

@@ -10,6 +10,7 @@
     <Compile Remove="Service\CartService.cs" />
     <Compile Remove="Service\CouponService.cs" />
     <Compile Remove="Service\InventoryService.cs" />
+    <Compile Remove="Service\OrderService.cs" />
     <Compile Remove="Service\ProductService.cs" />
   </ItemGroup>
 

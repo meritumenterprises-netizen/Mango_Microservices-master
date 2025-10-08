@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Internal;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace Xango.Models.Dto
 {
@@ -10,8 +12,10 @@ namespace Xango.Models.Dto
         public double Price { get; set; }
         public string Description { get; set; }
         public string CategoryName { get; set; }
+        public string? Base64Image { get; set; }
         public string? ImageUrl { get; set; }
         public string? ImageLocalPath { get; set; }
+        [JsonIgnore]
         public IFormFile? Image { get; set; }
         public int Count { get; set; } = 1;
         [Range(0,1000, ErrorMessage = "Inventory must be between 0 and 1000")]

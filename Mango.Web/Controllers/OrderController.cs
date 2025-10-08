@@ -14,15 +14,13 @@ namespace Xango.Web.Controllers
 {
     public class OrderController : Controller
     {
-        private readonly IOrderService _orderService;
         private readonly IShoppingCartHttpClient _shoppingCartHttpClient;
         private readonly IMapper _mapper;
         private readonly IInventoryttpClient _inventoryttpClient;
         private readonly IOrderHttpClient _orderHttpClient;
 
-        public OrderController(IOrderService orderService, IShoppingCartHttpClient shoppingCartHttpClient, IMapper mapper, IInventoryttpClient inventoryClient, IOrderHttpClient orderHttpClient)
+        public OrderController(IShoppingCartHttpClient shoppingCartHttpClient, IMapper mapper, IInventoryttpClient inventoryClient, IOrderHttpClient orderHttpClient)
         {
-            _orderService = orderService;
             _shoppingCartHttpClient = shoppingCartHttpClient;
             _mapper = mapper;
             _inventoryttpClient = inventoryClient;

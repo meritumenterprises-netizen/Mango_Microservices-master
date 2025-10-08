@@ -3,11 +3,12 @@ using Xango.Services.ProductAPI.Data;
 using Xango.Services.ProductAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
 using Xango.Services.Client.Utility;
 using Xango.Services.Utility;
-
+using System.IO;
 
 namespace Xango.Services.ProductAPI.Controllers
 {
@@ -70,24 +71,29 @@ namespace Xango.Services.ProductAPI.Controllers
                 _db.Products.Add(product);
                 _db.SaveChanges();
 
-                if (ProductDto.Image != null)
+                if (!string.IsNullOrEmpty(ProductDto.Base64Image))
                 {
+                    ProductDto.ImageLocalPath = Path.Combine(Path.GetFileNameWithoutExtension(Path.GetTempFileName()), ".jpg");
 
-                    string fileName = product.ProductId + Path.GetExtension(ProductDto.Image.FileName);
-                    string filePath = @"wwwroot\ProductImages\" + fileName;
-
-                    //I have added the if condition to remove the any image with same name if that exist in the folder by any change
-                    var directoryLocation = Path.Combine(Directory.GetCurrentDirectory(), filePath);
-                    FileInfo file = new FileInfo(directoryLocation);
+                    var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), ProductDto.ImageLocalPath);
+                    FileInfo file = new FileInfo(oldFilePathDirectory);
                     if (file.Exists)
                     {
                         file.Delete();
                     }
 
+                    string fileName = product.ProductId + ".jpg";
+                    string filePath = @"wwwroot\ProductImages\" + fileName;
                     var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
-                    using (var fileStream = new FileStream(filePathDirectory, FileMode.Create))
                     {
-                        ProductDto.Image.CopyTo(fileStream);
+                        try
+                        {
+                            System.IO.File.WriteAllBytes(filePathDirectory, Convert.FromBase64String(ProductDto.Base64Image));
+                        }
+                        catch
+                        {
+
+                        }
                     }
                     var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
                     product.ImageUrl = baseUrl + "/ProductImages/" + fileName;
@@ -117,24 +123,27 @@ namespace Xango.Services.ProductAPI.Controllers
             {
                 Product product = _mapper.Map<Product>(ProductDto);
 
-                if (ProductDto.Image != null)
+                if (!string.IsNullOrEmpty(ProductDto.Base64Image))
                 {
-                    if (!string.IsNullOrEmpty(product.ImageLocalPath))
+                    ProductDto.ImageLocalPath = Path.Combine(Path.GetFileNameWithoutExtension(Path.GetTempFileName()), ".jpg");
+
+                    var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), ProductDto.ImageLocalPath);
+                    FileInfo file = new FileInfo(oldFilePathDirectory);
+                    if (file.Exists)
                     {
-                        var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), product.ImageLocalPath);
-                        FileInfo file = new FileInfo(oldFilePathDirectory);
-                        if (file.Exists)
-                        {
-                            file.Delete();
-                        }
+                        file.Delete();
                     }
 
-                    string fileName = product.ProductId + Path.GetExtension(ProductDto.Image.FileName);
+                    string fileName = product.ProductId + ".jpg";
                     string filePath = @"wwwroot\ProductImages\" + fileName;
                     var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
-                    using (var fileStream = new FileStream(filePathDirectory, FileMode.Create))
+                    try
                     {
-                        ProductDto.Image.CopyTo(fileStream);
+                        System.IO.File.WriteAllBytes(filePathDirectory, Convert.FromBase64String(ProductDto.Base64Image));
+                    }
+                    catch
+                    {
+
                     }
                     var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
                     product.ImageUrl = baseUrl + "/ProductImages/" + fileName;

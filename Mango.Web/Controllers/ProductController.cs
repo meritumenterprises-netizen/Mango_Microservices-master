@@ -3,15 +3,21 @@ using Xango.Models.Dto;
 using Xango.Service.ProductAPI.Client;
 using Xango.Services.Client.Utility;
 using Xango.Services.Interfaces;
+using Microsoft.AspNetCore.Http;
+using AutoMapper;
+using Xango.Services.Dto;
+using Abp.IO.Extensions;
 
 namespace Xango.Web.Controllers
 {
     public class ProductController : Controller
     {
         private readonly IProductHttpClient _productHttpClient;
-        public ProductController(IProductHttpClient productHttpClient)
+        private readonly IMapper _mapper;
+        public ProductController(IProductHttpClient productHttpClient, IMapper mapper)
         {
-            _productHttpClient = productHttpClient; 
+            _productHttpClient = productHttpClient;
+            _mapper = mapper;
         }
 
 
@@ -43,6 +49,14 @@ namespace Xango.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (model.Image != null)
+                {
+                    var ms = new MemoryStream();
+                    model.Image.CopyTo(ms);
+                    ms.Position = 0;
+                    model.Base64Image = Convert.ToBase64String(ms.GetAllBytes());
+                    model.Image = null;
+                }
                 ResponseDto? response = await _productHttpClient.CreateProducts(model);
 
                 if (response != null && response.IsSuccess)
@@ -95,6 +109,14 @@ namespace Xango.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (productDto.Image != null)
+                {
+                    var ms = new MemoryStream();
+                    productDto.Image.CopyTo(ms);
+                    ms.Position = 0;
+                    productDto.Base64Image = Convert.ToBase64String(ms.GetAllBytes());
+                    productDto.Image = null;
+                }
                 ResponseDto? response = await _productHttpClient.UpdateProducts(productDto);
 
                 if (response != null && response.IsSuccess)
