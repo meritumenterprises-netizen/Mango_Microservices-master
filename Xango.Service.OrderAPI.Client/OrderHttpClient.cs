@@ -111,11 +111,6 @@ namespace Xango.Service.OrderAPI.Client
             return ResponseProducer.ErrorResponse("Could not find order");
         }
 
-        public async Task<ResponseDto?> GetUser(string email)
-        {
-            throw new NotImplementedException();
-        }
-
         public async Task<ResponseDto?> UpdateOrderStatus(int orderId, string newStatus)
         {
             var client = _httpClientFactory.CreateClient("Order");

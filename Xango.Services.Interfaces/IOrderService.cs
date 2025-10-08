@@ -10,7 +10,6 @@ namespace Xango.Services.Interfaces
         Task<ResponseDto?> GetAll(string userId, string status);
         Task<ResponseDto?> GetOrder(int orderId);
         Task<ResponseDto?> UpdateOrderStatus(int orderId, string newStatus);
-        Task<ResponseDto?> GetUser(string email);
 
         Task<ResponseDto?> DeleteOrder(int orderId);
     }
