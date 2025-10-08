@@ -11,6 +11,7 @@ using Xango.Services.Server.Utility;
 using Xango.Services.Dto;
 using Xango.Services.Client.Utility;
 using Xango.Service.CouponAPI.Client;
+using Xango.Service.InventoryAPI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,7 +26,7 @@ builder.Services.AddHttpClient<IProductService, ProductService>();
 builder.Services.AddHttpClient<ICartService, CartService>();
 builder.Services.AddHttpClient<IAuthService, AuthService>();
 builder.Services.AddHttpClient<IOrderService, OrderService>();
-builder.Services.AddHttpClient<IInventoryService, InventoryService>();
+//builder.Services.AddHttpClient<IInventoryService, InventoryService>();
 SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
 SD.OrderAPIBase = builder.Configuration["ServiceUrls:OrderAPI"];
 SD.ShoppingCartAPIBase = builder.Configuration["ServiceUrls:ShoppingCartAPI"];
@@ -39,8 +40,8 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 //builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IBaseService, BaseService>();
-builder.Services.AddScoped<IInventoryService, InventoryService>();
 builder.Services.AddScoped<ICouponHttpClient, CouponHttpClient>();
+builder.Services.AddScoped<IInventoryttpClient, InventoryHttpClient>();
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 

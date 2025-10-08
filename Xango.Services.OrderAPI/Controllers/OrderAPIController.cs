@@ -12,6 +12,7 @@ using Xango.Services.Dto;
 using Xango.Services.Client.Utility;
 using Xango.Services.ProductAPI.Service.IService;
 using Xango.Services.InventoryApi.Service.IService;
+using Xango.Service.InventoryAPI.Client;
 
 namespace Xango.Services.OrderAPI.Controllers
 {
@@ -25,9 +26,10 @@ namespace Xango.Services.OrderAPI.Controllers
         private readonly AppDbContext _db;
         private IProductService _productService;
         private readonly IConfiguration _configuration;
-        private IInventoryService _inventoryService;
+        //private IInventoryService _inventoryService;
+        private readonly IInventoryttpClient _inventoryClient;
 
-        public OrderAPIController(AppDbContext db,IProductService productService, IInventoryService inventoryService, IMapper mapper, IConfiguration configuration)
+        public OrderAPIController(AppDbContext db,IProductService productService, IInventoryttpClient inventoryClient, IMapper mapper, IConfiguration configuration)
         
         {
             _db = db;
@@ -35,7 +37,7 @@ namespace Xango.Services.OrderAPI.Controllers
             _productService = productService;
             _mapper = mapper;
             _configuration = configuration;
-            _inventoryService = inventoryService;
+            _inventoryClient = inventoryClient;
         }
 
         [HttpGet("GetAll")]
@@ -92,7 +94,8 @@ namespace Xango.Services.OrderAPI.Controllers
                 {
                     foreach (var orderDetail in orderHeader.OrderDetails)
                     {
-                        await _inventoryService.ReturnQty(orderDetail.ProductId, orderDetail.Count);
+                        await _inventoryClient.ReturnQty(orderDetail.ProductId, orderDetail.Count);
+                        //await _inventoryService.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                     }
                     orderHeader.Status = SD.Status_Cancelled;
                     _db.SaveChanges();
@@ -118,7 +121,8 @@ namespace Xango.Services.OrderAPI.Controllers
                 {
                     foreach (var orderDetail in orderHeader.OrderDetails)
                     {
-                        await _inventoryService.ReturnQty(orderDetail.ProductId, orderDetail.Count);
+                        //await _inventoryService.ReturnQty(orderDetail.ProductId, orderDetail.Count);
+                        await _inventoryClient.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                         _db.OrderDetails.Remove(orderDetail);
                     }
                     _db.OrderHeaders.Remove(orderHeader);
@@ -146,7 +150,8 @@ namespace Xango.Services.OrderAPI.Controllers
                 orderHeaderDto.OrderDetails = _mapper.Map<IEnumerable<OrderDetailsDto>>(cartDto.CartDetails);
                 foreach (var orderDetail in orderHeaderDto.OrderDetails)
                 {
-                    await _inventoryService.SubtractFromStock(orderDetail.ProductId, orderDetail.Count);
+                    //await _inventoryService.SubtractFromStock(orderDetail.ProductId, orderDetail.Count);
+                    await _inventoryClient.SubtractFromStock(orderDetail.ProductId, orderDetail.Count);
                 }
                 orderHeaderDto.OrderTotal = Math.Round(orderHeaderDto.OrderTotal, 2);
                 OrderHeader orderCreated = _db.OrderHeaders.Add(_mapper.Map<OrderHeader>(orderHeaderDto)).Entity;
@@ -274,7 +279,8 @@ namespace Xango.Services.OrderAPI.Controllers
                     {
                         foreach (var orderDetail in orderHeader.OrderDetails)
                         {
-                            _inventoryService.ReturnQty(orderDetail.ProductId, orderDetail.Count);
+                            //_inventoryService.ReturnQty(orderDetail.ProductId, orderDetail.Count);
+                            await _inventoryClient.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                         }
                     }
                     orderHeader.Status = newStatus;

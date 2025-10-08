@@ -6,6 +6,7 @@ using Xango.Models.Dto;
 using Xango.Services.Client.Utility;
 using Xango.Services.Interfaces;
 using Xango.Services.Dto;
+using Xango.Service.InventoryAPI.Client;
 
 namespace Xango.Web.Controllers
 {
@@ -14,12 +15,14 @@ namespace Xango.Web.Controllers
         private readonly IOrderService _orderService;
         private readonly ICartService _cartService;
         private readonly IMapper _mapper;
+        private readonly IInventoryttpClient _inventoryttpClient;   
 
-        public OrderController(IOrderService orderService, ICartService cartService, IMapper mapper)
+        public OrderController(IOrderService orderService, ICartService cartService, IMapper mapper, IInventoryttpClient inventoryClient)
         {
             _orderService = orderService;
             _cartService = cartService;
             _mapper = mapper;
+            _inventoryttpClient = inventoryClient;
         }
 
         [Authorize]
