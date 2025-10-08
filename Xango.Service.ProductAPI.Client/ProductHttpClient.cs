@@ -33,7 +33,7 @@ namespace Xango.Service.ProductAPI.Client
             _baseUri = _configuration["ServiceUrls:ProductAPI"];
             _tokenProvider = tokenProvider;
         }
-        public Task<ResponseDto?> CreateProducts(ProductDto productDto)
+        public async Task<ResponseDto?> CreateProducts(ProductDto productDto)
         {
             var client = _httpClientFactory.CreateClient("Product");
             client.BaseAddress = new Uri(_baseUri);
@@ -44,12 +44,12 @@ namespace Xango.Service.ProductAPI.Client
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
             if (resp != null && resp.IsSuccess)
             {
-                return Task.FromResult(ResponseProducer.OkResponse(resp.Result));
+                return ResponseProducer.OkResponse(resp.Result);
             }
-            return Task.FromResult(ResponseProducer.ErrorResponse("Could not find product"));
+            return ResponseProducer.ErrorResponse("Could not find product");
         }
 
-        public Task<ResponseDto?> UpdateProducts(ProductDto productDto)
+        public async Task<ResponseDto?> UpdateProducts(ProductDto productDto)
         {
             var client = _httpClientFactory.CreateClient("Product");
             client.BaseAddress = new Uri(_baseUri);
@@ -61,12 +61,12 @@ namespace Xango.Service.ProductAPI.Client
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
             if (resp != null && resp.IsSuccess)
             {
-                return Task.FromResult(ResponseProducer.OkResponse(resp.Result));
+                return ResponseProducer.OkResponse(resp.Result);
             }
-            return Task.FromResult(ResponseProducer.ErrorResponse("Could not find product"));
+            return ResponseProducer.ErrorResponse("Could not find product");
         }
 
-        public Task<ResponseDto?> DeleteProduct(int id)
+        public async Task<ResponseDto?> DeleteProduct(int id)
         {
             var client = _httpClientFactory.CreateClient("Product");
             client.BaseAddress = new Uri(_baseUri);
@@ -77,12 +77,12 @@ namespace Xango.Service.ProductAPI.Client
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
             if (resp != null && resp.IsSuccess)
             {
-                return Task.FromResult(ResponseProducer.OkResponse(resp.Result));
+                return ResponseProducer.OkResponse(resp.Result);
             }
-            return Task.FromResult(ResponseProducer.ErrorResponse("Could not find product"));
+            return ResponseProducer.ErrorResponse("Could not find product");
         }
 
-        public Task<ResponseDto?> GetAllProducts()
+        public async Task<ResponseDto?> GetAllProducts()
         {
             var client = _httpClientFactory.CreateClient("Product");
             client.BaseAddress = new Uri(_baseUri);
@@ -93,12 +93,12 @@ namespace Xango.Service.ProductAPI.Client
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
             if (resp != null && resp.IsSuccess)
             {
-                return Task.FromResult(ResponseProducer.OkResponse(resp.Result));
+                return ResponseProducer.OkResponse(resp.Result);
             }
-            return Task.FromResult(ResponseProducer.ErrorResponse("Could not find products"));
+            return ResponseProducer.ErrorResponse("Could not find products");
         }
 
-        public Task<ResponseDto?> GetProductById(int id)
+        public async Task<ResponseDto?> GetProductById(int id)
         {
             var client = _httpClientFactory.CreateClient("Product");
             client.BaseAddress = new Uri(_baseUri);
@@ -109,9 +109,9 @@ namespace Xango.Service.ProductAPI.Client
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
             if (resp != null && resp.IsSuccess)
             {
-                return Task.FromResult(ResponseProducer.OkResponse(resp.Result));
+                return ResponseProducer.OkResponse(resp.Result);
             }
-            return Task.FromResult(ResponseProducer.ErrorResponse("Could not find product"));
+            return ResponseProducer.ErrorResponse("Could not find product");
         }
     }
 }
