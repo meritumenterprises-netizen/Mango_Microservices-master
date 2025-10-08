@@ -12,10 +12,6 @@ using System.Net.Http;
 
 namespace Xango.Service.InventoryAPI.Client
 {
-    public interface IInventoryttpClient : IInventoryService
-    {
-    }
-
     public class InventoryHttpClient : IInventoryttpClient
     {
         private readonly IHttpClientFactory _httpClientFactory;

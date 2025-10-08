@@ -12,9 +12,6 @@ using System.Net.Http;
 
 namespace Xango.Service.CouponAPI.Client
 {
-    public interface ICouponHttpClient : ICouponService
-    {
-    }
 
     public class CouponHttpClient  : ICouponHttpClient
     {
