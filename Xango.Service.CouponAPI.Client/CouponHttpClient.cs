@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using System.Text;
 using Xango.Services.Server.Utility;
 using System.Net.Http.Headers;
+using System.Net.Http;
 
 namespace Xango.Service.CouponAPI.Client
 {
