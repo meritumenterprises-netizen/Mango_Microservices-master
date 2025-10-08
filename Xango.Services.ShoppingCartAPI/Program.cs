@@ -3,8 +3,6 @@ using Xango.Services.ShoppingCartAPI;
 using Xango.Services.ShoppingCartAPI.Data;
 using Xango.Services.ShoppingCartAPI.Extensions;
 using Xango.Services.ShoppingCartAPI.Service.IService;
-using Xango.Services.CouponAPI.Service;
-using Xango.Services.CouponAPI.Service.IService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -12,6 +10,7 @@ using Microsoft.OpenApi.Models;
 using Xango.Services.ShoppingCartAPI.Service;
 using Xango.Services.Utility;
 using Xango.Services.Server.Utility;
+using Xango.Service.CouponAPI.Client;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,7 +28,7 @@ builder.Services.AddSingleton(mapper);
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddScoped<IProductService, ProductService>();
-builder.Services.AddScoped<ICouponService, CouponService>();
+//builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 
@@ -39,6 +38,8 @@ builder.Services.AddHttpClient("Coupon", u => u.BaseAddress =
 new Uri(builder.Configuration["ServiceUrls:CouponAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddHttpClient("Auth", u => u.BaseAddress =
 new Uri(builder.Configuration["ServiceUrls:AuthAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+
+builder.Services.AddScoped<ICouponHttpClient, CouponHttpClient>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

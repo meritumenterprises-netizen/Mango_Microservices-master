@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Service\CouponService.cs" />
+    <Compile Remove="Service\IService\ICouponService.cs" />
     <Compile Remove="Utility\BackendApiAuthenticationHttpClientHandler.cs" />
   </ItemGroup>
 
@@ -32,6 +34,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Xango.Serrvices.Server.Utility\Xango.Serrvices.Server.Utility.csproj" />
+    <ProjectReference Include="..\Xango.Service.CouponAPI.Client\Xango.Service.CouponAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Services.Client.Utility\Xango.Services.Client.Utility.csproj" />
     <ProjectReference Include="..\Xango.Services.Dto\Xango.Services.Dto.csproj" />
   </ItemGroup>

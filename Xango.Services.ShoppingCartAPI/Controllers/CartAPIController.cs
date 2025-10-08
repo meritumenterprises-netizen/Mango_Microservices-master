@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Xango.Models.Dto;
-using Xango.Services.CouponAPI.Service.IService;
 using Xango.Services.Client.Utility;
+using Xango.Service.CouponAPI.Client;
 
 namespace Xango.Services.ShoppingCartAPI.Controllers
 {
@@ -21,19 +21,19 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
         private readonly AppDbContext _db;
         private IProductService _productService;
         private IAuthService _authService;
-        private ICouponService _couponService;
         private IConfiguration _configuration;
+        private ICouponHttpClient _couponHttpClient;
 
         public CartAPIController(AppDbContext db,
-            IMapper mapper, IProductService productService, ICouponService couponService, IConfiguration configuration, IAuthService authService)
+            IMapper mapper, IProductService productService, IConfiguration configuration, IAuthService authService, ICouponHttpClient couponHttpClient)
         {
             _db = db;
             _productService = productService;
             this._response = new ResponseDto();
             _mapper = mapper;
-            _couponService = couponService;
             _configuration = configuration;
             _authService = authService;
+            _couponHttpClient = couponHttpClient;
 
         }
         [HttpGet("GetCart/{userId}")]
@@ -64,7 +64,10 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
                 //apply coupon if any
                 if (!string.IsNullOrEmpty(cart.CartHeader.CouponCode))
                 {
-                    CouponDto coupon = await _couponService.GetCoupon(cart.CartHeader.CouponCode);
+                    //CouponDto coupon = await _couponService.GetCoupon(cart.CartHeader.CouponCode);
+
+                    var response = _couponHttpClient.GetCoupon(cart.CartHeader.CouponCode).GetAwaiter().GetResult();
+                    CouponDto coupon = DtoConverter.ToDto<CouponDto>((ResponseDto)(response.Result));
                     if (coupon != null && cart.CartHeader.CartTotal > coupon.MinAmount)
                     {
                         cart.CartHeader.CartTotal -= coupon.DiscountAmount;
