@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using Xango.Models.Dto;
+using Xango.Service.ProductAPI.Client;
 using Xango.Services.Client.Utility;
 using Xango.Services.Interfaces;
 
@@ -13,12 +14,12 @@ namespace Xango.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IProductService _productService;
         private readonly ICartService _cartService;
-        public HomeController(IProductService productService, ICartService cartService)
+        private readonly IProductHttpClient _productHttpClient;
+        public HomeController(ICartService cartService, IProductHttpClient productHttpClient)
         {
-            _productService = productService;
             _cartService = cartService;
+            _productHttpClient = productHttpClient;
         }
 
 
@@ -26,7 +27,7 @@ namespace Xango.Web.Controllers
         {
             List<ProductDto>? list = new();
 
-            ResponseDto? response = await _productService.GetAllProducts();
+            ResponseDto? response = await _productHttpClient.GetAllProducts();
 
             if (response != null && response.IsSuccess)
             {
@@ -45,7 +46,7 @@ namespace Xango.Web.Controllers
         {
             ProductDto? model = new();
 
-            ResponseDto? response = await _productService.GetProductById(productId);
+            ResponseDto? response = await _productHttpClient.GetProductById(productId);
 
             if (response != null && response.IsSuccess)
             {

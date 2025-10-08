@@ -5,6 +5,7 @@ using Xango.Models.Dto;
 using Xango.Services.Dto;
 using Xango.Services.Client.Utility;
 using Xango.Services.InventoryApi.Service.IService;
+using Xango.Services.Utility;
 
 namespace Xango.Services.InventoryApi.Service
 {

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Xango.Models.Dto;
 using Xango.Services.Client.Utility;
+using Xango.Services.Utility;
 
 namespace Xango.Services.CouponAPI.Controllers
 {

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
 using Xango.Services.Client.Utility;
+using Xango.Services.Utility;
 
 
 namespace Xango.Services.ProductAPI.Controllers
@@ -61,7 +62,7 @@ namespace Xango.Services.ProductAPI.Controllers
 
         [HttpPost]
         [Authorize(Roles = "ADMIN")]
-        public ResponseDto Post(ProductDto ProductDto)
+        public ResponseDto Post([FromBody] ProductDto ProductDto)
         {
             try
             {
@@ -110,7 +111,7 @@ namespace Xango.Services.ProductAPI.Controllers
 
         [HttpPut]
         [Authorize(Roles = "ADMIN")]
-        public ResponseDto Put(ProductDto ProductDto)
+        public ResponseDto Put([FromBody] ProductDto ProductDto)
         {
             try
             {

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Xango.Models.Dto;
+using Xango.Service.ProductAPI.Client;
 using Xango.Services.Client.Utility;
 using Xango.Services.Interfaces;
 
@@ -7,10 +8,10 @@ namespace Xango.Web.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly IProductService _productService;
-        public ProductController(IProductService productService)
+        private readonly IProductHttpClient _productHttpClient;
+        public ProductController(IProductHttpClient productHttpClient)
         {
-            _productService = productService;
+            _productHttpClient = productHttpClient; 
         }
 
 
@@ -18,7 +19,7 @@ namespace Xango.Web.Controllers
         {
             List<ProductDto>? list = new();
 
-            ResponseDto? response = await _productService.GetAllProducts();
+            ResponseDto? response = await _productHttpClient.GetAllProducts();
 
             if (response != null && response.IsSuccess)
             {
@@ -42,7 +43,7 @@ namespace Xango.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                ResponseDto? response = await _productService.CreateProducts(model);
+                ResponseDto? response = await _productHttpClient.CreateProducts(model);
 
                 if (response != null && response.IsSuccess)
                 {
@@ -59,7 +60,8 @@ namespace Xango.Web.Controllers
 
         public async Task<IActionResult> DeleteProduct(int productId)
         {
-            var response = await _productService.DeleteProduct(productId);
+            //var response = await _productService.DeleteProduct(productId);
+            var response = await _productHttpClient.DeleteProduct(productId);
 
             if (response != null && response.IsSuccess)
             {
@@ -75,7 +77,7 @@ namespace Xango.Web.Controllers
 
         public async Task<IActionResult> ProductEdit(int productId)
         {
-            ResponseDto? response = await _productService.GetProductById(productId);
+            ResponseDto? response = await _productHttpClient.GetProductById(productId);
 
             if (response != null && response.IsSuccess)
             {
@@ -94,7 +96,7 @@ namespace Xango.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                ResponseDto? response = await _productService.UpdateProducts(productDto);
+                ResponseDto? response = await _productHttpClient.UpdateProducts(productDto);
 
                 if (response != null && response.IsSuccess)
                 {

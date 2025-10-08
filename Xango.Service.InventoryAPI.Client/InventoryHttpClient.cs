@@ -9,6 +9,7 @@ using System.Text;
 using Xango.Services.Server.Utility;
 using System.Net.Http.Headers;
 using System.Net.Http;
+using Xango.Services.Utility;
 
 namespace Xango.Service.InventoryAPI.Client
 {
