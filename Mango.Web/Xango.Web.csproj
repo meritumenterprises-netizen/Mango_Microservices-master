@@ -31,15 +31,12 @@
     <ProjectReference Include="..\Xango.Serrvices.Server.Utility\Xango.Serrvices.Server.Utility.csproj" />
     <ProjectReference Include="..\Xango.Service.CouponAPI.Client\Xango.Service.CouponAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Service.InventoryAPI.Client\Xango.Service.InventoryAPI.Client.csproj" />
+    <ProjectReference Include="..\Xango.Service.OrderAPI.Client\Xango.Service.OrderAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Service.ProductAPI.Client\Xango.Service.ProductAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Service.ShoppingCartAPI.Client\Xango.Service.ShoppingCartAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Services.Client.Utility\Xango.Services.Client.Utility.csproj" />
     <ProjectReference Include="..\Xango.Services.Dto\Xango.Services.Dto.csproj" />
     <ProjectReference Include="..\Xango.Services.Interfaces\Xango.Services.Interfaces.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Utility\" />
   </ItemGroup>
 
 </Project>

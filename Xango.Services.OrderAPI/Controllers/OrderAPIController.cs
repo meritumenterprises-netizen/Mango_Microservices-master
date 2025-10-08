@@ -151,7 +151,6 @@ namespace Xango.Services.OrderAPI.Controllers
                 orderHeaderDto.OrderDetails = _mapper.Map<IEnumerable<OrderDetailsDto>>(cartDto.CartDetails);
                 foreach (var orderDetail in orderHeaderDto.OrderDetails)
                 {
-                    //await _inventoryService.SubtractFromStock(orderDetail.ProductId, orderDetail.Count);
                     await _inventoryClient.SubtractFromStock(orderDetail.ProductId, orderDetail.Count);
                 }
                 orderHeaderDto.OrderTotal = Math.Round(orderHeaderDto.OrderTotal, 2);
@@ -280,7 +279,6 @@ namespace Xango.Services.OrderAPI.Controllers
                     {
                         foreach (var orderDetail in orderHeader.OrderDetails)
                         {
-                            //_inventoryService.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                             await _inventoryClient.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                         }
                     }

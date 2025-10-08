@@ -8,6 +8,7 @@ using Xango.Services.Interfaces;
 using Xango.Services.Dto;
 using Xango.Service.InventoryAPI.Client;
 using Xango.Service.ShoppingCartAPI.Client;
+using Xango.Service.OrderAPI.Client;
 
 namespace Xango.Web.Controllers
 {
@@ -16,14 +17,16 @@ namespace Xango.Web.Controllers
         private readonly IOrderService _orderService;
         private readonly IShoppingCartHttpClient _shoppingCartHttpClient;
         private readonly IMapper _mapper;
-        private readonly IInventoryttpClient _inventoryttpClient;   
+        private readonly IInventoryttpClient _inventoryttpClient;
+        private readonly IOrderHttpClient _orderHttpClient;
 
-        public OrderController(IOrderService orderService, IShoppingCartHttpClient shoppingCartHttpClient, IMapper mapper, IInventoryttpClient inventoryClient)
+        public OrderController(IOrderService orderService, IShoppingCartHttpClient shoppingCartHttpClient, IMapper mapper, IInventoryttpClient inventoryClient, IOrderHttpClient orderHttpClient)
         {
             _orderService = orderService;
             _shoppingCartHttpClient = shoppingCartHttpClient;
             _mapper = mapper;
             _inventoryttpClient = inventoryClient;
+            _orderHttpClient = orderHttpClient;
         }
 
         [Authorize]
@@ -35,7 +38,7 @@ namespace Xango.Web.Controllers
             {
                 status = "all";
             }
-            ResponseDto response = _orderService.GetAll(userId, status).GetAwaiter().GetResult();
+            ResponseDto response = _orderHttpClient.GetAll(userId, status).GetAwaiter().GetResult();
             var list = new List<OrderHeaderDto>();
             return View(response);
         }
@@ -44,9 +47,7 @@ namespace Xango.Web.Controllers
         public async Task<IActionResult> OrderDetail(int orderId)
         {
             OrderHeaderDto orderHeaderDto = new OrderHeaderDto();
-            //string userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
-
-            var response = await _orderService.GetOrder(orderId);
+            var response = await _orderHttpClient.GetOrder(orderId);
             if (response != null && response.IsSuccess)
             {
                 orderHeaderDto = DtoConverter.ToDto<OrderHeaderDto>(response);
@@ -63,7 +64,7 @@ namespace Xango.Web.Controllers
         [HttpPost("OrderReadyForPickup")]
         public async Task<IActionResult> OrderReadyForPickup(int orderId)
         {
-            var response = await _orderService.UpdateOrderStatus(orderId, SD.Status_ReadyForPickup);
+            var response = await _orderHttpClient.UpdateOrderStatus(orderId, SD.Status_ReadyForPickup);
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Status updated successfully";
@@ -75,7 +76,7 @@ namespace Xango.Web.Controllers
         [HttpPost("CompleteOrder")]
         public async Task<IActionResult> CompleteOrder(int orderId)
         {
-            var response = await _orderService.UpdateOrderStatus(orderId, SD.Status_Completed);
+            var response = await _orderHttpClient.UpdateOrderStatus(orderId, SD.Status_Completed);
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Status updated successfully";
@@ -87,7 +88,7 @@ namespace Xango.Web.Controllers
         [HttpPost("CancelOrder")]
         public async Task<IActionResult> CancelOrder(int orderId)
         {
-            var response = await _orderService.UpdateOrderStatus(orderId, SD.Status_Cancelled);
+            var response = await _orderHttpClient.UpdateOrderStatus(orderId, SD.Status_Cancelled);
             if (response != null && response.IsSuccess)
             {
                 TempData["success"] = "Status updated successfully";
@@ -102,12 +103,12 @@ namespace Xango.Web.Controllers
         [HttpPost("DeleteOrder")]
         public async Task<IActionResult> DeleteOrder(int orderId)
         {
-            var response = await _orderService.DeleteOrder(orderId);
+            var response = await _orderHttpClient.DeleteOrder(orderId);
             return RedirectToAction(nameof(OrderIndex));
         }
 
         [HttpGet]
-        public IActionResult GetAll(string status)
+        public async Task<IActionResult> GetAll(string status)
         {
             IEnumerable<OrderHeaderDto> list;
             string userId = "";
@@ -115,7 +116,8 @@ namespace Xango.Web.Controllers
             {
                 userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
             }
-            ResponseDto response = _orderService.GetAll(userId, status).GetAwaiter().GetResult();
+            //ResponseDto response = _orderService.GetAll(userId, status).GetAwaiter().GetResult();
+            ResponseDto response = await _orderHttpClient.GetAll(userId, status);
             if (response != null && response.IsSuccess)
             {
                 list = DtoConverter.ToDto<List<OrderHeaderDto>>(response);

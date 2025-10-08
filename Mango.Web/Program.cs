@@ -14,6 +14,7 @@ using Xango.Service.CouponAPI.Client;
 using Xango.Service.InventoryAPI.Client;
 using Xango.Service.ProductAPI.Client;
 using Xango.Service.ShoppingCartAPI.Client;
+using Xango.Service.OrderAPI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,7 @@ builder.Services.AddScoped<ICouponHttpClient, CouponHttpClient>();
 builder.Services.AddScoped<IInventoryttpClient, InventoryHttpClient>();
 builder.Services.AddScoped<IProductHttpClient, ProductHttpClient>();
 builder.Services.AddScoped<IShoppingCartHttpClient, ShoppingCartHttpClient>();
+builder.Services.AddScoped<IOrderHttpClient, OrderHttpClient>();
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 

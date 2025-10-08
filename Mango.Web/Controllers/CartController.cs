@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using Xango.Models.Dto;
+using Xango.Service.OrderAPI.Client;
 using Xango.Service.ShoppingCartAPI.Client;
 using Xango.Services.Client.Utility;
 using Xango.Services.Dto;
@@ -17,14 +18,14 @@ namespace Xango.Web.Controllers
     
     public class CartController : Controller
     {
-        private readonly IOrderService _orderService;
         private readonly IAuthService _authService;
         private readonly IShoppingCartHttpClient _shoppingCartClient;
-        public CartController(IOrderService orderService, IAuthService authService, IShoppingCartHttpClient shoppingCartHttpClient)
+        private readonly IOrderHttpClient _orderHttpClient;
+        public CartController(IOrderHttpClient orderHttpClient, IAuthService authService, IShoppingCartHttpClient shoppingCartHttpClient)
         {
-            _orderService = orderService;
             _authService = authService;
             _shoppingCartClient = shoppingCartHttpClient;
+            _orderHttpClient = orderHttpClient;
         }
 
         [HttpGet]
@@ -64,7 +65,8 @@ namespace Xango.Web.Controllers
             cart.CartHeader.Email = cartDto.CartHeader.Email;
             cart.CartHeader.Name = cartDto.CartHeader.Name;
 
-            var response = await _orderService.CreateOrder(cart);
+            //var response = await _orderService.CreateOrder(cart);
+            var response = await _orderHttpClient.CreateOrder(cart);
             OrderHeaderDto orderHeaderDto = DtoConverter.ToDto<OrderHeaderDto>(response);
             orderHeaderDto.OrderTotalWithCurrency = orderHeaderDto.OrderTotal.ToString("C2");
 
@@ -80,7 +82,8 @@ namespace Xango.Web.Controllers
                     OrderHeader = orderHeaderDto
                 };
 
-                var stripeResponse = await _orderService.CreateStripeSession(stripeRequestDto);
+                //var stripeResponse = await _orderService.CreateStripeSession(stripeRequestDto);
+                var stripeResponse = await _orderHttpClient.CreateStripeSession(stripeRequestDto);
                 StripeRequestDto stripeResponseResult = DtoConverter.ToDto<StripeRequestDto>(stripeResponse);
                 Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
 
@@ -91,7 +94,7 @@ namespace Xango.Web.Controllers
 
         public async Task<IActionResult> Confirmation(int orderId)
         {
-            ResponseDto? response = await _orderService.ValidateStripeSession(orderId);
+            ResponseDto? response = await _orderHttpClient.ValidateStripeSession(orderId);
             if (response != null & response.IsSuccess)
             {
                 OrderHeaderDto orderHeader = DtoConverter.ToDto<OrderHeaderDto>(response);
@@ -109,7 +112,6 @@ namespace Xango.Web.Controllers
         public async Task<IActionResult> Remove(int cartDetailsId)
         {
             var userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
-            //ResponseDto? response = await _cartService.RemoveFromCart(cartDetailsId);
             ResponseDto? response = await _shoppingCartClient.RemoveFromCart(cartDetailsId);
             if (response != null & response.IsSuccess)
             {
@@ -150,7 +152,6 @@ namespace Xango.Web.Controllers
             var responseDto = await _authService.GetUser(userEmail);
             var userDto = DtoConverter.ToDto<UserDto>(responseDto);
             ResponseDto? response = await _shoppingCartClient.GetCartByUserId(userDto.Id);
-            //ResponseDto? response = await _cartService.GetCartByUserId(userDto.Id);
             if (response != null & response.IsSuccess)
             {
                 CartDto cartDto = DtoConverter.ToDto<CartDto>(response);
