@@ -76,10 +76,9 @@ namespace Xango.Services.ProductAPI.Controllers
                     ProductDto.ImageLocalPath = Path.Combine(Path.GetFileNameWithoutExtension(Path.GetTempFileName()), ".jpg");
 
                     var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), ProductDto.ImageLocalPath);
-                    FileInfo file = new FileInfo(oldFilePathDirectory);
-                    if (file.Exists)
+                    if (System.IO.File.Exists(oldFilePathDirectory))
                     {
-                        file.Delete();
+                        System.IO.File.Delete(oldFilePathDirectory);
                     }
 
                     string fileName = product.ProductId + ".jpg";
@@ -130,10 +129,9 @@ namespace Xango.Services.ProductAPI.Controllers
                     var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), ProductDto.ImageLocalPath);
 
                     string fileName = product.ProductId + ".jpg";
-                    FileInfo file = new FileInfo(Path.GetDirectoryName(oldFilePathDirectory) + fileName);
-                    if (file.Exists)
+                    if (System.IO.File.Exists(oldFilePathDirectory))
                     {
-                        file.Delete();
+                        System.IO.File.Delete(oldFilePathDirectory);
                     }
 
                     string filePath = @"wwwroot\ProductImages\" + fileName;

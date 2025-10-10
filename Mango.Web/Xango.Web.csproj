@@ -30,6 +30,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Xango.Serrvices.Server.Utility\Xango.Serrvices.Server.Utility.csproj" />
+    <ProjectReference Include="..\Xango.Service.AuthenticationAPI.Client\Xango.Service.AuthenticationAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Service.CouponAPI.Client\Xango.Service.CouponAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Service.InventoryAPI.Client\Xango.Service.InventoryAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Service.OrderAPI.Client\Xango.Service.OrderAPI.Client.csproj" />

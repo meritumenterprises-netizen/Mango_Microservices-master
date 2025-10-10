@@ -11,6 +11,7 @@ using Xango.Services.Server.Utility;
 using Xango.Services.Interfaces;
 using Xango.Services.Dto;
 using Xango.Services.Client.Utility;
+using Xango.Service.AuthenticationAPI.Client;
 
 namespace Xango.Web.Controllers
 {
@@ -18,11 +19,15 @@ namespace Xango.Web.Controllers
     {
         private readonly IAuthService _authService;
         private readonly ITokenProvider _tokenProvider;
+        private readonly IAuthenticationHttpClient _authenticationClient;
+        private readonly string _baseUri;
 
-        public AuthController(IAuthService authService, ITokenProvider tokenProvider)
+        public AuthController(IAuthService authService, ITokenProvider tokenProvider, IAuthenticationHttpClient authenticationClient, IConfiguration configuration)
         {
             _authService = authService;
             _tokenProvider = tokenProvider;
+            _authenticationClient = authenticationClient;
+            _baseUri = configuration["ServiceUrls:AuthenticationAPI"];
         }
 
         [HttpGet]
@@ -35,12 +40,12 @@ namespace Xango.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequestDto obj)
         {
-            ResponseDto response = await _authService.Login(obj);
+            ResponseDto response = await _authenticationClient.Login(obj);
 
             if (response != null && response.IsSuccess)
             {
                 LoginResponseDto loginResponseDto = DtoConverter.ToDto<LoginResponseDto>(response);
-                 SignInUser(loginResponseDto);
+                SignInUser(loginResponseDto);
                 _tokenProvider.SetToken(loginResponseDto.Token);
                 TempData.Remove("error");
                 return RedirectToAction("Index", "Home");
@@ -49,15 +54,13 @@ namespace Xango.Web.Controllers
             {
                 TempData["error"] = response.Message;
                 return View(obj);
-                //return RedirectToAction("Index", "Home");
             }
         }
 
         [HttpGet]
         public async Task<IActionResult> Logout()
         {
-            await HttpContext.SignOutAsync();
-            _tokenProvider.ClearToken();
+            ResponseDto response = await _authenticationClient.Logout();
             TempData.Remove("error");
             return RedirectToAction("Index", "Home");
         }
@@ -78,8 +81,8 @@ namespace Xango.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegistrationRequestDto obj)
         {
-            ResponseDto result =  _authService.Register(obj).Result;
-            ResponseDto assingRole;
+            ResponseDto result = await _authenticationClient.Register(obj);
+            
 
             if (result != null && result.IsSuccess)
             {
@@ -87,8 +90,8 @@ namespace Xango.Web.Controllers
                 {
                     obj.Role = SD.RoleCustomer;
                 }
-                assingRole =  _authService.AssignRole(obj).Result;
-                if (assingRole != null && assingRole.IsSuccess)
+                ResponseDto assignRole = await _authenticationClient.AssignRole(obj);
+                if (assignRole != null && assignRole.IsSuccess)
                 {
                     TempData["success"] = "Registration Successful";
                     return RedirectToAction(nameof(Login));
