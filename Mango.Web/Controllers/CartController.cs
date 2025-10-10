@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.IdentityModel.Tokens.Jwt;
 using Xango.Models.Dto;
+using Xango.Service.AuthenticationAPI.Client;
 using Xango.Service.OrderAPI.Client;
 using Xango.Service.ShoppingCartAPI.Client;
 using Xango.Services.Client.Utility;
@@ -18,14 +19,14 @@ namespace Xango.Web.Controllers
     
     public class CartController : Controller
     {
-        private readonly IAuthService _authService;
         private readonly IShoppingCartHttpClient _shoppingCartClient;
         private readonly IOrderHttpClient _orderHttpClient;
-        public CartController(IOrderHttpClient orderHttpClient, IAuthService authService, IShoppingCartHttpClient shoppingCartHttpClient)
+        private readonly IAuthenticationHttpClient _authenticationClient;
+        public CartController(IOrderHttpClient orderHttpClient, IShoppingCartHttpClient shoppingCartHttpClient, IAuthenticationHttpClient authenticationHttpClient)
         {
-            _authService = authService;
             _shoppingCartClient = shoppingCartHttpClient;
             _orderHttpClient = orderHttpClient;
+            _authenticationClient = authenticationHttpClient;
         }
 
         [HttpGet]
@@ -37,7 +38,7 @@ namespace Xango.Web.Controllers
         [Authorize]
         public async Task<IActionResult> Checkout()
         {
-            var responseDto = await _authService.GetUser(User.Identity.Name);
+            var responseDto = await _authenticationClient.GetUser(User.Identity.Name);
             UserDto userDto = DtoConverter.ToDto<UserDto>(responseDto);
             var cartDto = DtoConverter.ToDto<CartDto>(await _shoppingCartClient.GetCartByUserId(userDto.Id));
             return View(cartDto);
@@ -47,7 +48,7 @@ namespace Xango.Web.Controllers
         [ActionName("DeleteCart")]
         public async Task<IActionResult> DeleteCart()
         {
-            var responseDto = await _authService.GetUser(User.Identity.Name);
+            var responseDto = await _authenticationClient.GetUser(User.Identity.Name);
             UserDto userDto = DtoConverter.ToDto<UserDto>(responseDto);
             var response = await _shoppingCartClient.DeleteCart(userDto.Id);
             return Redirect("/");
@@ -146,7 +147,7 @@ namespace Xango.Web.Controllers
         private async Task<CartDto> LoadCartDtoBasedOnLoggedInUser()
         {
             var userEmail = User.Claims.Where((claim) => claim.Type == "email").First().Value;
-            var responseDto = await _authService.GetUser(userEmail);
+            var responseDto = await _authenticationClient.GetUser(userEmail);
             var userDto = DtoConverter.ToDto<UserDto>(responseDto);
             ResponseDto? response = await _shoppingCartClient.GetCartByUserId(userDto.Id);
             if (response != null & response.IsSuccess)
