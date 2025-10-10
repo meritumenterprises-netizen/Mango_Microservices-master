@@ -11,8 +11,6 @@ using Xango.Services.Client.Utility;
 using Xango.Services.Dto;
 using Xango.Services.Interfaces;
 using Xango.Services.Utility;
-using Xango.Web.Service;
-
 
 namespace Xango.Web.Controllers
 {

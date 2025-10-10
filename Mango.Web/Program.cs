@@ -1,10 +1,7 @@
-using Xango.Web.Service;
-using Xango.Web.Service.IService;
 using Xango.Services;
 using Xango.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Xango.Models.Dto;
-using Xango.Web.BaseService;
 using AutoMapper;
 using Xango.Web.Mapping;
 using Xango.Services.Server.Utility;
@@ -34,7 +31,6 @@ SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"];
 SD.InventoryAPIBase = builder.Configuration["ServiceUrls:InventoryAPI"];
 
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
-builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICouponHttpClient, CouponHttpClient>();
 builder.Services.AddScoped<IInventoryttpClient, InventoryHttpClient>();
 builder.Services.AddScoped<IProductHttpClient, ProductHttpClient>();

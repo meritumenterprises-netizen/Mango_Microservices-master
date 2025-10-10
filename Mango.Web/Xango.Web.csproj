@@ -7,15 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Service\AuthService.cs" />
-    <Compile Remove="Service\CartService.cs" />
-    <Compile Remove="Service\CouponService.cs" />
-    <Compile Remove="Service\InventoryService.cs" />
-    <Compile Remove="Service\OrderService.cs" />
-    <Compile Remove="Service\ProductService.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Abp.Web.Common" Version="10.3.0" />
     <PackageReference Include="AutoMapper" Version="15.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
