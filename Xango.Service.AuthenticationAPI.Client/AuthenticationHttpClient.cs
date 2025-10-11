@@ -58,7 +58,7 @@ namespace Xango.Service.AuthenticationAPI.Client
             var response = await client.GetAsync("/api/auth/GetUser/" + email);
             if (response != null & response.Content != null)
             {
-                var responseDto = DtoConverter.ToDto<ResponseDto>(new ResponseDto() { IsSuccess = true, Result = response.Content.ReadAsStringAsync().Result });
+                var responseDto = DtoConverter.ToDto<ResponseDto>(new ResponseDto() { IsSuccess = true, Result = DtoConverter.ToDto<ResponseDto>(response.Content.ReadAsStringAsync().Result) });
                 return ResponseProducer.OkResponse(responseDto.Result);
             }
             return ResponseProducer.ErrorResponse("Could not log in the user");
