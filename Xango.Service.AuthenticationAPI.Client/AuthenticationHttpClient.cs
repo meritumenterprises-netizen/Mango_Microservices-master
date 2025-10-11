@@ -70,7 +70,7 @@ namespace Xango.Service.AuthenticationAPI.Client
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = client.PostAsync("/api/auth/login", StringContentUTF8.AsJsonString<LoginRequestDto>(loginRequestDto)).GetAwaiter().GetResult();
-            if (response != null & response.Content != null)
+            if (response.StatusCode != System.Net.HttpStatusCode.BadRequest & response.Content != null)
             {
                 var responseDto = DtoConverter.ToDto<ResponseDto>(new ResponseDto() { IsSuccess = true, Result = response.Content.ReadAsStringAsync().Result });    
                 return ResponseProducer.OkResponse(responseDto.Result);

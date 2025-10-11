@@ -39,7 +39,8 @@ namespace Xango.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginRequestDto obj)
         {
-            ResponseDto response = await _authenticationClient.Login(obj);
+            var response1 = await _authenticationClient.Login(obj);
+            ResponseDto response = response1;
 
             if (response != null && response.IsSuccess)
             {
