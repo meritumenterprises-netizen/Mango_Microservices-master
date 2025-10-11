@@ -15,6 +15,12 @@ namespace Xango.Services.Client.Utility
 #pragma warning restore CS8603 // Possible null reference return.
         }
 
+        public static T ToDto<T>(string str)
+            where T: class, new()
+        {
+            return JsonConvert.DeserializeObject<T>(str);
+        }
+
         public static string ToJson<T>(T model)
             where T : class, new()
         {

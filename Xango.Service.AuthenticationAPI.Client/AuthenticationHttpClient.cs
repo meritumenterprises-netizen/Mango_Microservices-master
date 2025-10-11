@@ -92,7 +92,7 @@ namespace Xango.Service.AuthenticationAPI.Client
                 var responseDto1 = DtoConverter.ToDto<ResponseDto>(new ResponseDto() { IsSuccess = true, Result = response.Content.ReadAsStringAsync().Result });
                 return ResponseProducer.OkResponse(responseDto1.Result);
             }
-            var responseError = JsonConvert.DeserializeObject<ResponseDto>(await response.Content.ReadAsStringAsync());
+            var responseError = DtoConverter.ToDto<ResponseDto>(await response.Content.ReadAsStringAsync());
             return ResponseProducer.ErrorResponse(responseError.Message);
         }
 
