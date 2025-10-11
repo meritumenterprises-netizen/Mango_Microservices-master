@@ -32,9 +32,9 @@ namespace Xango.Services.AuthAPI.Controllers
         public async Task<IActionResult> Register([FromBody] RegistrationRequestDto model)
         {
             var result = await _authService.Register(model);
-            if (string.IsNullOrEmpty(result))
+            if (!string.IsNullOrEmpty(result))
             {
-                return BadRequest(ResponseProducer.ErrorResponse("User registration failed"));
+                return BadRequest(ResponseProducer.ErrorResponse($"User id {model.Email} is already taken"));
             }
             _response.IsSuccess = true;
             _response.Message = "Registration successful";

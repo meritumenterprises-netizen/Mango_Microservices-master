@@ -13,6 +13,7 @@ using Xango.Services.Server.Utility;
 using Xango.Services.Utility;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Newtonsoft.Json;
 
 namespace Xango.Service.AuthenticationAPI.Client
 {
@@ -86,12 +87,13 @@ namespace Xango.Service.AuthenticationAPI.Client
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = client.PostAsync("/api/auth/register", StringContentUTF8.AsJsonString<RegistrationRequestDto>(registrationRequestDto)).GetAwaiter().GetResult();
-            if (response != null & response.Content != null)
+            if (response != null & response.StatusCode != System.Net.HttpStatusCode.BadRequest & response.Content != null)
             {
-                var responseDto = DtoConverter.ToDto<ResponseDto>(new ResponseDto() { IsSuccess = true, Result = response.Content.ReadAsStringAsync().Result });
-                return ResponseProducer.OkResponse(responseDto.Result);
+                var responseDto1 = DtoConverter.ToDto<ResponseDto>(new ResponseDto() { IsSuccess = true, Result = response.Content.ReadAsStringAsync().Result });
+                return ResponseProducer.OkResponse(responseDto1.Result);
             }
-            return ResponseProducer.ErrorResponse("Could not register the user");
+            var responseError = JsonConvert.DeserializeObject<ResponseDto>(await response.Content.ReadAsStringAsync());
+            return ResponseProducer.ErrorResponse(responseError.Message);
         }
 
         public async Task<ResponseDto?> Logout()
