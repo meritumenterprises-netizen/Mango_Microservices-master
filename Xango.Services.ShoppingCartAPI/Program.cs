@@ -1,7 +1,7 @@
 using AutoMapper;
 using Xango.Services.ShoppingCartAPI;
 using Xango.Services.ShoppingCartAPI.Data;
-using Xango.Services.ShoppingCartAPI.Extensions;
+using Xango.Services.Server.Utility.Extensions;
 using Xango.Services.ShoppingCartAPI.Service.IService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;

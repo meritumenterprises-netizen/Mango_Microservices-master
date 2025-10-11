@@ -1,7 +1,7 @@
 using AutoMapper;
 using Xango.Services.CouponAPI;
 using Xango.Services.CouponAPI.Data;
-using Xango.Services.CouponAPI.Extensions;
+using Xango.Services.Server.Utility.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

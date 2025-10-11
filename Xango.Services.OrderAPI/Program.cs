@@ -1,7 +1,7 @@
 using AutoMapper;
 using Xango.Services.OrderAPI;
 using Xango.Services.OrderAPI.Data;
-using Xango.Services.OrderAPI.Extensions;
+using Xango.Services.Server.Utility.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;

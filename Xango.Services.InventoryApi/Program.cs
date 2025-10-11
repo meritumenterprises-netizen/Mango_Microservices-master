@@ -1,5 +1,5 @@
 using AutoMapper;
-using Xango.Services.InventoryApi.Extensions;
+using Xango.Services.Server.Utility.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;

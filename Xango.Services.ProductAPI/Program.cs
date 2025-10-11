@@ -5,7 +5,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.IdentityModel.Tokens;
 using Xango.Services.ProductAPI;
 using Xango.Services.ProductAPI.Data;
-using Xango.Services.ProductAPI.Extensions;
+using Xango.Services.Server.Utility.Extensions;
 using Xango.Services.Server.Utility;
 
 var builder = WebApplication.CreateBuilder(args);

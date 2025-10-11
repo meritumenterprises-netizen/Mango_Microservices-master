@@ -14,7 +14,6 @@ using Xango.Models.Dto;
 using Xango.Services.Client.Utility;
 using Xango.Services.Server.Utility;
 using Xango.Services.Utility;
-using Microsoft.AspNetCore.Http.Internal;
 using Xango.Services.Dto;
 
 namespace Xango.Service.ProductAPI.Client
