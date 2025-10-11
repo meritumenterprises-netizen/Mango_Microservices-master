@@ -248,12 +248,6 @@ namespace Xango.Services.OrderAPI.Controllers
                     orderHeader.PaymentIntentId = paymentIntent.Id;
                     orderHeader.Status = SD.Status_Approved;
                     _db.SaveChanges();
-                    RewardsDto rewardsDto = new()
-                    {
-                        OrderId = orderHeader.OrderHeaderId,
-                        RewardsActivity = Convert.ToInt32(orderHeader.OrderTotal),
-                        UserId = orderHeader.UserId
-                    };
                     _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
                 }
             }
