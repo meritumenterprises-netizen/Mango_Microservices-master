@@ -11,6 +11,7 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.WebHost.UseUrls("https://0.0.0.0:7001");
 // Add services to the container.
 
 builder.Services.AddDbContext<AppDbContext>(option =>

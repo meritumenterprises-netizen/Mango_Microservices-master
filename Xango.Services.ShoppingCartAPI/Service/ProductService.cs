@@ -17,7 +17,14 @@ namespace Xango.Services.ShoppingCartAPI.Service
         }
         public async Task<IEnumerable<ProductDto>> GetProducts()
         {
-            var client = _httpClientFactory.CreateClient("Product");
+            //var client = _httpClientFactory.CreateClient("Product");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             var response = await client.GetAsync($"/api/product");
             var resp = await response.Content.ReadFromJsonAsync<ResponseDto>();
             if (resp.IsSuccess)

@@ -5,17 +5,12 @@ using Xango.Services.Server.Utility.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using System.Text;
-using Xango.Services.Utility;
 using Xango.Service.InventoryAPI.Client;
 
-using Xango.Services.ProductApi.Service;
-using Xango.Services.ProductAPI.Service.IService;
-using Xango.Services.InventoryApi.Service;
-using Xango.Services.InventoryApi.Service.IService;
 using Xango.Services.Server.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("https://0.0.0.0:7004");
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 

@@ -1,0 +1,37 @@
+services:
+  xango.services.authapi:
+    image: ${DOCKER_REGISTRY-}xangoservicesauthapi
+    build:
+      context: .
+      dockerfile: Xango.Services.AuthAPI/Dockerfile
+  xango.services.couponapi:
+    image: ${DOCKER_REGISTRY-}xangoservicescouponapi
+    build:
+       context: .
+       dockerfile: Xango.Services.CouponAPI/Dockerfile
+  xango.services.inventoryapi:
+    image: ${docker_registry-}xangoservicesinventoryapi
+    build:
+       context: .
+       dockerfile: Xango.Services.InventoryAPI/Dockerfile
+  xango.services.productapi:
+    image: ${docker_registry-}xangoservicesproductapi
+    build:
+       context: .
+       dockerfile: Xango.Services.ProductAPI/Dockerfile
+  xango.services.orderapi:
+    image: ${docker_registry-}xangoservicesorderapi
+    build:
+       context: .
+       dockerfile: Xango.Services.OrderAPI/Dockerfile
+  xango.services.shoppingcartapi:
+    image: ${docker_registry-}xangoservicesshoppingcartapi
+    build:
+       context: .
+       dockerfile: Xango.Services.ShoppingCartAPI/Dockerfile
+  xango.web:
+    image: ${docker_registry-}xangoweb
+    build:
+       context: .
+       dockerfile: Mango.Web/Dockerfile
+  

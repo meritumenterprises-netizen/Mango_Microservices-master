@@ -9,6 +9,8 @@ using Xango.Models.Dto;
 using Xango.Services.Client.Utility;
 using Xango.Service.CouponAPI.Client;
 using Xango.Services.Utility;
+using Xango.Service.AuthenticationAPI.Client;
+using Xango.Service.ProductAPI.Client;
 
 namespace Xango.Services.ShoppingCartAPI.Controllers
 {
@@ -20,20 +22,20 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
         private ResponseDto _response;
         private IMapper _mapper;
         private readonly AppDbContext _db;
-        private IProductService _productService;
-        private IAuthService _authService;
+        private IProductHttpClient _productHttpClient;
+        private IAuthenticationHttpClient _authenticationHttpClient;
         private IConfiguration _configuration;
         private ICouponHttpClient _couponHttpClient;
 
         public CartAPIController(AppDbContext db,
-            IMapper mapper, IProductService productService, IConfiguration configuration, IAuthService authService, ICouponHttpClient couponHttpClient)
+            IMapper mapper, IProductHttpClient productHttpClient, IConfiguration configuration, IAuthenticationHttpClient authenticationHttpClient, ICouponHttpClient couponHttpClient)
         {
             _db = db;
-            _productService = productService;
+            _productHttpClient = productHttpClient;
             this._response = new ResponseDto();
             _mapper = mapper;
             _configuration = configuration;
-            _authService = authService;
+            _authenticationHttpClient = authenticationHttpClient;
             _couponHttpClient = couponHttpClient;
 
         }
@@ -42,19 +44,19 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
         {
             try
             {
-                
                 CartDto cart = new CartDto()
                 {
                     CartHeader = _mapper.Map<CartHeaderDto>(_db.CartHeaders.First(u => u.UserId== userId))
                 };
-                var userDto = await _authService.GetUserById(userId);
+                var response = await _authenticationHttpClient.GetUserById(userId);
+                var userDto = DtoConverter.ToDto<UserDto>(Convert.ToString(response.Result));
                 cart.CartHeader.Name = userDto.Name;
                 cart.CartHeader.Email = userDto.Email;
                 cart.CartHeader.Phone = userDto.PhoneNumber;
                 cart.CartDetails = _mapper.Map<IEnumerable<CartDetailsDto>>(_db.CartDetails
                     .Where(u => u.CartHeaderId == cart.CartHeader.CartHeaderId));
 
-                IEnumerable<ProductDto> productDtos = await _productService.GetProducts();
+                IEnumerable<ProductDto> productDtos = DtoConverter.ToDto<List<ProductDto>>(await _productHttpClient.GetAllProducts());
 
                 foreach (var item in cart.CartDetails)
                 {
@@ -67,8 +69,8 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
                 {
                     //CouponDto coupon = await _couponService.GetCoupon(cart.CartHeader.CouponCode);
 
-                    var response = _couponHttpClient.GetCoupon(cart.CartHeader.CouponCode).GetAwaiter().GetResult();
-                    CouponDto coupon = DtoConverter.ToDto<CouponDto>((ResponseDto)(response.Result));
+                    var response2 = await _couponHttpClient.GetCoupon(cart.CartHeader.CouponCode);
+                    CouponDto coupon = DtoConverter.ToDto<CouponDto>((ResponseDto)(response2.Result));
                     if (coupon != null && cart.CartHeader.CartTotal > coupon.MinAmount)
                     {
                         cart.CartHeader.CartTotal -= coupon.DiscountAmount;

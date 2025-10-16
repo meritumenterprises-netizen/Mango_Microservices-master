@@ -30,7 +30,14 @@ namespace Xango.Service.OrderAPI.Client
         }
         public async Task<ResponseDto?> CreateOrder(CartDto cartDto)
         {
-            var client = _httpClientFactory.CreateClient("Order");
+            //var client = _httpClientFactory.CreateClient("Order");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -47,7 +54,14 @@ namespace Xango.Service.OrderAPI.Client
 
         public async Task<ResponseDto?> CreateStripeSession(StripeRequestDto stripeRequestDto)
         {
-            var client = _httpClientFactory.CreateClient("Order");
+            //var client = _httpClientFactory.CreateClient("Order");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -64,7 +78,14 @@ namespace Xango.Service.OrderAPI.Client
 
         public async Task<ResponseDto?> DeleteOrder(int orderId)
         {
-            var client = _httpClientFactory.CreateClient("Order");
+            //var client = _httpClientFactory.CreateClient("Order");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -80,7 +101,14 @@ namespace Xango.Service.OrderAPI.Client
 
         public async Task<ResponseDto?> GetAll(string userId, string status)
         {
-            var client = _httpClientFactory.CreateClient("Order");
+            //var client = _httpClientFactory.CreateClient("Order");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -97,7 +125,14 @@ namespace Xango.Service.OrderAPI.Client
 
         public async Task<ResponseDto?> GetOrder(int orderId)
         {
-            var client = _httpClientFactory.CreateClient("Order");
+            //var client = _httpClientFactory.CreateClient("Order");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -113,7 +148,14 @@ namespace Xango.Service.OrderAPI.Client
 
         public async Task<ResponseDto?> UpdateOrderStatus(int orderId, string newStatus)
         {
-            var client = _httpClientFactory.CreateClient("Order");
+            //var client = _httpClientFactory.CreateClient("Order");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -129,7 +171,14 @@ namespace Xango.Service.OrderAPI.Client
 
         public async Task<ResponseDto?> ValidateStripeSession(int orderHeaderId)
         {
-            var client = _httpClientFactory.CreateClient("Order");
+            //var client = _httpClientFactory.CreateClient("Order");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

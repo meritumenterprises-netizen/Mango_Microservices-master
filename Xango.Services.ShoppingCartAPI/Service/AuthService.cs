@@ -15,7 +15,14 @@ namespace Xango.Services.ShoppingCartAPI.Service
 
         public async Task<UserDto> GetUser(string userEmail)
         {
-            var client = _httpClientFactory.CreateClient("Auth");
+            //var client = _httpClientFactory.CreateClient("Auth");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             var response = await client.GetAsync($"/api/auth/GetUser/" + userEmail);
             var resp = response.Content.ReadFromJsonAsync<ResponseDto>().Result;
             if (resp != null && resp.IsSuccess)
@@ -27,7 +34,14 @@ namespace Xango.Services.ShoppingCartAPI.Service
 
         public async Task<UserDto> GetUserById(string id)
         {
-            var client = _httpClientFactory.CreateClient("Auth");
+            //var client = _httpClientFactory.CreateClient("Auth");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             var response = await client.GetAsync($"/api/auth/GetUserById/" + id);
             var resp = response.Content.ReadFromJsonAsync<ResponseDto>().Result;
             if (resp != null && resp.IsSuccess)

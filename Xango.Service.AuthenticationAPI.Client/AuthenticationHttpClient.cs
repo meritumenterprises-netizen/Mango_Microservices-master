@@ -35,7 +35,14 @@ namespace Xango.Service.AuthenticationAPI.Client
         }
         public async Task<ResponseDto?> AssignRole(RegistrationRequestDto registrationRequestDto)
         {
-            var client = _httpClientFactory.CreateClient("Authentication");
+            //var client = _httpClientFactory.CreateClient("Authentication");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -51,14 +58,21 @@ namespace Xango.Service.AuthenticationAPI.Client
 
         public async Task<ResponseDto> GetUser(string email)
         {
-            var client = _httpClientFactory.CreateClient("Authentication");
+            //var client = _httpClientFactory.CreateClient("Authentication");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.GetAsync("/api/auth/GetUser/" + email);
             if (response != null & response.Content != null)
             {
-                var responseDto = DtoConverter.ToDto<ResponseDto>(new ResponseDto() { IsSuccess = true, Result = DtoConverter.ToDto<ResponseDto>(response.Content.ReadAsStringAsync().Result) });
+                var responseDto = DtoConverter.ToDto<ResponseDto>(await response.Content.ReadAsStringAsync());
                 return ResponseProducer.OkResponse(responseDto.Result);
             }
             return ResponseProducer.ErrorResponse("Could not log in the user");
@@ -66,7 +80,14 @@ namespace Xango.Service.AuthenticationAPI.Client
 
         public async Task<ResponseDto?> Login(LoginRequestDto loginRequestDto)
         {
-            var client = _httpClientFactory.CreateClient("Authentication");
+            //var client = _httpClientFactory.CreateClient("Authentication");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -82,7 +103,14 @@ namespace Xango.Service.AuthenticationAPI.Client
 
         public async Task<ResponseDto?> Register(RegistrationRequestDto registrationRequestDto)
         {
-            var client = _httpClientFactory.CreateClient("Authentication");
+            //var client = _httpClientFactory.CreateClient("Authentication");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -101,6 +129,28 @@ namespace Xango.Service.AuthenticationAPI.Client
             await _contextAccessor.HttpContext.SignOutAsync();
             _tokenProvider.ClearToken();
             return ResponseProducer.OkResponse();
+        }
+
+        public async Task<ResponseDto> GetUserById(string id)
+        {
+            //var client = _httpClientFactory.CreateClient("Authentication");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
+            client.BaseAddress = new Uri(_baseUri);
+            var token = _tokenProvider.GetToken();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = await client.GetAsync("/api/auth/GetUserById/" + id);
+            if (response != null & response.Content != null)
+            {
+                var responseDto = DtoConverter.ToDto<ResponseDto>(await response.Content.ReadAsStringAsync());
+                return ResponseProducer.OkResponse(responseDto.Result);
+            }
+            return ResponseProducer.ErrorResponse("Could not log in the user");
         }
     }
 }

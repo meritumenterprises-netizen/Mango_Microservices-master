@@ -1,14 +1,17 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Http;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using Xango.Services.ProductAPI;
 using Xango.Services.ProductAPI.Data;
-using Xango.Services.Server.Utility.Extensions;
 using Xango.Services.Server.Utility;
+using Xango.Services.Server.Utility.Extensions;
+using Xango.Web;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("https://0.0.0.0:7005");
 
 // Add services to the container.
 

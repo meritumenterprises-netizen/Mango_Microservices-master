@@ -79,7 +79,7 @@ namespace Xango.Services.AuthAPI.Controllers
             var userDto = await _authService.GetUser(email);
             if (userDto == null || userDto.Email.ToLower() != email.ToLower())
             {
-                return NotFound(ResponseProducer.ErrorResponse("User not found"));
+                return BadRequest(ResponseProducer.ErrorResponse("User not found"));
             }
             return Ok(ResponseProducer.OkResponse(result: userDto));
         }

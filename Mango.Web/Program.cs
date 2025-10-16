@@ -1,20 +1,23 @@
-using Xango.Services;
-using Xango.Services.Interfaces;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Xango.Models.Dto;
 using AutoMapper;
-using Xango.Web.Mapping;
-using Xango.Services.Server.Utility;
-using Xango.Services.Dto;
-using Xango.Services.Client.Utility;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Http;
+using Xango.Models.Dto;
+using Xango.Service.AuthenticationAPI.Client;
 using Xango.Service.CouponAPI.Client;
 using Xango.Service.InventoryAPI.Client;
+using Xango.Service.OrderAPI.Client;
 using Xango.Service.ProductAPI.Client;
 using Xango.Service.ShoppingCartAPI.Client;
-using Xango.Service.OrderAPI.Client;
-using Xango.Service.AuthenticationAPI.Client;
+using Xango.Services;
+using Xango.Services.Client.Utility;
+using Xango.Services.Dto;
+using Xango.Services.Interfaces;
+using Xango.Services.Server.Utility;
+using Xango.Web.Mapping;
+using Xango.Web;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.UseUrls("https://0.0.0.0:7167");
 
 // Add services to the container.
 
@@ -22,13 +25,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddHttpClient();
 
-
-SD.CouponAPIBase = builder.Configuration["ServiceUrls:CouponAPI"];
-SD.OrderAPIBase = builder.Configuration["ServiceUrls:OrderAPI"];
-SD.ShoppingCartAPIBase = builder.Configuration["ServiceUrls:ShoppingCartAPI"];
-SD.AuthAPIBase = builder.Configuration["ServiceUrls:AuthenticationAPI"];
-SD.ProductAPIBase = builder.Configuration["ServiceUrls:ProductAPI"];
-SD.InventoryAPIBase = builder.Configuration["ServiceUrls:InventoryAPI"];
 
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<ICouponHttpClient, CouponHttpClient>();

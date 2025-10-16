@@ -11,10 +11,12 @@ using Xango.Services.ShoppingCartAPI.Service;
 using Xango.Services.Utility;
 using Xango.Services.Server.Utility;
 using Xango.Service.CouponAPI.Client;
+using Xango.Service.AuthenticationAPI.Client;
+using Xango.Service.ProductAPI.Client;
 
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.WebHost.UseUrls("https://0.0.0.0:7003");
 // Add services to the container.
 
 builder.Services.AddDbContext<AppDbContext>(option =>
@@ -27,9 +29,8 @@ builder.Services.AddSingleton(mapper);
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
-builder.Services.AddScoped<IProductService, ProductService>();
-//builder.Services.AddScoped<ICouponService, CouponService>();
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IProductHttpClient, ProductHttpClient>();
+builder.Services.AddScoped<IAuthenticationHttpClient, AuthenticationHttpClient>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 
 builder.Services.AddHttpClient("Product", u => u.BaseAddress =

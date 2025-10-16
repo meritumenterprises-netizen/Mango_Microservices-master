@@ -32,7 +32,14 @@ namespace Xango.Service.CouponAPI.Client
 
         public async Task<ResponseDto?> CreateCoupons(CouponDto couponDto)
         {
-            var client = _httpClientFactory.CreateClient("Coupon");
+            //var client = _httpClientFactory.CreateClient("Coupon");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -46,7 +53,14 @@ namespace Xango.Service.CouponAPI.Client
 
         public async Task<ResponseDto?> DeleteCoupons(int id)
         {
-            var client = _httpClientFactory.CreateClient("Coupon");
+            //var client = _httpClientFactory.CreateClient("Coupon");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -61,7 +75,14 @@ namespace Xango.Service.CouponAPI.Client
 
         public async Task<ResponseDto?> GetAllCoupons()
         {
-            var client = _httpClientFactory.CreateClient("Coupon");
+            //var client = _httpClientFactory.CreateClient("Coupon");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -77,7 +98,14 @@ namespace Xango.Service.CouponAPI.Client
 
         public async Task<ResponseDto?> GetCoupon(string couponCode)
         {
-            var client = _httpClientFactory.CreateClient("Coupon");
+            //var client = _httpClientFactory.CreateClient("Coupon");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -93,7 +121,14 @@ namespace Xango.Service.CouponAPI.Client
 
         public async Task<ResponseDto?> GetCouponById(int id)
         {
-            var client = _httpClientFactory.CreateClient("Coupon");
+            //var client = _httpClientFactory.CreateClient("Coupon");
+            var handler = new HttpClientHandler
+            {
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+            };
+
+            var client = new HttpClient(handler);
+
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

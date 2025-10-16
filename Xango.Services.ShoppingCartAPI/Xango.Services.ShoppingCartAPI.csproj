@@ -4,6 +4,8 @@
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>20de5854-b69e-4500-a7b9-1f932ddf7b97</UserSecretsId>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,6 +29,7 @@
 		  <PrivateAssets>all</PrivateAssets>
 		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 	  </PackageReference>
+	  <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
 	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
@@ -34,7 +37,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Xango.Serrvices.Server.Utility\Xango.Serrvices.Server.Utility.csproj" />
+    <ProjectReference Include="..\Xango.Service.AuthenticationAPI.Client\Xango.Service.AuthenticationAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Service.CouponAPI.Client\Xango.Service.CouponAPI.Client.csproj" />
+    <ProjectReference Include="..\Xango.Service.ProductAPI.Client\Xango.Service.ProductAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Services.Client.Utility\Xango.Services.Client.Utility.csproj" />
     <ProjectReference Include="..\Xango.Services.Dto\Xango.Services.Dto.csproj" />
   </ItemGroup>

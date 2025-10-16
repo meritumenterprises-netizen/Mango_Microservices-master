@@ -4,6 +4,7 @@ using Xango.Services.AuthAPI.Models;
 using Xango.Services.AuthAPI.Service;
 using Xango.Services.AuthAPI.Service.IService;
 using Xango.Services.Server.Utility;
+using Xango.Services.Server.Utility.Extensions;
 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +12,8 @@ using Microsoft.EntityFrameworkCore;
 using Xango.Services.AuthAPI;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.WebHost.UseUrls("https://0.0.0.0:7002");
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>
@@ -31,6 +34,7 @@ builder.Services.AddSingleton(mapper);
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
