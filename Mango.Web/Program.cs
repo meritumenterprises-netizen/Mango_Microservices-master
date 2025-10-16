@@ -18,6 +18,13 @@ using Xango.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls("https://0.0.0.0:7167");
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(7167, listenOptions =>
+    {
+        listenOptions.UseHttps("devcert.pfx", "Password1!");
+    });
+});
 
 // Add services to the container.
 

@@ -1,16 +1,25 @@
 using AutoMapper;
-using Xango.Services.Server.Utility.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Xango.Services.InventoryApi;
 using Xango.Services.InventoryApi.Data;
 using Xango.Services.InventoryApi.Service;
 using Xango.Services.InventoryApi.Service.IService;
 using Xango.Services.Server.Utility;
+using Xango.Services.Server.Utility.Extensions;
 
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(7010, listenOptions =>
+    {
+        listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
+    });
+});
+
 builder.WebHost.UseUrls("https://0.0.0.0:7010");
 // Add services to the container.
 

@@ -1,15 +1,23 @@
 using AutoMapper;
-using Xango.Services.OrderAPI;
-using Xango.Services.OrderAPI.Data;
-using Xango.Services.Server.Utility.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Xango.Service.InventoryAPI.Client;
-
+using Xango.Services.OrderAPI;
+using Xango.Services.OrderAPI.Data;
 using Xango.Services.Server.Utility;
+using Xango.Services.Server.Utility.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(7004, listenOptions =>
+    {
+        listenOptions.UseHttps("devcert.pfx", "Password1!");
+    });
+});
+
 builder.WebHost.UseUrls("https://0.0.0.0:7004");
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);

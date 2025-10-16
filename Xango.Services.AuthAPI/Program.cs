@@ -12,6 +12,13 @@ using Microsoft.EntityFrameworkCore;
 using Xango.Services.AuthAPI;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.ListenAnyIP(7002, listenOptions =>
+    {
+        listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
+    });
+});
 
 builder.WebHost.UseUrls("https://0.0.0.0:7002");
 
