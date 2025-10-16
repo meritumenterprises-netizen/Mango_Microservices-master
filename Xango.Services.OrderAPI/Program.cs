@@ -14,7 +14,7 @@ builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenAnyIP(7004, listenOptions =>
     {
-        listenOptions.UseHttps("devcert.pfx", "Password1!");
+        listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
     });
 });
 

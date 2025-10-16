@@ -75,14 +75,7 @@ namespace Xango.Service.CouponAPI.Client
 
         public async Task<ResponseDto?> GetAllCoupons()
         {
-            //var client = _httpClientFactory.CreateClient("Coupon");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.CreateClient("Coupon");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -98,14 +91,7 @@ namespace Xango.Service.CouponAPI.Client
 
         public async Task<ResponseDto?> GetCoupon(string couponCode)
         {
-            //var client = _httpClientFactory.CreateClient("Coupon");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.CreateClient("Coupon");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -121,14 +107,7 @@ namespace Xango.Service.CouponAPI.Client
 
         public async Task<ResponseDto?> GetCouponById(int id)
         {
-            //var client = _httpClientFactory.CreateClient("Coupon");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.CreateClient("Coupon");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

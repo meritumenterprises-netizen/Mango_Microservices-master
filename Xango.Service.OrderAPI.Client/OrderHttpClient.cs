@@ -125,14 +125,7 @@ namespace Xango.Service.OrderAPI.Client
 
         public async Task<ResponseDto?> GetOrder(int orderId)
         {
-            //var client = _httpClientFactory.CreateClient("Order");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.CreateClient("Order");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -148,14 +141,7 @@ namespace Xango.Service.OrderAPI.Client
 
         public async Task<ResponseDto?> UpdateOrderStatus(int orderId, string newStatus)
         {
-            //var client = _httpClientFactory.CreateClient("Order");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.CreateClient("Order");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -171,14 +157,7 @@ namespace Xango.Service.OrderAPI.Client
 
         public async Task<ResponseDto?> ValidateStripeSession(int orderHeaderId)
         {
-            //var client = _httpClientFactory.CreateClient("Order");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.CreateClient("Order");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

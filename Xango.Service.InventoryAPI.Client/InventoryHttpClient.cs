@@ -76,14 +76,7 @@ namespace Xango.Service.InventoryAPI.Client
 
         public async Task<ResponseDto?> ReturnQty(int productId, int quantity)
         {
-            //var client = _httpClientFactory.CreateClient("Inventory");
-
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
+            var client = _httpClientFactory.CreateClient("Inventory");
 
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();

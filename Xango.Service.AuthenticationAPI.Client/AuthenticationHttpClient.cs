@@ -35,13 +35,7 @@ namespace Xango.Service.AuthenticationAPI.Client
         }
         public async Task<ResponseDto?> AssignRole(RegistrationRequestDto registrationRequestDto)
         {
-            //var client = _httpClientFactory.CreateClient("Authentication");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
+            var client = _httpClientFactory.CreateClient("Authentication");
 
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
@@ -58,14 +52,7 @@ namespace Xango.Service.AuthenticationAPI.Client
 
         public async Task<ResponseDto> GetUser(string email)
         {
-            //var client = _httpClientFactory.CreateClient("Authentication");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.CreateClient("Authentication");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -80,14 +67,7 @@ namespace Xango.Service.AuthenticationAPI.Client
 
         public async Task<ResponseDto?> Login(LoginRequestDto loginRequestDto)
         {
-            //var client = _httpClientFactory.CreateClient("Authentication");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.CreateClient("Authentication");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -103,14 +83,7 @@ namespace Xango.Service.AuthenticationAPI.Client
 
         public async Task<ResponseDto?> Register(RegistrationRequestDto registrationRequestDto)
         {
-            //var client = _httpClientFactory.CreateClient("Authentication");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.CreateClient("Authentication");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -133,14 +106,7 @@ namespace Xango.Service.AuthenticationAPI.Client
 
         public async Task<ResponseDto> GetUserById(string id)
         {
-            //var client = _httpClientFactory.CreateClient("Authentication");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.CreateClient("Authentication");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

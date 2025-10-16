@@ -20,12 +20,10 @@ builder.WebHost.ConfigureKestrel(options =>
     });
 });
 
-builder.WebHost.UseUrls("https://0.0.0.0:7002");
-
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
-    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    option.UseSqlServer(Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING"));
 });
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection("ApiSettings:JwtOptions"));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<AppDbContext>()

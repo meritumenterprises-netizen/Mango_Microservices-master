@@ -53,14 +53,7 @@ namespace Xango.Service.ShoppingCartAPI.Client
 
         public Task<ResponseDto> DeleteCart(string userId)
         {
-            //var client = _httpClientFactory.CreateClient("ShoppingCart");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.CreateClient("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -81,14 +74,7 @@ namespace Xango.Service.ShoppingCartAPI.Client
 
         public Task<ResponseDto?> GetCartByUserId(string userId)
         {
-            //var client = _httpClientFactory.CreateClient("ShoppingCart");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.CreateClient("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -104,14 +90,7 @@ namespace Xango.Service.ShoppingCartAPI.Client
 
         public Task<ResponseDto?> RemoveFromCart(int cartDetailsId)
         {
-            //var client = _httpClientFactory.CreateClient("ShoppingCart");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.CreateClient("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -127,14 +106,7 @@ namespace Xango.Service.ShoppingCartAPI.Client
 
         public Task<ResponseDto?> UpsertCart(CartDto cartDto)
         {
-            //var client = _httpClientFactory.CreateClient("ShoppingCart");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.CreateClient("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
