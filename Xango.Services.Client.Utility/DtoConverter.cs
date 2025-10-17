@@ -15,6 +15,10 @@ namespace Xango.Services.Client.Utility
 #pragma warning restore CS8603 // Possible null reference return.
         }
 
+        public static ResponseDto ToResponseDto(object obj)
+        {
+            return (ResponseDto)(obj as ResponseDto).Result;
+        }
         public static T ToDto<T>(string str)
             where T: class, new()
         {

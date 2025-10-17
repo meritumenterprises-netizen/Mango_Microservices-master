@@ -150,7 +150,7 @@ namespace Xango.Web.Controllers
             ResponseDto? responseDto = await _shoppingCartClient.GetCartByUserId(userDto.Id);
             if (response != null & response.IsSuccess)
             {
-                CartDto cartDto = JsonConvert.DeserializeObject<CartDto>(Convert.ToString(((ResponseDto)responseDto.Result).Result));
+                CartDto cartDto = JsonConvert.DeserializeObject<CartDto>(Convert.ToString(DtoConverter.ToResponseDto(responseDto).Result));
                 return cartDto;
             }
             return new CartDto();
