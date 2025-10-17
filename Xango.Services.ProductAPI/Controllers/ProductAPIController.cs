@@ -30,7 +30,6 @@ namespace Xango.Services.ProductAPI.Controllers
         }
 
         [HttpGet]
-        [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any)]
         public ResponseDto Get()
         {
             try
@@ -73,26 +72,20 @@ namespace Xango.Services.ProductAPI.Controllers
 
                 if (!string.IsNullOrEmpty(ProductDto.Base64Image))
                 {
-                    ProductDto.ImageLocalPath = Path.Combine(Path.GetFileNameWithoutExtension(Path.GetTempFileName()), ".jpg");
-
-                    var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), ProductDto.ImageLocalPath);
-                    if (System.IO.File.Exists(oldFilePathDirectory))
-                    {
-                        System.IO.File.Delete(oldFilePathDirectory);
-                    }
-
                     string fileName = product.ProductId + ".jpg";
-                    string filePath = @"wwwroot\ProductImages\" + fileName;
-                    var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
-                    {
-                        try
-                        {
-                            System.IO.File.WriteAllBytes(filePathDirectory, Convert.FromBase64String(ProductDto.Base64Image));
-                        }
-                        catch
-                        {
+                    string filePath = Directory.GetCurrentDirectory() + "/wwwroot/ProductImages/";
 
+                    try
+                    {
+                        if (System.IO.File.Exists(filePath + fileName))
+                        {
+                            System.IO.File.Delete(filePath + fileName);
                         }
+                        System.IO.File.WriteAllBytes(filePath + fileName, Convert.FromBase64String(ProductDto.Base64Image));
+                    }
+                    catch
+                    {
+
                     }
                     var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
                     product.ImageUrl = baseUrl + "/ProductImages/" + fileName;
@@ -124,21 +117,16 @@ namespace Xango.Services.ProductAPI.Controllers
 
                 if (!string.IsNullOrEmpty(ProductDto.Base64Image))
                 {
-                    ProductDto.ImageLocalPath = Path.Combine(Path.GetFileNameWithoutExtension(Path.GetTempFileName()), ".jpg");
-
-                    var oldFilePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), ProductDto.ImageLocalPath);
-
                     string fileName = product.ProductId + ".jpg";
-                    if (System.IO.File.Exists(oldFilePathDirectory))
+                    string filePath = Directory.GetCurrentDirectory() + "/wwwroot/ProductImages/";
+                    if (System.IO.File.Exists(filePath + fileName))
                     {
-                        System.IO.File.Delete(oldFilePathDirectory);
+                        System.IO.File.Delete(filePath + fileName);
                     }
 
-                    string filePath = @"wwwroot\ProductImages\" + fileName;
-                    var filePathDirectory = Path.Combine(Directory.GetCurrentDirectory(), filePath);
                     try
                     {
-                        System.IO.File.WriteAllBytes(filePathDirectory, Convert.FromBase64String(ProductDto.Base64Image));
+                        System.IO.File.WriteAllBytes(filePath + fileName, Convert.FromBase64String(ProductDto.Base64Image));
                     }
                     catch
                     {
