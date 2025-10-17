@@ -9,6 +9,7 @@ using Xango.Models.Dto;
 using Xango.Services.Client.Utility;
 using Xango.Services.Utility;
 using System.IO;
+using FileSystem = System.IO.File;
 
 namespace Xango.Services.ProductAPI.Controllers
 {
@@ -77,11 +78,11 @@ namespace Xango.Services.ProductAPI.Controllers
 
                     try
                     {
-                        if (System.IO.File.Exists(filePath + fileName))
+                        if (FileSystem.Exists(filePath + fileName))
                         {
-                            System.IO.File.Delete(filePath + fileName);
+                            FileSystem.Delete(filePath + fileName);
                         }
-                        System.IO.File.WriteAllBytes(filePath + fileName, Convert.FromBase64String(ProductDto.Base64Image));
+                        FileSystem.WriteAllBytes(filePath + fileName, Convert.FromBase64String(ProductDto.Base64Image));
                     }
                     catch
                     {
@@ -119,19 +120,12 @@ namespace Xango.Services.ProductAPI.Controllers
                 {
                     string fileName = product.ProductId + ".jpg";
                     string filePath = Directory.GetCurrentDirectory() + "/wwwroot/ProductImages/";
-                    if (System.IO.File.Exists(filePath + fileName))
+                    if (FileSystem.Exists(filePath + fileName))
                     {
-                        System.IO.File.Delete(filePath + fileName);
+                        FileSystem.Delete(filePath + fileName);
                     }
 
-                    try
-                    {
-                        System.IO.File.WriteAllBytes(filePath + fileName, Convert.FromBase64String(ProductDto.Base64Image));
-                    }
-                    catch
-                    {
-
-                    }
+                    FileSystem.WriteAllBytes(filePath + fileName, Convert.FromBase64String(ProductDto.Base64Image));
                     var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
                     product.ImageUrl = baseUrl + "/ProductImages/" + fileName;
                     product.ImageLocalPath = filePath;
