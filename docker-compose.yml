@@ -52,4 +52,12 @@ services:
     build:
        context: .
        dockerfile: Mango.Web/Dockerfile
+    depends_on:
+      - xango.services.authapi
+      - xango.services.couponapi
+      - xango.services.inventoryapi
+      - xango.services.productapi
+      - xango.services.orderapi
+      - xango.services.shoppingcartapi
+
   

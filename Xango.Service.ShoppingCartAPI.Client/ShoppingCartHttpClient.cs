@@ -65,20 +65,20 @@ namespace Xango.Service.ShoppingCartAPI.Client
             throw new NotImplementedException();
         }
 
-        public Task<ResponseDto?> GetCartByUserId(string userId)
+        public async Task<ResponseDto?> GetCartByUserId(string userId)
         {
             var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.GetAsync("/api/cart/GetCart/" + userId, HttpCompletionOption.ResponseContentRead).GetAwaiter().GetResult();
+            var response = await client.GetAsync("/api/cart/GetCart/" + userId);
             response.EnsureSuccessStatusCode();
-            var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
+            var resp = await response.Content.ReadFromJsonAsync<ResponseDto?>();
             if (resp != null && resp.IsSuccess)
             {
-                return Task.FromResult(ResponseProducer.OkResponse(resp.Result));
+                return ResponseProducer.OkResponse(resp);
             }
-            return Task.FromResult(ResponseProducer.ErrorResponse("Could not find cart"));
+            return ResponseProducer.ErrorResponse("Could not find cart");
         }
 
         public Task<ResponseDto?> RemoveFromCart(int cartDetailsId)

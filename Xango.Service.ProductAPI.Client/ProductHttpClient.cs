@@ -89,7 +89,10 @@ namespace Xango.Service.ProductAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             
             var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            if (token != null)
+            {
+                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            }
             var response = await client.GetAsync("/api/product");
             response.EnsureSuccessStatusCode();
             var resp = await response.Content.ReadFromJsonAsync<ResponseDto?>();

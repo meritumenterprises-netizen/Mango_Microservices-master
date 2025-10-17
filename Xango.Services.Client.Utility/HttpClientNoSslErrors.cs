@@ -12,13 +12,10 @@ namespace Xango.Services.Client.Utility
     {
         public static HttpClient NewClientNoSslErrors(this IHttpClientFactory factory, string name)
         {
-#if DEBUG
-            HttpClientHandler handler = new HttpClientHandler();
-            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) =>
+            HttpClientHandler handler = new HttpClientHandler()
             {
-                return true;
+                ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true
             };
-#endif
             var client = new HttpClient(handler);
             return client;
         }

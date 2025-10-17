@@ -146,11 +146,11 @@ namespace Xango.Web.Controllers
         {
             var userEmail = User.Claims.Where((claim) => claim.Type == "email").First().Value;
             var response = await _authenticationClient.GetUser(userEmail);
-            var userDto = JsonConvert.DeserializeObject<UserDto>(Convert.ToString(response.Result));
+            var userDto = DtoConverter.ToDto<UserDto>(response);
             ResponseDto? responseDto = await _shoppingCartClient.GetCartByUserId(userDto.Id);
             if (response != null & response.IsSuccess)
             {
-                CartDto cartDto = DtoConverter.ToDto<CartDto>(response);
+                CartDto cartDto = JsonConvert.DeserializeObject<CartDto>(Convert.ToString(((ResponseDto)responseDto.Result).Result));
                 return cartDto;
             }
             return new CartDto();
