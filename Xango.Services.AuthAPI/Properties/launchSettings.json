@@ -4,7 +4,7 @@
       "commandName": "Docker",
       "environmentVariables": {
         "ASPNETCORE_HTTPS_PORTS": "7002",
-        "ASPNETCORE_ENVIRONMENT": "Production"
+        "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "publishAllPorts": true,
       "useSSL": true

@@ -31,12 +31,12 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseSqlServer(Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING"));
 });
 
+builder.Services.AddControllers();
+
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(option =>
 {
@@ -62,29 +62,26 @@ builder.Services.AddSwaggerGen(option =>
         }
     });
 });
+
+builder.Services.AddHttpContextAccessor();
 builder.AddAppAuthetication();
 
 builder.Services.AddAuthorization();
-
-
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-app.UseSwagger();
-app.UseSwaggerUI(c =>
+if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
 {
-    if (app.Environment.IsDevelopment())
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Coupon API");
-        c.RoutePrefix = string.Empty;
-    }
-});
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 
 
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseStaticFiles();
 app.MapControllers();
 
 ApplyMigration();
