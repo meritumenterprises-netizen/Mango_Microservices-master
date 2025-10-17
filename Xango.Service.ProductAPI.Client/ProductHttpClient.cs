@@ -30,7 +30,7 @@ namespace Xango.Service.ProductAPI.Client
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
-            _baseUri = _configuration["ServiceUrls:ProductAPI"];
+            _baseUri = Environment.GetEnvironmentVariable("ProductAPI");
             _tokenProvider = tokenProvider;
 
         }

@@ -26,7 +26,7 @@ namespace Xango.Service.ShoppingCartAPI.Client
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
             _tokenProvider = tokenProvider;
-            _baseUri = _configuration["ServiceUrls:ShoppingCartAPI"];
+            _baseUri = Environment.GetEnvironmentVariable("ShoppingCartAPI");
         }
         public Task<ResponseDto?> ApplyCoupon(CartDto cartDto)
         {

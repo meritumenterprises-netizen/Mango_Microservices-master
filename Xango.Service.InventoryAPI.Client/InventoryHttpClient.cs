@@ -24,7 +24,7 @@ namespace Xango.Service.InventoryAPI.Client
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
-            _baseUri = _configuration["ServiceUrls:InventoryAPI"];
+            _baseUri = Environment.GetEnvironmentVariable("InventoryAPI");
             _tokenProvider = tokenProvider;
         }
 

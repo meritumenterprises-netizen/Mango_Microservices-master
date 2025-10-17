@@ -25,7 +25,7 @@ namespace Xango.Service.OrderAPI.Client
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
-            _baseUri = _configuration["ServiceUrls:OrderAPI"];
+            _baseUri = Environment.GetEnvironmentVariable("OrderAPI");
             _tokenProvider = tokenProvider;
         }
         public async Task<ResponseDto?> CreateOrder(CartDto cartDto)
