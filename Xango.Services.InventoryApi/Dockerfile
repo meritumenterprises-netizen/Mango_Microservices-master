@@ -20,6 +20,7 @@ ENV ShoppingCartAPI="https://myhost:7003"
 ENV OrderAPI="https://myhost:7004"
 ENV InventoryAPI="https://myhost:7010"
 
+ENV SQL_CONNECTION_STRING=Server="myhost,1433;Database=Xango_Order;User ID=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build

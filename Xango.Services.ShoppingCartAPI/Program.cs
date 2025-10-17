@@ -32,7 +32,7 @@ builder.WebHost.UseUrls("https://0.0.0.0:7003");
 
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
-    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    option.UseSqlServer(Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING"));
 });
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
 builder.Services.AddSingleton(mapper);

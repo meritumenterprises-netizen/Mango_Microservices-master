@@ -11,8 +11,6 @@ ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 ENV CURRENCY=USD
 
-ENV SQL_CONNECTION_STRING="Server=myhost,1433;Database=Xango_Auth;User ID=sa; Password=YourStrong!Passw0rd;TrustServerCertificate=True"
-
 ENV CertificateName="devcertificate.pfx"
 ENV DevCertificatePassword=Password1!
 
@@ -22,6 +20,8 @@ ENV ProductAPI="https://myhost:7005"
 ENV ShoppingCartAPI="https://myhost:7003"
 ENV OrderAPI="https://myhost:7004"
 ENV InventoryAPI="https://myhost:7010"
+
+ENV SQL_CONNECTION_STRING=Server="myhost,1433;Database=Xango_Order;User ID=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
 
 ENV ASPNETCORE_ENVIRONMENT=Production
 

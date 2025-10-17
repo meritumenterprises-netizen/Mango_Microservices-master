@@ -43,7 +43,7 @@ builder.Services.AddEndpointsApiExplorer();
 
 builder.Services.AddDbContext<AppDbContext>(option =>
 {
-    option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    option.UseSqlServer(Environment.GetEnvironmentVariable("SQL_CONNECTION_STRING"));
 });
 
 builder.Services.AddHttpContextAccessor();
