@@ -76,18 +76,11 @@ namespace Xango.Services.ProductAPI.Controllers
                     string fileName = product.ProductId + ".jpg";
                     string filePath = Directory.GetCurrentDirectory() + "/wwwroot/ProductImages/";
 
-                    try
+                    if (FileSystem.Exists(filePath + fileName))
                     {
-                        if (FileSystem.Exists(filePath + fileName))
-                        {
-                            FileSystem.Delete(filePath + fileName);
-                        }
-                        FileSystem.WriteAllBytes(filePath + fileName, Convert.FromBase64String(ProductDto.Base64Image));
+                        FileSystem.Delete(filePath + fileName);
                     }
-                    catch
-                    {
-
-                    }
+                    FileSystem.WriteAllBytes(filePath + fileName, Convert.FromBase64String(ProductDto.Base64Image));
                     var baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.Value}{HttpContext.Request.PathBase.Value}";
                     product.ImageUrl = baseUrl + "/ProductImages/" + fileName;
                     product.ImageLocalPath = filePath;
