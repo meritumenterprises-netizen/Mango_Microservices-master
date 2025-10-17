@@ -11,6 +11,8 @@ using Xango.Service.CouponAPI.Client;
 using Xango.Services.Utility;
 using Xango.Service.AuthenticationAPI.Client;
 using Xango.Service.ProductAPI.Client;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Xango.Services.ShoppingCartAPI.Controllers
 {
@@ -53,15 +55,27 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
                 cart.CartHeader.Name = userDto.Name;
                 cart.CartHeader.Email = userDto.Email;
                 cart.CartHeader.Phone = userDto.PhoneNumber;
-                cart.CartDetails = _mapper.Map<IEnumerable<CartDetailsDto>>(_db.CartDetails
-                    .Where(u => u.CartHeaderId == cart.CartHeader.CartHeaderId));
+                cart.CartDetails = _mapper.Map<List<CartDetailsDto>>(_db.CartDetails.Where(u => u.CartHeaderId == cart.CartHeader.CartHeaderId));
 
-                IEnumerable<ProductDto> productDtos = DtoConverter.ToDto<List<ProductDto>>(await _productHttpClient.GetAllProducts());
+                List<ProductDto> productDtos = DtoConverter.ToDto<List<ProductDto>>(await _productHttpClient.GetAllProducts());
 
+                var cartDetailsToDelete = new List<CartDetailsDto>();
                 foreach (var item in cart.CartDetails)
                 {
                     item.Product = productDtos.FirstOrDefault(u => u.ProductId == item.ProductId);
-                    cart.CartHeader.CartTotal += (item.Count * item.Product.Price);
+                    if (item.Product != null)
+                    {
+                        cart.CartHeader.CartTotal += (item.Count * item.Product.Price);
+                    }
+                    else
+                    {
+                        cartDetailsToDelete.Add(item);
+                    }
+                }
+
+                foreach (var detail in cartDetailsToDelete)
+                {
+                    cart.CartDetails.Remove(detail);
                 }
 
                 //apply coupon if any
