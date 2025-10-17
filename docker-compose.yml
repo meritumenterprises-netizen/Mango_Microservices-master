@@ -12,42 +12,58 @@ services:
     build:
       context: .
       dockerfile: Xango.Services.AuthAPI/Dockerfile
+    depends_on:
+       - sqlserver
   xango.services.couponapi:
     image: ${DOCKER_REGISTRY-}xangoservicescouponapi
     build:
        context: .
        dockerfile: Xango.Services.CouponAPI/Dockerfile
+    depends_on:
+       - sqlserver
   xango.services.inventoryapi:
     image: ${docker_registry-}xangoservicesinventoryapi
     build:
        context: .
        dockerfile: Xango.Services.InventoryAPI/Dockerfile
+    depends_on:
+       - sqlserver
   xango.services.productapi:
     image: ${docker_registry-}xangoservicesproductapi
     build:
        context: .
        dockerfile: Xango.Services.ProductAPI/Dockerfile
+    depends_on:
+       - sqlserver
+       - xango.services.authapi
+       - xango.services.inventoryapi
+       - xango.services.orderapi
   xango.services.orderapi:
     image: ${docker_registry-}xangoservicesorderapi
     build:
        context: .
        dockerfile: Xango.Services.OrderAPI/Dockerfile
+    depends_on:
+       - sqlserver
   xango.services.shoppingcartapi:
     image: ${docker_registry-}xangoservicesshoppingcartapi
     build:
        context: .
        dockerfile: Xango.Services.ShoppingCartAPI/Dockerfile
+    depends_on:
+       - sqlserver
   xango.web:
     image: ${docker_registry-}xangoweb
     build:
        context: .
        dockerfile: Mango.Web/Dockerfile
     depends_on:
-      - xango.services.productapi
+      - sqlserver
       - xango.services.authapi
       - xango.services.couponapi
       - xango.services.inventoryapi
       - xango.services.orderapi
       - xango.services.shoppingcartapi
-
+      - xango.services.productapi
+  
   

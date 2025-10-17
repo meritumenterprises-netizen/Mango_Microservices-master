@@ -93,7 +93,25 @@ namespace Xango.Service.ProductAPI.Client
             {
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
-            var response = await client.GetAsync("/api/product");
+
+            // this is a hack to wait for the Product API to be available when called from Xango.Web
+            var count = 5;
+            var error = true;
+            HttpResponseMessage response = null;
+            while (count-- > 0 && error)
+            {
+                try
+                {
+                    response = await client.GetAsync("/api/product");
+                    error = false;
+                }
+                catch
+                {
+                    error = true;
+                    Thread.Sleep(2000);
+                }
+
+            }
             response.EnsureSuccessStatusCode();
             var resp = await response.Content.ReadFromJsonAsync<ResponseDto?>();
             if (resp != null && resp.IsSuccess)

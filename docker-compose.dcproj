@@ -6,8 +6,8 @@
     <DockerPublishLocally>False</DockerPublishLocally>
     <ProjectGuid>81dded9d-158b-e303-5f62-77a2896d2a5a</ProjectGuid>
     <DockerLaunchAction>LaunchBrowser</DockerLaunchAction>
-    <DockerServiceUrl>{Scheme}://localhost:{ServicePort}/swagger</DockerServiceUrl>
-    <DockerServiceName>xango.services.authapi</DockerServiceName>
+    <DockerServiceUrl>https://myhost:7167</DockerServiceUrl>
+    <DockerServiceName>xango.web</DockerServiceName>
   </PropertyGroup>
   <ItemGroup>
     <None Include="docker-compose.override.yml">

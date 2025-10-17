@@ -10,8 +10,6 @@ namespace Xango.Services.ProductAPI.Data
         }
 
         public DbSet<Product> Products { get; set; }
-        //public DbSet<CartDetails> ShoppingCartDetails { get; set; }
-        //public DbSet<OrderDetails> OrderDetails { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
