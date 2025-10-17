@@ -9,8 +9,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Service\CouponService.cs" />
-    <Compile Remove="Service\IService\ICouponService.cs" />
     <Compile Remove="Utility\BackendApiAuthenticationHttpClientHandler.cs" />
   </ItemGroup>
 
