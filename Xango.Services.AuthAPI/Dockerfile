@@ -23,6 +23,8 @@ ENV ShoppingCartAPI="https://myhost:7003"
 ENV OrderAPI="https://myhost:7004"
 ENV InventoryAPI="https://myhost:7010"
 
+ENV ASPNETCORE_ENVIRONMENT=Production
+
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Debug

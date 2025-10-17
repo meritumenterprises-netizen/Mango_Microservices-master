@@ -35,12 +35,12 @@ namespace Xango.Service.AuthenticationAPI.Client
         }
         public async Task<ResponseDto?> AssignRole(RegistrationRequestDto registrationRequestDto)
         {
-            var client = _httpClientFactory.CreateClient("Authentication");
+            var client = _httpClientFactory.NewClientNoSslErrors("Authentication");
 
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.PostAsync("/api/auth/AssignRole", StringContentUTF8.AsJsonString<RegistrationRequestDto>(registrationRequestDto)).GetAwaiter().GetResult();
+            var response = await client.PostAsync("/api/auth/AssignRole", StringContentUTF8.AsJsonString<RegistrationRequestDto>(registrationRequestDto));
             if (response != null & response.Content != null)
             {
                 var responseDto = DtoConverter.ToDto<ResponseDto>(new ResponseDto() { IsSuccess = true, Result = response.Content.ReadAsStringAsync().Result });
@@ -52,7 +52,7 @@ namespace Xango.Service.AuthenticationAPI.Client
 
         public async Task<ResponseDto> GetUser(string email)
         {
-            var client = _httpClientFactory.CreateClient("Authentication");
+            var client = _httpClientFactory.NewClientNoSslErrors("Authentication");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -67,7 +67,7 @@ namespace Xango.Service.AuthenticationAPI.Client
 
         public async Task<ResponseDto?> Login(LoginRequestDto loginRequestDto)
         {
-            var client = _httpClientFactory.CreateClient("Authentication");
+            var client = _httpClientFactory.NewClientNoSslErrors("Authentication");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -83,7 +83,7 @@ namespace Xango.Service.AuthenticationAPI.Client
 
         public async Task<ResponseDto?> Register(RegistrationRequestDto registrationRequestDto)
         {
-            var client = _httpClientFactory.CreateClient("Authentication");
+            var client = _httpClientFactory.NewClientNoSslErrors("Authentication");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -106,7 +106,7 @@ namespace Xango.Service.AuthenticationAPI.Client
 
         public async Task<ResponseDto> GetUserById(string id)
         {
-            var client = _httpClientFactory.CreateClient("Authentication");
+            var client = _httpClientFactory.NewClientNoSslErrors("Authentication");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

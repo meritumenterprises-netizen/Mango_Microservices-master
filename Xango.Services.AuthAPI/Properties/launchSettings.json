@@ -2,10 +2,9 @@
   "profiles": {
     "Container (Dockerfile)": {
       "commandName": "Docker",
-      "launchBrowser": true,
-      "launchUrl": "https://myhost:7002/swagger",
       "environmentVariables": {
-        "ASPNETCORE_HTTPS_PORTS": "7002"
+        "ASPNETCORE_HTTPS_PORTS": "7002",
+        "ASPNETCORE_ENVIRONMENT": "Production"
       },
       "publishAllPorts": true,
       "useSSL": true
