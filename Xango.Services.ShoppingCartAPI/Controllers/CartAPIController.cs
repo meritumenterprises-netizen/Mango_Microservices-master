@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Xango.Services.ShoppingCartAPI.Data;
 using Xango.Services.ShoppingCartAPI.Models;
-using Xango.Services.ShoppingCartAPI.Service.IService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

@@ -10,8 +10,6 @@ using Xango.Services.Server.Utility;
 using Xango.Services.Server.Utility.Extensions;
 using Xango.Services.ShoppingCartAPI;
 using Xango.Services.ShoppingCartAPI.Data;
-using Xango.Services.ShoppingCartAPI.Service;
-using Xango.Services.ShoppingCartAPI.Service.IService;
 using Xango.Services.Utility;
 
 
