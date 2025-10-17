@@ -38,7 +38,7 @@ namespace Xango.Web.Controllers
         {
             var responseDto = await _authenticationClient.GetUser(User.Identity.Name);
             UserDto userDto = DtoConverter.ToDto<UserDto>(responseDto);
-            var cartDto = DtoConverter.ToDto<CartDto>(await _shoppingCartClient.GetCartByUserId(userDto.Id));
+            var cartDto = DtoConverter.ToDto<CartDto>(DtoConverter.ToResponseDto(await _shoppingCartClient.GetCartByUserId(userDto.Id)));
             return View(cartDto);
         }
 
@@ -148,7 +148,7 @@ namespace Xango.Web.Controllers
             var response = await _authenticationClient.GetUser(userEmail);
             var userDto = DtoConverter.ToDto<UserDto>(response);
             ResponseDto? responseDto = await _shoppingCartClient.GetCartByUserId(userDto.Id);
-            if (response != null & response.IsSuccess)
+            if (responseDto != null & responseDto.IsSuccess)
             {
                 CartDto cartDto = JsonConvert.DeserializeObject<CartDto>(Convert.ToString(DtoConverter.ToResponseDto(responseDto).Result));
                 return cartDto;
