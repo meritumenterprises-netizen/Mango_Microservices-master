@@ -36,7 +36,7 @@ namespace Xango.Service.ProductAPI.Client
         }
         public async Task<ResponseDto?> CreateProducts(ProductDto productDto)
         {
-            var client = _httpClientFactory.CreateClient("Product");
+            var client = _httpClientFactory.NewClientNoSslErrors("Product");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -52,7 +52,7 @@ namespace Xango.Service.ProductAPI.Client
 
         public async Task<ResponseDto?> UpdateProducts(ProductDto productDto)
         {
-            var client = _httpClientFactory.CreateClient("Product");
+            var client = _httpClientFactory.NewClientNoSslErrors("Product");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -69,7 +69,7 @@ namespace Xango.Service.ProductAPI.Client
 
         public async Task<ResponseDto?> DeleteProduct(int id)
         {
-            var client = _httpClientFactory.CreateClient("Product");
+            var client = _httpClientFactory.NewClientNoSslErrors("Product");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -85,7 +85,7 @@ namespace Xango.Service.ProductAPI.Client
 
         public async Task<ResponseDto?> GetAllProducts()
         {
-            var client = _httpClientFactory.CreateClient("Product");
+            var client = _httpClientFactory.NewClientNoSslErrors("Product");
             client.BaseAddress = new Uri(_baseUri);
             
             var token = _tokenProvider.GetToken();
@@ -102,7 +102,7 @@ namespace Xango.Service.ProductAPI.Client
 
         public async Task<ResponseDto?> GetProductById(int id)
         {
-            var client = _httpClientFactory.CreateClient("Product");
+            var client = _httpClientFactory.NewClientNoSslErrors("Product");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

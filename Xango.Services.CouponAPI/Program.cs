@@ -1,18 +1,22 @@
 using AutoMapper;
-using Xango.Services.CouponAPI;
-using Xango.Services.CouponAPI.Data;
-using Xango.Services.Server.Utility.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
+using Xango.Serrvices.Server.Utility;
+using Xango.Services.CouponAPI;
+using Xango.Services.CouponAPI.Data;
+using Xango.Services.Server.Utility.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
+#if DEBUG
+    CertificateInstaller.AddCertificateToTrustedRoot(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
+#endif
     options.ListenAnyIP(7001, listenOptions =>
     {
         listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));

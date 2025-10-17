@@ -1,4 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Xango.Serrvices.Server.Utility;
+using Xango.Services.AuthAPI;
 using Xango.Services.AuthAPI.Data;
 using Xango.Services.AuthAPI.Models;
 using Xango.Services.AuthAPI.Service;
@@ -6,19 +10,19 @@ using Xango.Services.AuthAPI.Service.IService;
 using Xango.Services.Server.Utility;
 using Xango.Services.Server.Utility.Extensions;
 
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-
-using Xango.Services.AuthAPI;
-
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
 {
+#if DEBUG
+    CertificateInstaller.AddCertificateToTrustedRoot(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
+#endif
     options.ListenAnyIP(7002, listenOptions =>
     {
         listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
     });
 });
+
+builder.WebHost.UseUrls("https://0.0.0.0:7002");
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(option =>

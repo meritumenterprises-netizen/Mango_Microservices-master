@@ -1,14 +1,16 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Net.Security;
+using System.Text;
 using Xango.Models.Dto;
 using Xango.Services.Client.Utility;
 using Xango.Services.Dto;
 using Xango.Services.Interfaces;
-using Microsoft.Extensions.Configuration;
-using System.Text;
+using Xango.Services.Client.Utility;
 using Xango.Services.Server.Utility;
-using System.Net.Http.Headers;
-using System.Net.Http;
 using Xango.Services.Utility;
 
 namespace Xango.Service.CouponAPI.Client
@@ -26,20 +28,13 @@ namespace Xango.Service.CouponAPI.Client
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
-            _baseUri = _configuration["ServiceUrls:CouponAPI"];
+            _baseUri = Environment.GetEnvironmentVariable("CouponAPI");
             _tokenProvider = tokenProvider;
         }
 
         public async Task<ResponseDto?> CreateCoupons(CouponDto couponDto)
         {
-            //var client = _httpClientFactory.CreateClient("Coupon");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.NewClientNoSslErrors("Coupon");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -53,14 +48,7 @@ namespace Xango.Service.CouponAPI.Client
 
         public async Task<ResponseDto?> DeleteCoupons(int id)
         {
-            //var client = _httpClientFactory.CreateClient("Coupon");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.NewClientNoSslErrors("Coupon");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -75,11 +63,11 @@ namespace Xango.Service.CouponAPI.Client
 
         public async Task<ResponseDto?> GetAllCoupons()
         {
-            var client = _httpClientFactory.CreateClient("Coupon");
+            var client = _httpClientFactory.NewClientNoSslErrors("Coupon");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.GetAsync("/api/coupon",HttpCompletionOption.ResponseContentRead).GetAwaiter().GetResult();
+            var response = await client.GetAsync("/api/coupon",HttpCompletionOption.ResponseContentRead);
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
             if (resp != null && resp.IsSuccess)
@@ -91,11 +79,11 @@ namespace Xango.Service.CouponAPI.Client
 
         public async Task<ResponseDto?> GetCoupon(string couponCode)
         {
-            var client = _httpClientFactory.CreateClient("Coupon");
+            var client = _httpClientFactory.NewClientNoSslErrors("Coupon");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.GetAsync($"/api/coupon/GetByCode/{couponCode}").GetAwaiter().GetResult();
+            var response = await client.GetAsync($"/api/coupon/GetByCode/{couponCode}");
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto>().Result;
             if (resp != null && resp.IsSuccess)
@@ -107,11 +95,11 @@ namespace Xango.Service.CouponAPI.Client
 
         public async Task<ResponseDto?> GetCouponById(int id)
         {
-            var client = _httpClientFactory.CreateClient("Coupon");
+            var client = _httpClientFactory.NewClientNoSslErrors("Coupon");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.GetAsync($"/api/coupon/" + id).GetAwaiter().GetResult();
+            var response = await client.GetAsync($"/api/coupon/" + id);
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto>().Result;
             if (resp != null && resp.IsSuccess)

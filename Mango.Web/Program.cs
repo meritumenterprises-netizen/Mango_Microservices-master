@@ -15,16 +15,22 @@ using Xango.Services.Interfaces;
 using Xango.Services.Server.Utility;
 using Xango.Web.Mapping;
 using Xango.Web;
+using Xango.Serrvices.Server.Utility;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.UseUrls("https://0.0.0.0:7167");
+
 builder.WebHost.ConfigureKestrel(options =>
 {
+#if DEBUG
+    CertificateInstaller.AddCertificateToTrustedRoot(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
+#endif
     options.ListenAnyIP(7167, listenOptions =>
     {
-        listenOptions.UseHttps("devcert.pfx", "Password1!");
+        listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
     });
 });
+
+builder.WebHost.UseUrls("https://0.0.0.0:7167");
 
 // Add services to the container.
 

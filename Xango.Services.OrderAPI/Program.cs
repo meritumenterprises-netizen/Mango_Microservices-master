@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Xango.Serrvices.Server.Utility;
 using Xango.Service.InventoryAPI.Client;
 using Xango.Services.OrderAPI;
 using Xango.Services.OrderAPI.Data;
@@ -12,6 +13,10 @@ using Xango.Services.Server.Utility.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
 {
+#if DEBUG
+    CertificateInstaller.AddCertificateToTrustedRoot(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
+#endif
+
     options.ListenAnyIP(7004, listenOptions =>
     {
         listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));

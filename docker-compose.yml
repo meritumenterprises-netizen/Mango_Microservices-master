@@ -1,16 +1,13 @@
 services:
   xango.services.authapi:
     image: ${DOCKER_REGISTRY-}xangoservicesauthapi
-    environment:
-        - CertificateName=devcert.pfx
-        - DevCertificatePassword=Password1!
     build:
       context: .
       dockerfile: Xango.Services.AuthAPI/Dockerfile
   xango.services.couponapi:
     image: ${DOCKER_REGISTRY-}xangoservicescouponapi
     environment:
-        - CertificateName=devcert.pfx
+        - CertificateName=devcertificate.pfx
         - DevCertificatePassword=Password1!
     build:
        context: .
@@ -18,7 +15,7 @@ services:
   xango.services.inventoryapi:
     image: ${docker_registry-}xangoservicesinventoryapi
     environment:
-        - CertificateName=devcert.pfx
+        - CertificateName=devcertificate.pfx
         - DevCertificatePassword=Password1!
     build:
        context: .
@@ -26,7 +23,7 @@ services:
   xango.services.productapi:
     image: ${docker_registry-}xangoservicesproductapi
     environment:
-        - CertificateName=devcert.pfx
+        - CertificateName=devcertificate.pfx
         - DevCertificatePassword=Password1!
     build:
        context: .
@@ -34,7 +31,7 @@ services:
   xango.services.orderapi:
     image: ${docker_registry-}xangoservicesorderapi
     environment:
-        - CertificateName=devcert.pfx
+        - CertificateName=devcertificate.pfx
         - DevCertificatePassword=Password1!
     build:
        context: .
@@ -42,7 +39,7 @@ services:
   xango.services.shoppingcartapi:
     image: ${docker_registry-}xangoservicesshoppingcartapi
     environment:
-        - CertificateName=devcert.pfx
+        - CertificateName=devcertificate.pfx
         - DevCertificatePassword=Password1!
     build:
        context: .
@@ -50,7 +47,7 @@ services:
   xango.web:
     image: ${docker_registry-}xangoweb
     environment:
-        - CertificateName=devcert.pfx
+        - CertificateName=devcertificate.pfx
         - DevCertificatePassword=Password1!
     build:
        context: .

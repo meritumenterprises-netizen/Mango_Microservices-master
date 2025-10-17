@@ -30,14 +30,7 @@ namespace Xango.Service.InventoryAPI.Client
 
         public async Task<ResponseDto?> CurrentStock(int productId)
         {
-            //var client = _httpClientFactory.CreateClient("Inventory");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.NewClientNoSslErrors("Inventory");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -53,14 +46,7 @@ namespace Xango.Service.InventoryAPI.Client
 
         public async Task<ResponseDto?> IsProductInStock(int productId)
         {
-            //var client = _httpClientFactory.CreateClient("Inventory");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
+            var client = _httpClientFactory.NewClientNoSslErrors("Inventory");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -76,8 +62,7 @@ namespace Xango.Service.InventoryAPI.Client
 
         public async Task<ResponseDto?> ReturnQty(int productId, int quantity)
         {
-            var client = _httpClientFactory.CreateClient("Inventory");
-
+            var client = _httpClientFactory.NewClientNoSslErrors("Inventory");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
@@ -98,15 +83,7 @@ namespace Xango.Service.InventoryAPI.Client
 
         public async Task<ResponseDto?> SubtractFromStock(int productId, int quantity)
         {
-            //var client = _httpClientFactory.CreateClient("Inventory");
-            var handler = new HttpClientHandler
-            {
-                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-            };
-
-            var client = new HttpClient(handler);
-
-
+            var client = _httpClientFactory.NewClientNoSslErrors("Inventory");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);

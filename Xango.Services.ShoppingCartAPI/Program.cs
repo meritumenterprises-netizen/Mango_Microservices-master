@@ -1,23 +1,26 @@
 using AutoMapper;
-using Xango.Services.ShoppingCartAPI;
-using Xango.Services.ShoppingCartAPI.Data;
-using Xango.Services.Server.Utility.Extensions;
-using Xango.Services.ShoppingCartAPI.Service.IService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-
-using Xango.Services.ShoppingCartAPI.Service;
-using Xango.Services.Utility;
-using Xango.Services.Server.Utility;
-using Xango.Service.CouponAPI.Client;
+using Xango.Serrvices.Server.Utility;
 using Xango.Service.AuthenticationAPI.Client;
+using Xango.Service.CouponAPI.Client;
 using Xango.Service.ProductAPI.Client;
+using Xango.Services.Server.Utility;
+using Xango.Services.Server.Utility.Extensions;
+using Xango.Services.ShoppingCartAPI;
+using Xango.Services.ShoppingCartAPI.Data;
+using Xango.Services.ShoppingCartAPI.Service;
+using Xango.Services.ShoppingCartAPI.Service.IService;
+using Xango.Services.Utility;
 
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
 {
+#if DEBUG
+    CertificateInstaller.AddCertificateToTrustedRoot(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
+#endif
     options.ListenAnyIP(7003, listenOptions =>
     {
         listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
