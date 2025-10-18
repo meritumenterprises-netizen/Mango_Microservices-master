@@ -34,7 +34,7 @@ namespace Xango.Service.OrderAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.PostAsync("/api/order/CreateOrder", StringContentUTF8.AsJsonString(cartDto)).GetAwaiter().GetResult();
+            var response = await client.PostAsync("/api/order/CreateOrder", StringContentUTF8.AsJsonString(cartDto));
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
             if (resp != null && resp.IsSuccess)
@@ -51,7 +51,7 @@ namespace Xango.Service.OrderAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.PostAsync("/api/order/CreateStripeSession", StringContentUTF8.AsJsonString(stripeRequestDto)).GetAwaiter().GetResult();
+            var response = await client.PostAsync("/api/order/CreateStripeSession", StringContentUTF8.AsJsonString(stripeRequestDto));
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
             if (resp != null && resp.IsSuccess)
@@ -68,7 +68,7 @@ namespace Xango.Service.OrderAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.DeleteAsync("/api/order/DeleteOrder/" + orderId).GetAwaiter().GetResult();
+            var response = await client.DeleteAsync("/api/order/DeleteOrder/" + orderId);
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
             if (resp != null && resp.IsSuccess)
@@ -84,7 +84,7 @@ namespace Xango.Service.OrderAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.GetAsync("/api/order/GetAll?" + $"userId={userId}&status={status}").GetAwaiter().GetResult();
+            var response = await client.GetAsync("/api/order/GetAll?" + $"userId={userId}&status={status}");
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
             if (resp != null && resp.IsSuccess)
@@ -101,7 +101,7 @@ namespace Xango.Service.OrderAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.GetAsync("/api/order/GetOrder/" + orderId).GetAwaiter().GetResult();
+            var response = await client.GetAsync("/api/order/GetOrder/" + orderId);
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
             if (resp != null && resp.IsSuccess)
@@ -117,7 +117,7 @@ namespace Xango.Service.OrderAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.PostAsync("/api/order/UpdateOrderStatus/" + orderId,new StringContent("\"" + newStatus + "\"", Encoding.UTF8, "application/json")).GetAwaiter().GetResult();
+            var response = await client.PostAsync("/api/order/UpdateOrderStatus/" + orderId, new StringContent("\"" + newStatus + "\"", Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
             if (resp != null && resp.IsSuccess)
@@ -133,7 +133,7 @@ namespace Xango.Service.OrderAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.PostAsync("/api/order/ValidateStripeSession", new StringContent(orderHeaderId.ToString(),Encoding.UTF8, "application/json")).GetAwaiter().GetResult();
+            var response = await client.PostAsync("/api/order/ValidateStripeSession", new StringContent(orderHeaderId.ToString(), Encoding.UTF8, "application/json"));
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
             if (resp != null && resp.IsSuccess)

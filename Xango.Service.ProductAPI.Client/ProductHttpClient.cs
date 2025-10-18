@@ -94,23 +94,22 @@ namespace Xango.Service.ProductAPI.Client
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
 
-            // this is a hack to wait for the Product API to be available when called from Xango.Web
-            var count = 5;
-            var error = true;
+            // this is a Retry microservices design pattern
             HttpResponseMessage response = null;
-            while (count-- > 0 && error)
+            for (int i = 0; i < 5; i++)
             {
                 try
                 {
                     response = await client.GetAsync("/api/product");
-                    error = false;
                 }
                 catch
                 {
-                    error = true;
                     Thread.Sleep(2000);
                 }
-
+                if (response != null)
+                {
+                    break;
+                }
             }
             response.EnsureSuccessStatusCode();
             var resp = await response.Content.ReadFromJsonAsync<ResponseDto?>();
@@ -129,7 +128,7 @@ namespace Xango.Service.ProductAPI.Client
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.GetAsync("/api/product/" + id, HttpCompletionOption.ResponseContentRead);
             response.EnsureSuccessStatusCode();
-            var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
+            var resp = await response.Content.ReadFromJsonAsync<ResponseDto?>();
             if (resp != null && resp.IsSuccess)
             {
                 return ResponseProducer.OkResponse(resp.Result);

@@ -71,7 +71,7 @@ namespace Xango.Service.AuthenticationAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.PostAsync("/api/auth/login", StringContentUTF8.AsJsonString<LoginRequestDto>(loginRequestDto)).GetAwaiter().GetResult();
+            var response = await client.PostAsync("/api/auth/login", StringContentUTF8.AsJsonString<LoginRequestDto>(loginRequestDto));
             if (response.StatusCode != System.Net.HttpStatusCode.BadRequest & response.Content != null)
             {
                 var responseDto = DtoConverter.ToDto<ResponseDto>(new ResponseDto() { IsSuccess = true, Result = response.Content.ReadAsStringAsync().Result });    
@@ -87,7 +87,7 @@ namespace Xango.Service.AuthenticationAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.PostAsync("/api/auth/register", StringContentUTF8.AsJsonString<RegistrationRequestDto>(registrationRequestDto)).GetAwaiter().GetResult();
+            var response = await client.PostAsync("/api/auth/register", StringContentUTF8.AsJsonString<RegistrationRequestDto>(registrationRequestDto));
             if (response != null & response.StatusCode != System.Net.HttpStatusCode.BadRequest & response.Content != null)
             {
                 var responseDto1 = DtoConverter.ToDto<ResponseDto>(new ResponseDto() { IsSuccess = true, Result = response.Content.ReadAsStringAsync().Result });

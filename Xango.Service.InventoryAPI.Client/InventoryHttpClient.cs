@@ -34,7 +34,7 @@ namespace Xango.Service.InventoryAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.GetAsync($"/api/inventory/currentstock/{productId}").GetAwaiter().GetResult();
+            var response = await client.GetAsync($"/api/inventory/currentstock/{productId}");
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto>().Result;
             if (resp != null && resp.IsSuccess)
@@ -50,7 +50,7 @@ namespace Xango.Service.InventoryAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.GetAsync($"/api/inventory/instock/{productId}").GetAwaiter().GetResult();
+            var response = await client.GetAsync($"/api/inventory/instock/{productId}");
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto>().Result;
             if (resp != null && resp.IsSuccess)
@@ -66,7 +66,7 @@ namespace Xango.Service.InventoryAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.PostAsync($"/api/inventory/returnqty", StringContentUTF8.AsJsonString(new InventoryQuantityDto { ProductId = productId, Quantity = quantity })).GetAwaiter().GetResult();
+            var response = await client.PostAsync($"/api/inventory/returnqty", StringContentUTF8.AsJsonString(new InventoryQuantityDto { ProductId = productId, Quantity = quantity }));
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ProductDto>().Result;
             if (resp != null)
@@ -87,7 +87,7 @@ namespace Xango.Service.InventoryAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.PostAsync($"/api/inventory/subtractfromstock", StringContentUTF8.AsJsonString(new InventoryQuantityDto { ProductId = productId, Quantity = quantity })).GetAwaiter().GetResult();
+            var response = await client.PostAsync($"/api/inventory/subtractfromstock", StringContentUTF8.AsJsonString(new InventoryQuantityDto { ProductId = productId, Quantity = quantity }));
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ProductDto>().Result;
             if (resp != null)

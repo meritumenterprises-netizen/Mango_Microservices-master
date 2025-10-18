@@ -38,7 +38,7 @@ namespace Xango.Service.CouponAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var resp = client.PostAsync("/api/coupon", StringContentUTF8.AsJsonString<CouponDto>(couponDto)).GetAwaiter().GetResult();
+            var resp = await client.PostAsync("/api/coupon", StringContentUTF8.AsJsonString<CouponDto>(couponDto));
             if (resp != null & resp.IsSuccessStatusCode)
             {
                 return ResponseProducer.OkResponse(resp);
