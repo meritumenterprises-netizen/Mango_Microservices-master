@@ -96,17 +96,20 @@ namespace Xango.Service.ProductAPI.Client
 
             // this is a Retry microservices design pattern
             HttpResponseMessage response = null;
+            var error = true;
             for (int i = 0; i < 5; i++)
             {
                 try
                 {
                     response = await client.GetAsync("/api/product");
+                    error = false;
                 }
                 catch
                 {
+                    error = true;
                     Thread.Sleep(2000);
                 }
-                if (response != null)
+                if (!error)
                 {
                     break;
                 }
