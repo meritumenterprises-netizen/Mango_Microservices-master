@@ -14,16 +14,13 @@ using Xango.Services.Utility;
 
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.ConfigureKestrel(options =>
-{
-#if DEBUG
-    CertificateInstaller.AddCertificateToTrustedRoot(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
-#endif
-    options.ListenAnyIP(7003, listenOptions =>
-    {
-        listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
-    });
-});
+//builder.WebHost.ConfigureKestrel(options =>
+//{
+//    options.ListenAnyIP(7003, listenOptions =>
+//    {
+//        listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
+//    });
+//});
 
 builder.WebHost.UseUrls("https://0.0.0.0:7003");
 // Add services to the container.
@@ -85,11 +82,8 @@ builder.Services.AddAuthorization();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 app.UseAuthentication();

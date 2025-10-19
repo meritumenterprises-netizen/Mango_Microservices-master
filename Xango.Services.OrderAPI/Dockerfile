@@ -13,8 +13,6 @@ ENV CURRENCY=USD
 
 ENV SQL_CONNECTION_STRING=Server="myhost,1433;Database=Xango_Order;User ID=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
 
-ENV CertificateName="devcertificate.pfx"
-ENV DevCertificatePassword=Password1!
 ENV AuthenticaionAPI="https://myhost:7002"
 ENV CouponAPI="https://myhost:7001"
 ENV ProductAPI="https://myhost:7005"

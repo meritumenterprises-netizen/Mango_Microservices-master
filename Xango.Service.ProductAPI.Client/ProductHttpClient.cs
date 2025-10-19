@@ -97,7 +97,7 @@ namespace Xango.Service.ProductAPI.Client
             // this is a Retry microservices design pattern
             HttpResponseMessage response = null;
             var error = true;
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < 10; i++)
             {
                 try
                 {

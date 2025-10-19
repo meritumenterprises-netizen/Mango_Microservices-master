@@ -36,4 +36,10 @@
     <ProjectReference Include="..\Xango.Services.Interfaces\Xango.Services.Interfaces.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Xango.pfx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

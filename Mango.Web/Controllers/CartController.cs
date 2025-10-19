@@ -144,14 +144,17 @@ namespace Xango.Web.Controllers
 
         private async Task<CartDto> LoadCartDtoBasedOnLoggedInUser()
         {
-            var userEmail = User.Claims.Where((claim) => claim.Type == "email").First().Value;
-            var response = await _authenticationClient.GetUser(userEmail);
-            var userDto = DtoConverter.ToDto<UserDto>(response);
-            ResponseDto? responseDto = await _shoppingCartClient.GetCartByUserId(userDto.Id);
-            if (responseDto != null & responseDto.IsSuccess)
+            if (User.Identity.IsAuthenticated)
             {
-                CartDto cartDto = JsonConvert.DeserializeObject<CartDto>(Convert.ToString(DtoConverter.ToResponseDto(responseDto).Result));
-                return cartDto;
+                var userEmail = User.Claims.Where((claim) => claim.Type == "email").First().Value;
+                var response = await _authenticationClient.GetUser(userEmail);
+                var userDto = DtoConverter.ToDto<UserDto>(response);
+                ResponseDto? responseDto = await _shoppingCartClient.GetCartByUserId(userDto.Id);
+                if (responseDto != null & responseDto.IsSuccess)
+                {
+                    CartDto cartDto = JsonConvert.DeserializeObject<CartDto>(Convert.ToString(DtoConverter.ToResponseDto(responseDto).Result));
+                    return cartDto;
+                }
             }
             return new CartDto();
         }

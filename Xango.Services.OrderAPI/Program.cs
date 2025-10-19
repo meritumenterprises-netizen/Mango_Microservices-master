@@ -11,17 +11,13 @@ using Xango.Services.Server.Utility;
 using Xango.Services.Server.Utility.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.ConfigureKestrel(options =>
-{
-#if DEBUG
-    CertificateInstaller.AddCertificateToTrustedRoot(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
-#endif
-
-    options.ListenAnyIP(7004, listenOptions =>
-    {
-        listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
-    });
-});
+//builder.WebHost.ConfigureKestrel(options =>
+//{
+//    //options.ListenAnyIP(7004, listenOptions =>
+//    //{
+//    //    listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
+//    //});
+//});
 
 builder.WebHost.UseUrls("https://0.0.0.0:7004");
 IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
@@ -90,12 +86,9 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
+app.UseSwagger();
+app.UseSwaggerUI();
 
-if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
 
 Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
 

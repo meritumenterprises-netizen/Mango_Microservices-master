@@ -12,8 +12,6 @@ ENV LC_ALL=en_US.UTF-8
 ENV CURRENCY=USD
 
 
-ENV CertificateName="devcertificate.pfx"
-ENV DevCertificatePassword=Password1!
 ENV AuthenticaionAPI="https://myhost:7002"
 ENV CouponAPI="https://myhost:7001"
 ENV ProductAPI="https://myhost:7005"

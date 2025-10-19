@@ -13,17 +13,13 @@ using Xango.Services.Server.Utility;
 using Xango.Services.Server.Utility.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.WebHost.ConfigureKestrel(options =>
-{
-#if DEBUG
-    CertificateInstaller.AddCertificateToTrustedRoot(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
-#endif
-    options.ListenAnyIP(7002, listenOptions =>
-    {
-        listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
-    });
-});
-
+//builder.WebHost.ConfigureKestrel(options =>
+//{
+//    //options.ListenAnyIP(7002, listenOptions =>
+//    //{
+//    //    listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
+//    //});
+//});
 builder.WebHost.UseUrls("https://0.0.0.0:7002");
 
 // Add services to the container.
@@ -77,22 +73,20 @@ builder.Services.AddHttpContextAccessor();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))
-    {
-        c.SwaggerEndpoint("/swagger/v1/swagger.json", "Auth API");
-        c.RoutePrefix = string.Empty;
-    }
-});
+app.UseSwaggerUI();
+
+// Configure the HTTP request pipeline.
+
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
 ApplyMigration();
+
 app.Run();
 
 void ApplyMigration()

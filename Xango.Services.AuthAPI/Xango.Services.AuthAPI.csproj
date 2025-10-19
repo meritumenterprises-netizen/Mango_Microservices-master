@@ -7,6 +7,9 @@
 		<DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
 		<DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
 	</PropertyGroup>
+	<ItemGroup>
+	  <None Remove="Dockerfile.original" />
+	</ItemGroup>
 	
 	<ItemGroup>
 		<PackageReference Include="AutoMapper" Version="15.0.1" />
@@ -41,6 +44,16 @@
 		<ProjectReference Include="..\Xango.Serrvices.Server.Utility\Xango.Serrvices.Server.Utility.csproj" />
 		<ProjectReference Include="..\Xango.Services.Client.Utility\Xango.Services.Client.Utility.csproj" />
 		<ProjectReference Include="..\Xango.Services.Dto\Xango.Services.Dto.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Remove="..\.dockerignore" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="Xango.pfx">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>
