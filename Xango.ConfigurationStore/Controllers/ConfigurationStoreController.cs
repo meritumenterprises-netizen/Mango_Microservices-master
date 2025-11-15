@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Xango.Models.Dto;
+using Xango.Services.Dto;
 
 namespace Xango.ConfigurationStore.Controllers
 {

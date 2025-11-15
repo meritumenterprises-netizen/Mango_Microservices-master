@@ -12,14 +12,14 @@ ENV LC_ALL=en_US.UTF-8
 ENV CURRENCY=USD
 
 
-ENV CertificateName="devcertificate.pfx"
+ENV CertificateName="devcertificate.cer"
 ENV DevCertificatePassword=Password1!
-ENV AuthenticaionAPI="https://myhost:7002"
-ENV CouponAPI="https://myhost:7001"
-ENV ProductAPI="https://myhost:7005"
-ENV ShoppingCartAPI="https://myhost:7003"
-ENV OrderAPI="https://myhost:7004"
-ENV InventoryAPI="https://myhost:7010"
+ENV AuthenticaionAPI="http://myhost:7002"
+ENV CouponAPI="http://myhost:7001"
+ENV ProductAPI="http://myhost:7005"
+ENV ShoppingCartAPI="http://myhost:7003"
+ENV OrderAPI="http://myhost:7004"
+ENV InventoryAPI="http://myhost:7010"
 
 
 

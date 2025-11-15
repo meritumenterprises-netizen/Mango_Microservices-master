@@ -14,16 +14,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-#if DEBUG
-    CertificateInstaller.AddCertificateToTrustedRoot(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
-#endif
-    options.ListenAnyIP(7001, listenOptions =>
-    {
-        listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
-    });
+    options.Configure(builder.Configuration.GetSection("Kestrel"));
 });
-
-builder.WebHost.UseUrls("https://0.0.0.0:7001");
 // Add services to the container.
 
 builder.Services.AddDbContext<AppDbContext>(option =>

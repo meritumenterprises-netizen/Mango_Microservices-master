@@ -12,18 +12,11 @@ using Xango.Services.Server.Utility.Extensions;
 using Xango.Web;
 
 var builder = WebApplication.CreateBuilder(args);
-#if DEBUG
-CertificateInstaller.AddCertificateToTrustedRoot(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
-#endif
+
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(7005, listenOptions =>
-    {
-        listenOptions.UseHttps(Environment.GetEnvironmentVariable("CertificateName"), Environment.GetEnvironmentVariable("DevCertificatePassword"));
-    });
+    options.Configure(builder.Configuration.GetSection("Kestrel"));
 });
-
-builder.WebHost.UseUrls("https://0.0.0.0:7005");
 
 // Add services to the container.
 
