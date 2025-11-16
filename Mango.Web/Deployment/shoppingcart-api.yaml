@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shoppingcart-api-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: shoppingcart-api
+  template:
+    metadata:
+      labels:
+        app: shoppingcart-api
+    spec:
+      containers:
+        - name: shoppingcart-api
+          image: shoppingcart-api:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 7003
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: shoppingcart-api
+spec:
+  selector:
+    app: shoppingcart-api
+  ports:
+    - port: 443
+      targetPort: 7003
+  type: ClusterIP

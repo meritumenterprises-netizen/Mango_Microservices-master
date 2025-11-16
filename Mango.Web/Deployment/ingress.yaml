@@ -1,0 +1,87 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: myhost-local-ingress
+  namespace: default
+  annotations:
+    # Use nginx (or your ingress class) – adjust if you use something else
+    kubernetes.io/ingress.class: nginx
+spec:
+  ingressClassName: nginx
+
+  # --- TLS on port 443 ---
+  tls:
+    - hosts:
+        - myhost.local
+      # IMPORTANT:
+      # Replace this with the name of the TLS secret that Docker Desktop
+      # created for you (or any kubernetes.io/tls secret you use).
+      secretName: myhost-local-tls
+
+  # --- Host & path routing rules ---
+  rules:
+    - host: myhost.local
+      http:
+        paths:
+          # ASP.NET MVC Web app at the root
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web-mvc
+                port:
+                  number: 80
+
+          # /api/coupon  -> coupon microservice
+          - path: /api/coupon
+            pathType: Prefix
+            backend:
+              service:
+                name: coupon-service
+                port:
+                  number: 80
+
+          # /api/auth -> auth microservice
+          - path: /api/auth
+            pathType: Prefix
+            backend:
+              service:
+                name: auth-service
+                port:
+                  number: 80
+
+          # /api/cart -> cart microservice
+          - path: /api/cart
+            pathType: Prefix
+            backend:
+              service:
+                name: cart-service
+                port:
+                  number: 80
+
+          # /api/order -> order microservice
+          - path: /api/order
+            pathType: Prefix
+            backend:
+              service:
+                name: order-service
+                port:
+                  number: 80
+
+          # /api/product -> product microservice
+          - path: /api/product
+            pathType: Prefix
+            backend:
+              service:
+                name: product-service
+                port:
+                  number: 80
+
+          # /api/inventory -> inventory microservice
+          - path: /api/inventory
+            pathType: Prefix
+            backend:
+              service:
+                name: inventory-service
+                port:
+                  number: 80

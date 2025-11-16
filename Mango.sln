@@ -53,34 +53,6 @@ Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-co
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{889AA4C7-BA45-481F-AF1F-8A8C11195C93}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{930DD25D-D248-4DA8-BE45-4710BF599440}"
-	ProjectSection(SolutionItems) = preProject
-		mssql-pv.yaml = mssql-pv.yaml
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kubernetes", "Kubernetes", "{670C44A6-00D7-42C1-AA92-9CBCDC368080}"
-	ProjectSection(SolutionItems) = preProject
-		Kubernetes\auth-api.yaml = Kubernetes\auth-api.yaml
-		BuildDockerImages.bat = BuildDockerImages.bat
-		Kubernetes\coupon-api.yaml = Kubernetes\coupon-api.yaml
-		Kubernetes\DeployYaml.bat = Kubernetes\DeployYaml.bat
-		Kubernetes\ingress.yaml = Kubernetes\ingress.yaml
-		Kubernetes\inventory-api.yaml = Kubernetes\inventory-api.yaml
-		Kubernetes\mssql.yaml = Kubernetes\mssql.yaml
-		Kubernetes\order-api.yaml = Kubernetes\order-api.yaml
-		Kubernetes\product-api.yaml = Kubernetes\product-api.yaml
-		Kubernetes\shoppingcart-api.yaml = Kubernetes\shoppingcart-api.yaml
-		Kubernetes\ui.yaml = Kubernetes\ui.yaml
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TLS", "TLS", "{191B7B99-5630-4781-8282-7D414341E7D2}"
-	ProjectSection(SolutionItems) = preProject
-		CreateKubernetesSecret.bat = CreateKubernetesSecret.bat
-		myhost.local-key.pem = myhost.local-key.pem
-		myhost.local.pem = myhost.local.pem
-		ValidateKubernetesSecretStoredProperly.bat = ValidateKubernetesSecretStoredProperly.bat
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Angular", "Angular", "{77FD03BB-32A5-42B7-8550-3F43A818A0C2}"
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Xango.Angular.Application", "Xango.Angular.Application\", "{16CB4228-7030-6766-73B0-C89E485751F8}"
@@ -212,8 +184,6 @@ Global
 		{22540ADB-1650-4638-863D-09C30C74F786} = {8C19D64C-29AC-4997-9035-6664E2B8CA97}
 		{DC634FFD-D74D-4516-AF70-721C02A483D8} = {8C19D64C-29AC-4997-9035-6664E2B8CA97}
 		{3BA5D37A-F27C-49F7-96EC-4F62A9C37DA7} = {8C19D64C-29AC-4997-9035-6664E2B8CA97}
-		{670C44A6-00D7-42C1-AA92-9CBCDC368080} = {930DD25D-D248-4DA8-BE45-4710BF599440}
-		{191B7B99-5630-4781-8282-7D414341E7D2} = {930DD25D-D248-4DA8-BE45-4710BF599440}
 		{77FD03BB-32A5-42B7-8550-3F43A818A0C2} = {9DBEDFC7-6695-43A2-A386-869558CE9FCA}
 		{16CB4228-7030-6766-73B0-C89E485751F8} = {77FD03BB-32A5-42B7-8550-3F43A818A0C2}
 	EndGlobalSection
