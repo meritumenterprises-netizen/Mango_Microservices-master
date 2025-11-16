@@ -18,6 +18,19 @@ builder.WebHost.ConfigureKestrel(options =>
     options.Configure(builder.Configuration.GetSection("Kestrel"));
 });
 
+#if DEBUG
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowAll",
+		policy =>
+		{
+			policy.AllowAnyOrigin()
+				  .AllowAnyHeader()
+				  .AllowAnyMethod();
+		});
+});
+#endif
+
 // Add services to the container.
 
 builder.Services.AddDbContext<AppDbContext>(option =>
@@ -61,6 +74,9 @@ builder.AddAppAuthetication();
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+#if DEBUG
+app.UseCors("AllowAll");
+#endif
 
 // Configure the HTTP request pipeline.
 app.UseSwagger();
