@@ -81,6 +81,29 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TLS", "TLS", "{191B7B99-563
 		ValidateKubernetesSecretStoredProperly.bat = ValidateKubernetesSecretStoredProperly.bat
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Angular", "Angular", "{77FD03BB-32A5-42B7-8550-3F43A818A0C2}"
+EndProject
+Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Xango.Angular.Application", "Xango.Angular.Application\", "{16CB4228-7030-6766-73B0-C89E485751F8}"
+	ProjectSection(WebsiteProperties) = preProject
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.8.1"
+		Debug.AspNetCompiler.VirtualPath = "/localhost_58233"
+		Debug.AspNetCompiler.PhysicalPath = "Xango.Angular.Application\"
+		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_58233\"
+		Debug.AspNetCompiler.Updateable = "true"
+		Debug.AspNetCompiler.ForceOverwrite = "true"
+		Debug.AspNetCompiler.FixedNames = "false"
+		Debug.AspNetCompiler.Debug = "True"
+		Release.AspNetCompiler.VirtualPath = "/localhost_58233"
+		Release.AspNetCompiler.PhysicalPath = "Xango.Angular.Application\"
+		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\localhost_58233\"
+		Release.AspNetCompiler.Updateable = "true"
+		Release.AspNetCompiler.ForceOverwrite = "true"
+		Release.AspNetCompiler.FixedNames = "false"
+		Release.AspNetCompiler.Debug = "False"
+		VWDPort = "58233"
+		SlnRelativePath = "Xango.Angular.Application\"
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -159,6 +182,10 @@ Global
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{81DDED9D-158B-E303-5F62-77A2896D2A5A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16CB4228-7030-6766-73B0-C89E485751F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16CB4228-7030-6766-73B0-C89E485751F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16CB4228-7030-6766-73B0-C89E485751F8}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{16CB4228-7030-6766-73B0-C89E485751F8}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -187,6 +214,8 @@ Global
 		{3BA5D37A-F27C-49F7-96EC-4F62A9C37DA7} = {8C19D64C-29AC-4997-9035-6664E2B8CA97}
 		{670C44A6-00D7-42C1-AA92-9CBCDC368080} = {930DD25D-D248-4DA8-BE45-4710BF599440}
 		{191B7B99-5630-4781-8282-7D414341E7D2} = {930DD25D-D248-4DA8-BE45-4710BF599440}
+		{77FD03BB-32A5-42B7-8550-3F43A818A0C2} = {9DBEDFC7-6695-43A2-A386-869558CE9FCA}
+		{16CB4228-7030-6766-73B0-C89E485751F8} = {77FD03BB-32A5-42B7-8550-3F43A818A0C2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {929D2BC7-133A-46CF-89C4-0315B8019576}
