@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: order-api
-          image: xangoservicesorderapi:latest
+          image: order-api:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 7004
@@ -22,11 +22,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: xangoservicesorderapi
+  name: order-api
 spec:
   selector:
     app: order-api
   ports:
-    - port: 7004
+    - port: 443
       targetPort: 7004
   type: ClusterIP

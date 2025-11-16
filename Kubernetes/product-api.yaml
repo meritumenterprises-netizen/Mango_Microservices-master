@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: product-api
-          image: xangoservicesproductapi:latest
+          image: product-api:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 7005
@@ -22,11 +22,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: xangoservicesproductapi
+  name: product-api
 spec:
   selector:
     app: product-api
   ports:
-    - port: 7005
+    - port: 443
       targetPort: 7005
   type: ClusterIP

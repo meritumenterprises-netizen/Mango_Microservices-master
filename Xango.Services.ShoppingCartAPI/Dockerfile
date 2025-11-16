@@ -4,24 +4,21 @@
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 USER $APP_UID
 WORKDIR /app
-EXPOSE 7003
+EXPOSE 80
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 ENV CURRENCY=USD
 
+ENV AuthenticaionAPI="http://auth-api.default.svc.cluster.local"
+ENV CouponAPI="http://coupon-api.default.svc.cluster.local"
+ENV ProductAPI="http://product-api.default.svc.cluster.local"
+ENV ShoppingCartAPI="http://shoppingcart-api.default.svc.cluster.local"
+ENV OrderAPI="http://order-api.default.svc.cluster.local"
+ENV InventoryAPI="http://inventory-api.default.svc.cluster.local"
 
-ENV CertificateName="devcertificate.cer"
-ENV DevCertificatePassword=Password1!
-ENV AuthenticaionAPI="http://myhost:7002"
-ENV CouponAPI="http://myhost:7001"
-ENV ProductAPI="http://myhost:7005"
-ENV ShoppingCartAPI="http://myhost:7003"
-ENV OrderAPI="http://myhost:7004"
-ENV InventoryAPI="http://myhost:7010"
-
-ENV SQL_CONNECTION_STRING=Server="myhost,1433;Database=Xango_Order;User ID=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
+ENV SQL_CONNECTION_STRING=Server="tcp:mssql.default.svc.cluster.local,1433;Database=Xango_Product;User ID=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build

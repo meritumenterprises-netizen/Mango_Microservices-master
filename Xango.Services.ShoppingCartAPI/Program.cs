@@ -36,11 +36,11 @@ builder.Services.AddScoped<IAuthenticationHttpClient, AuthenticationHttpClient>(
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 
 builder.Services.AddHttpClient("Product", u => u.BaseAddress =
-new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+new Uri(Environment.GetEnvironmentVariable("ProductAPI"))).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddHttpClient("Coupon", u => u.BaseAddress =
-new Uri(builder.Configuration["ServiceUrls:CouponAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+new Uri(Environment.GetEnvironmentVariable("CouponAPI"))).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddHttpClient("Auth", u => u.BaseAddress =
-new Uri(builder.Configuration["ServiceUrls:AuthenticationAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+new Uri(Environment.GetEnvironmentVariable("AuthenticationAPI"))).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 
 builder.Services.AddScoped<ICouponHttpClient, CouponHttpClient>();
 

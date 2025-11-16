@@ -44,10 +44,10 @@ builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 
 builder.Services.AddMemoryCache();
 builder.Services.AddHttpClient("Product", u => u.BaseAddress =
-new Uri(builder.Configuration["ServiceUrls:ProductAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+new Uri(Environment.GetEnvironmentVariable("ProductAPI"))).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddControllers();
 builder.Services.AddHttpClient("Inventory", u => u.BaseAddress =
-new Uri(builder.Configuration["ServiceUrls:InventoryAPI"])).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
+new Uri(Environment.GetEnvironmentVariable("InventoryAPI"))).AddHttpMessageHandler<BackendApiAuthenticationHttpClientHandler>();
 
 
 builder.Services.AddEndpointsApiExplorer();

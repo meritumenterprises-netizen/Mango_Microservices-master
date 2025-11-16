@@ -1,59 +1,59 @@
 services:
-  xango.services.authapi:
+  auth-api:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "7002:7002"
+      - "192.168.0.134:80:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-  xango.services.couponapi:
+  coupon-api:
     environment:  
     - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "7001:7001"
+      - "192.168.0.135:80:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-  xango.services.inventoryapi:
+  inventory-api:
     environment:  
     - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "7010:7010"
+      - "192.168.0.139:80:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-  xango.services.productapi:
+  product-api:
     environment:  
     - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "7005:7005"
+      - "192.168.0.136:80:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro 
-  xango.services.orderapi:
+  order-api:
     environment:  
     - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "7004:7004"
+      - "192.168.0.138:80:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
-  xango.services.shoppingcartapi:
+  shoppingcart-api:
     environment:  
     - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "7003:7003"
+      - "192.168.0.137:80:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
@@ -63,16 +63,16 @@ services:
     environment:  
     - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "7167:7167"
+      - "192.168.0.133:80:80"
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
     depends_on:
-      - xango.services.productapi
+      - product-api
     labels:
       - "com.microsoft.visualstudio.debuggee.openBrowser=true"
-      - "com.microsoft.visualstudio.debuggee.url=https://myhost:7167"
+      - "com.microsoft.visualstudio.debuggee.url=http://myhost.local"
 
   

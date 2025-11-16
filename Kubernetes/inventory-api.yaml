@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: inventory-api
-          image: xangoservicesinventoryapi:latest
+          image: inventory-api:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 7010
@@ -22,11 +22,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: xangoservicesinventoryapi
+  name: inventory-api
 spec:
   selector:
     app: inventory-api
   ports:
-    - port: 7010
+    - port: 443
       targetPort: 7010
   type: ClusterIP

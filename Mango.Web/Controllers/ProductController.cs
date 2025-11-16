@@ -1,12 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Abp.IO.Extensions;
+using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Xango.Models.Dto;
 using Xango.Service.ProductAPI.Client;
 using Xango.Services.Client.Utility;
-using Xango.Services.Interfaces;
-using Microsoft.AspNetCore.Http;
-using AutoMapper;
 using Xango.Services.Dto;
-using Abp.IO.Extensions;
+using Xango.Services.Interfaces;
 
 namespace Xango.Web.Controllers
 {
@@ -39,13 +40,15 @@ namespace Xango.Web.Controllers
             return View(list);
         }
 
-        public async Task<IActionResult> ProductCreate()
+		[Authorize(Roles = "ADMIN")]
+		public async Task<IActionResult> ProductCreate()
         {
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> ProductCreate(ProductDto model)
+		[Authorize(Roles = "ADMIN")]
+		public async Task<IActionResult> ProductCreate(ProductDto model)
         {
             if (ModelState.IsValid)
             {
@@ -72,7 +75,8 @@ namespace Xango.Web.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> DeleteProduct(int productId)
+		[Authorize(Roles = "ADMIN")]
+		public async Task<IActionResult> DeleteProduct(int productId)
         {
             var response = await _productHttpClient.DeleteProduct(productId);
 
@@ -88,7 +92,8 @@ namespace Xango.Web.Controllers
             return NotFound();
         }
 
-        public async Task<IActionResult> ProductEdit(int productId)
+		[Authorize(Roles = "ADMIN")]
+		public async Task<IActionResult> ProductEdit(int productId)
         {
             ResponseDto? response = await _productHttpClient.GetProductById(productId);
 
@@ -105,7 +110,8 @@ namespace Xango.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> ProductEdit(ProductDto productDto)
+		[Authorize(Roles = "ADMIN")]
+		public async Task<IActionResult> ProductEdit(ProductDto productDto)
         {
             if (ModelState.IsValid)
             {

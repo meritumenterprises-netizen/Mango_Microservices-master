@@ -3,13 +3,13 @@
     "Container (Dockerfile)": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "http://myhost:7003/index.html",
+      "launchUrl": "http://shoppingcart-api.default.svc.cluster.local/index.html",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "http://myhost:7003"
+        "ASPNETCORE_URLS": "http://shoppingcart-api.default.svc.cluster.local"
       },
       "publishAllPorts": false,
       "useSSL": false,
-      "httpPort": 7003
+      "httpPort": 80
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",

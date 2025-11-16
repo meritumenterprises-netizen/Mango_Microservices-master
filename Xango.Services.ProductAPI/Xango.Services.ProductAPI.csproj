@@ -19,9 +19,6 @@
   <None Update="Certs\aspnetapp.pfx">
     <CopyToOutputDirectory>Always</CopyToOutputDirectory>
   </None>
-  <None Update="Xango.pfx">
-    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-  </None>
 </ItemGroup>
 
   <ItemGroup>

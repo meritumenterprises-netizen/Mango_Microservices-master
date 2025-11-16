@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: shoppingcart-api
-          image: xangoservicesshoppingcartapi:latest
+          image: shoppingcart-api:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 7003
@@ -22,11 +22,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: xangoservicesshoppingcartapi
+  name: shoppingcart-api
 spec:
   selector:
     app: shoppingcart-api
   ports:
-    - port: 7003
+    - port: 443
       targetPort: 7003
   type: ClusterIP

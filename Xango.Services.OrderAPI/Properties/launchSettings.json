@@ -3,13 +3,13 @@
     "Container (Dockerfile)": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "http://myhost:7004/index.html",
+      "launchUrl": "http://order-api.default.svc.cluster.local/index.html",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "http://myhost:7004"
+        "ASPNETCORE_URLS": "http://order-api.default.svc.cluster.local"
       },
       "publishAllPorts": true,
       "useSSL": false,
-      "httpPort": 7004
+      "httpPort": 80
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
@@ -17,7 +17,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://myhost:3189",
+      "applicationUrl": "http://myhost.local:3189",
       "sslPort": 44306
     }
   }

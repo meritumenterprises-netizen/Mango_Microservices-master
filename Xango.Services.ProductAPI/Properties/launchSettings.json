@@ -3,13 +3,13 @@
     "Container (Dockerfile)": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "http://myhost:7005/index.html",
+      "launchUrl": "http://product-api.default.svc.cluster.local/index.html",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "http://myhost:7005"
+        "ASPNETCORE_URLS": "http://product-api.default.svc.cluster.local"
       },
       "publishAllPorts": true,
       "useSSL": false,
-      "httpPort": 7005
+      "httpPort": 80
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
@@ -17,7 +17,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://myhost:13780",
+      "applicationUrl": "http://myhost.local:13780",
       "sslPort": 44341
     }
   }

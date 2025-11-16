@@ -45,10 +45,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="NewFolder\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Update="Xango.pfx">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

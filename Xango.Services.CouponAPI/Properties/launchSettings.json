@@ -3,13 +3,13 @@
     "Container (Dockerfile)": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "http://myhost:7001/index.html",
+      "launchUrl": "http://coupon-api.default.svc.cluster.local/index.html",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "http://myhost:7001"
+        "ASPNETCORE_URLS": "http://coupon-api.default.svc.cluster.local"
       },
       "publishAllPorts": false,
       "useSSL": false,
-      "httpPort": 7001
+      "httpPort": 80
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
@@ -17,7 +17,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://myhost:36830",
+      "applicationUrl": "http://myhost.local:36830",
       "sslPort": 44381
     }
   }

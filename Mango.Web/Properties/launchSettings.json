@@ -3,13 +3,13 @@
     "Container (Dockerfile)": {
       "commandName": "Docker",
       "launchBrowser": true,
-      "launchUrl": "http://myhost:7167",
+      "launchUrl": "http://myhost.local:80",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "http://myhost:7167"
+        "ASPNETCORE_URLS": "http://myhost.local:80"
       },
       "publishAllPorts": false,
       "useSSL": false,
-      "httpPort": 7167
+      "httpPort": 80
     }
   },
   "$schema": "http://json.schemastore.org/launchsettings.json",
@@ -17,7 +17,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://myhost:11750",
+      "applicationUrl": "http://myhost.local:11750",
       "sslPort": 44370
     }
   }

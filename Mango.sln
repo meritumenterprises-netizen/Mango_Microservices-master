@@ -55,13 +55,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{930DD25D-D248-4DA8-BE45-4710BF599440}"
 	ProjectSection(SolutionItems) = preProject
-		BuildDockerImages.bat = BuildDockerImages.bat
 		mssql-pv.yaml = mssql-pv.yaml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kubernetes", "Kubernetes", "{670C44A6-00D7-42C1-AA92-9CBCDC368080}"
 	ProjectSection(SolutionItems) = preProject
 		Kubernetes\auth-api.yaml = Kubernetes\auth-api.yaml
+		BuildDockerImages.bat = BuildDockerImages.bat
 		Kubernetes\coupon-api.yaml = Kubernetes\coupon-api.yaml
 		Kubernetes\DeployYaml.bat = Kubernetes\DeployYaml.bat
 		Kubernetes\ingress.yaml = Kubernetes\ingress.yaml
@@ -71,6 +71,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kubernetes", "Kubernetes", 
 		Kubernetes\product-api.yaml = Kubernetes\product-api.yaml
 		Kubernetes\shoppingcart-api.yaml = Kubernetes\shoppingcart-api.yaml
 		Kubernetes\ui.yaml = Kubernetes\ui.yaml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TLS", "TLS", "{191B7B99-5630-4781-8282-7D414341E7D2}"
+	ProjectSection(SolutionItems) = preProject
+		CreateKubernetesSecret.bat = CreateKubernetesSecret.bat
+		myhost.local-key.pem = myhost.local-key.pem
+		myhost.local.pem = myhost.local.pem
+		ValidateKubernetesSecretStoredProperly.bat = ValidateKubernetesSecretStoredProperly.bat
 	EndProjectSection
 EndProject
 Global
@@ -178,6 +186,7 @@ Global
 		{DC634FFD-D74D-4516-AF70-721C02A483D8} = {8C19D64C-29AC-4997-9035-6664E2B8CA97}
 		{3BA5D37A-F27C-49F7-96EC-4F62A9C37DA7} = {8C19D64C-29AC-4997-9035-6664E2B8CA97}
 		{670C44A6-00D7-42C1-AA92-9CBCDC368080} = {930DD25D-D248-4DA8-BE45-4710BF599440}
+		{191B7B99-5630-4781-8282-7D414341E7D2} = {930DD25D-D248-4DA8-BE45-4710BF599440}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {929D2BC7-133A-46CF-89C4-0315B8019576}

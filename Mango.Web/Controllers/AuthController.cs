@@ -26,7 +26,7 @@ namespace Xango.Web.Controllers
         {
             _tokenProvider = tokenProvider;
             _authenticationClient = authenticationClient;
-            _baseUri = configuration["ServiceUrls:AuthenticationAPI"];
+            _baseUri = Environment.GetEnvironmentVariable("AuthenticationAPI");
         }
 
         [HttpGet]

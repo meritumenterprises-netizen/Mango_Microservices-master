@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: coupon-api
-          image: xangoservicescouponapi:latest
+          image: coupon-api:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 7001
@@ -22,11 +22,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: xangoservicescouponapi
+  name: coupon-api
 spec:
   selector:
     app: coupon-api
   ports:
-    - port: 7001
+    - port: 443
       targetPort: 7001
   type: ClusterIP

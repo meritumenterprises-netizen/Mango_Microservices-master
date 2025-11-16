@@ -1,52 +1,138 @@
+networks:
+  appnet:
+
 services:
   sqlserver:
     image: mcr.microsoft.com/mssql/server:2022-latest
+    extra_hosts:
+      - "mssql.default.svc.cluster.local:192.168.0.140"
     container_name: sqlserver
     environment:
       SA_PASSWORD: "YourStrong!Passw0rd"
       ACCEPT_EULA: "Y"
+    networks:
+      appnet:
+        aliases:
+          - mssql.default.svc.cluster.local
     ports:
-      - "1433:1433"
-  xango.services.authapi:
-    image: ${DOCKER_REGISTRY-}xangoservicesauthapi
+      - "192.168.0.140:1433:1433"
+  auth-api:
+    image: ${DOCKER_REGISTRY-}authapi
+    extra_hosts:
+      auth-api.default.svc.cluster.local : 192.168.0.134
+    networks:
+      appnet:
+        aliases:
+          - auth-api.default.svc.cluster.local
+    ports:
+      - "192.168.0.134:80:80"
+    environment:
+        - ASPNETCORE_URLS=http://auth-api.default.svc.cluster.local:80
     build:
       context: .
       dockerfile: Xango.Services.AuthAPI/Dockerfile
     depends_on:
        - sqlserver
-  xango.services.couponapi:
-    image: ${DOCKER_REGISTRY-}xangoservicescouponapi
+  coupon-api:
+    image: ${DOCKER_REGISTRY-}couponapi
+    extra_hosts:
+      coupon-api.default.svc.cluster.local : 192.168.0.135
+      shoppingcart-api.default.svc.cluster.local : 192.168.0.137
+    networks:
+      appnet:
+        aliases:
+          - coupon-api.default.svc.cluster.local
+    environment:
+        - ASPNETCORE_URLS=http://coupon-api.default.svc.cluster.local:80
+    ports:
+      - "192.168.0.135:80:80"
     build:
        context: .
        dockerfile: Xango.Services.CouponAPI/Dockerfile
     depends_on:
        - sqlserver
-  xango.services.inventoryapi:
-    image: ${docker_registry-}xangoservicesinventoryapi
+  inventory-api:
+    image: ${docker_registry-}inventoryapi
+    extra_hosts:
+      coupon-api.default.svc.cluster.local : 192.168.0.135
+      shoppingcart-api.default.svc.cluster.local : 192.168.0.137
+      inventory-api.default.svc.cluster.local : 192.168.0.139
+    networks:
+      appnet:
+        aliases:
+          - inventory-api.default.svc.cluster.local
+    ports:
+      - "192.168.0.139:80:80"
+    environment:
+        - ASPNETCORE_URLS=http://inventory-api.default.svc.cluster.local:80
     build:
        context: .
        dockerfile: Xango.Services.InventoryAPI/Dockerfile
     depends_on:
        - sqlserver
-  xango.services.productapi:
-    image: ${docker_registry-}xangoservicesproductapi
+  product-api:
+    image: ${docker_registry-}productapi
+    extra_hosts:
+      auth-api.default.svc.cluster.local : 192.168.0.134
+      coupon-api.default.svc.cluster.local : 192.168.0.135
+      product-api.default.svc.cluster.local : 192.168.0.136
+      shoppingcart-api.default.svc.cluster.local : 192.168.0.137
+      inventory-api.default.svc.cluster.local : 192.168.0.139
+    networks:
+      appnet:
+        aliases:
+        - product-api.default.svc.cluster.local
+    ports:
+      - "192.168.0.136:80:80"
+    environment:
+        - ASPNETCORE_URLS=http://product-api.default.svc.cluster.local:80
     build:
        context: .
        dockerfile: Xango.Services.ProductAPI/Dockerfile
     depends_on:
        - sqlserver
-       - xango.services.authapi
-       - xango.services.inventoryapi
-       - xango.services.orderapi
-  xango.services.orderapi:
-    image: ${docker_registry-}xangoservicesorderapi
+       - auth-api
+       - inventory-api
+       - order-api
+  order-api:
+    image: ${docker_registry-}orderapi
+    extra_hosts:
+      auth-api.default.svc.cluster.local : 192.168.0.134
+      coupon-api.default.svc.cluster.local : 192.168.0.135
+      product-api.default.svc.cluster.local : 192.168.0.136
+      shoppingcart-api.default.svc.cluster.local : 192.168.0.137
+      order-api.default.svc.cluster.local : 192.168.0.138
+      inventory-api.default.svc.cluster.local : 192.168.0.139
+    networks:
+      appnet:
+        aliases:
+          - order-api.default.svc.cluster.local
+    ports:
+      - "192.168.0.138:80:80"
+    environment:
+        - ASPNETCORE_URLS=http://order-api.default.svc.cluster.local:80
     build:
        context: .
        dockerfile: Xango.Services.OrderAPI/Dockerfile
     depends_on:
        - sqlserver
-  xango.services.shoppingcartapi:
-    image: ${docker_registry-}xangoservicesshoppingcartapi
+  shoppingcart-api:
+    image: ${docker_registry-}shoppingcartapi
+    extra_hosts:
+      auth-api.default.svc.cluster.local : 192.168.0.134
+      coupon-api.default.svc.cluster.local : 192.168.0.135
+      product-api.default.svc.cluster.local : 192.168.0.136
+      shoppingcart-api.default.svc.cluster.local : 192.168.0.137
+      order-api.default.svc.cluster.local : 192.168.0.138
+      inventory-api.default.svc.cluster.local : 192.168.0.139
+    networks:
+      appnet:
+        aliases:
+          - shoppingcart-api.default.svc.cluster.local
+    ports:
+      - "192.168.0.137:80:80"
+    environment:
+        - ASPNETCORE_URLS=http://shoppingcart-api.default.svc.cluster.local:80
     build:
        context: .
        dockerfile: Xango.Services.ShoppingCartAPI/Dockerfile
@@ -54,16 +140,36 @@ services:
        - sqlserver
   xango.web:
     image: ${docker_registry-}xangoweb
+    extra_hosts:
+      auth-api.default.svc.cluster.local : 192.168.0.134
+      coupon-api.default.svc.cluster.local : 192.168.0.135
+      product-api.default.svc.cluster.local : 192.168.0.136
+      shoppingcart-api.default.svc.cluster.local : 192.168.0.137
+      order-api.default.svc.cluster.local : 192.168.0.138
+      inventory-api.default.svc.cluster.local : 192.168.0.139
+    networks:
+      appnet:
+        aliases:
+          - myhost.local
+          - auth-api.default.svc.cluster.local
+          - coupon-api.default.svc.cluster.local
+          - inventory-api.default.svc.cluster.local
+          - product-api.default.svc.cluster.local
+          - order-api.default.svc.cluster.local
+          - shoppingcart-api.default.svc.cluster.local
+    ports:
+      - "192.168.0.133:80:80"
+    environment:
+        - ASPNETCORE_URLS=http://myhost.local:80
     build:
        context: .
        dockerfile: Mango.Web/Dockerfile
     depends_on:
-      - sqlserver
-      - xango.services.authapi
-      - xango.services.couponapi
-      - xango.services.inventoryapi
-      - xango.services.orderapi
-      - xango.services.shoppingcartapi
-      - xango.services.productapi
+      - auth-api
+      - coupon-api
+      - inventory-api
+      - order-api
+      - shoppingcart-api
+      - product-api
   
   

@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: auth-api
-          image: xangoservicesauthapi:latest
+          image: auth-api:latest
           imagePullPolicy: Never
           ports:
             - containerPort: 7002
@@ -22,11 +22,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: xangoservicesauthapi
+  name: auth-api
 spec:
   selector:
     app: auth-api
   ports:
-    - port: 7002
+    - port: 443
       targetPort: 7002
   type: ClusterIP
