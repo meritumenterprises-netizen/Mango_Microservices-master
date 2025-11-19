@@ -44,8 +44,9 @@ namespace Xango.Services.AuthAPI.Service
                 Id = user.Id,
                 Email = user.Email,
                 Name = user.Name,
-                PhoneNumber = user.PhoneNumber
-            };
+                PhoneNumber = user.PhoneNumber,
+                Role = (await _userManager.GetRolesAsync(user)).FirstOrDefault()
+			};
         }
 
         public async Task<UserDto> GetUserById(string id)
@@ -62,8 +63,9 @@ namespace Xango.Services.AuthAPI.Service
                 Id = user.Id,
                 Email = user.Email,
                 Name = user.Name,
-                PhoneNumber = user.PhoneNumber
-            };
+                PhoneNumber = user.PhoneNumber,
+				Role = (await _userManager.GetRolesAsync(user)).FirstOrDefault()
+			};
         }
 
         public async Task<LoginResponseDto> Login(LoginRequestDto loginRequestDto)
@@ -82,7 +84,8 @@ namespace Xango.Services.AuthAPI.Service
             var roles = await _userManager.GetRolesAsync(user);
             var token = _jwtTokenGenerator.GenerateToken(user, roles);
             var userDto = _mapper.Map<UserDto>(user);
-            LoginResponseDto loginResponseDto = new LoginResponseDto()
+            userDto.Role = roles.FirstOrDefault();
+			LoginResponseDto loginResponseDto = new LoginResponseDto()
             {
                 User = userDto,
                 Token = token
