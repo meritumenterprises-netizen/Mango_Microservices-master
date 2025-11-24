@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
-using Xango.Services.CouponAPI.Data;
-using Xango.Services.CouponAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Xango.Models.Dto;
 using Xango.Services.Client.Utility;
+using Xango.Services.CouponAPI.Data;
+using Xango.Services.CouponAPI.Models;
 using Xango.Services.Utility;
 
 namespace Xango.Services.CouponAPI.Controllers
@@ -27,7 +28,8 @@ namespace Xango.Services.CouponAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ResponseDto> Get()
+		[Authorize(Roles = "ADMIN")]
+		public async Task<ResponseDto> Get()
         {
             try
             {
@@ -80,6 +82,10 @@ namespace Xango.Services.CouponAPI.Controllers
             try
             {
                 couponDto.CouponId = 0;
+				if (_db.Coupons.ToList().FirstOrDefault((c) => c.CouponCode.ToLowerInvariant() == couponDto.CouponCode.ToLowerInvariant()) != null)
+				{
+                    throw new ApplicationException($"Coupon with code {couponDto.CouponCode} already exists");
+                }
                 Coupon obj = _mapper.Map<Coupon>(couponDto);
                 _db.Coupons.Add(obj);
                 _db.SaveChanges();
@@ -107,15 +113,35 @@ namespace Xango.Services.CouponAPI.Controllers
 
         [HttpPut]
         [Authorize(Roles = "ADMIN")]
-        public ResponseDto Put([FromBody] CouponDto couponDto)
+        public ResponseDto Put(CouponDto couponDto)
         {
             try
             {
-                Coupon obj = _mapper.Map<Coupon>(couponDto);
-                _db.Coupons.Update(obj);
-                _db.SaveChanges();
+                if (_db.Coupons.ToList().FirstOrDefault((c) => 
+                    c.CouponCode.ToLowerInvariant() == couponDto.CouponCode.ToLowerInvariant() &&
+                    c.CouponId != couponDto.CouponId) != null)
+                {
+                    throw new ApplicationException($"Coupon with code {couponDto.CouponCode} already exists");
+                }
 
-                _response.Result = _mapper.Map<CouponDto>(obj);
+                var existing = _db.Coupons.Find(couponDto.CouponId);
+				if (existing == null)
+				{
+                    throw new ApplicationException("Coupon not found");
+				}
+
+				// Map only the properties you want to update:
+				existing.CouponCode = couponDto.CouponCode;
+				existing.DiscountAmount = couponDto.DiscountAmount;
+				existing.MinAmount = couponDto.MinAmount;
+
+				_db.SaveChanges();
+
+				//Coupon obj = _mapper.Map<Coupon>(couponDto);
+    //            _db.Coupons.Update(obj);
+    //            _db.SaveChanges();
+
+                _response.Result = _mapper.Map<CouponDto>(existing);
             }
             catch (Exception ex)
             {

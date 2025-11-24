@@ -18,7 +18,7 @@ ENV ShoppingCartAPI="http://shoppingcart-api.default.svc.cluster.local"
 ENV OrderAPI="http://order-api.default.svc.cluster.local"
 ENV InventoryAPI="http://inventory-api.default.svc.cluster.local"
 
-ENV SQL_CONNECTION_STRING=Server="tcp:mssql.default.svc.cluster.local,1433;Database=Xango_Product;User ID=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
+ENV SQL_CONNECTION_STRING=Server="tcp:mssql.default.svc.cluster.local,1433;Database=Xango_Cart;User ID=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
