@@ -56,15 +56,15 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
                 cart.CartHeader.Phone = userDto.PhoneNumber;
                 cart.CartDetails = _mapper.Map<List<CartDetailsDto>>(_db.CartDetails.Where(u => u.CartHeaderId == cart.CartHeader.CartHeaderId));
 
-                List<ProductDto> productDtos = DtoConverter.ToDto<List<ProductDto>>(await _productHttpClient.GetAllProducts());
-
                 var cartDetailsToDelete = new List<CartDetailsDto>();
                 foreach (var item in cart.CartDetails)
                 {
-                    item.Product = productDtos.FirstOrDefault(u => u.ProductId == item.ProductId);
-                    if (item.Product != null)
+                    var existingProductResponse = await _productHttpClient.GetProductById(item.ProductId);
+                    ProductDto? existingProduct = existingProductResponse.IsSuccess ? DtoConverter.ToDto<ProductDto>(Convert.ToString(existingProductResponse.Result)) : null;
+                    if (existingProduct != null)
                     {
-                        cart.CartHeader.CartTotal += (item.Count * item.Product.Price);
+                        item.Product = existingProduct;
+                        cart.CartHeader.CartTotal += (item.Count * existingProduct.Price);
                     }
                     else
                     {
@@ -77,8 +77,8 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
                     cart.CartDetails.Remove(detail);
                 }
 
-                //apply coupon if any
-                if (!string.IsNullOrEmpty(cart.CartHeader.CouponCode))
+                //apply coupon if any and if the shopping cart is not empty
+                if (cart.CartDetails?.Count() > 0 && !string.IsNullOrEmpty(cart.CartHeader.CouponCode))
                 {
                     //CouponDto coupon = await _couponService.GetCoupon(cart.CartHeader.CouponCode);
 
