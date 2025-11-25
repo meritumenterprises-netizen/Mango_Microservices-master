@@ -68,7 +68,11 @@ namespace Xango.Services.ProductAPI.Controllers
             try
             {
                 Product product = _mapper.Map<Product>(ProductDto);
-                _db.Products.Add(product);
+                if (_db.Products.Any(u => u.Name.ToLower() == product.Name.ToLower()))
+                {
+                    return ResponseProducer.ErrorResponse("Product with that name already exists!");
+				}
+				_db.Products.Add(product);
                 _db.SaveChanges();
 
                 if (!string.IsNullOrEmpty(ProductDto.Base64Image))
@@ -123,9 +127,12 @@ namespace Xango.Services.ProductAPI.Controllers
                     product.ImageUrl = baseUrl + "/ProductImages/" + fileName;
                     product.ImageLocalPath = filePath;
                 }
+				else
+				{
+					product.ImageUrl = "https://placehold.co/600x400";
+				}
 
-
-                _db.Products.Update(product);
+				_db.Products.Update(product);
                 _db.SaveChanges();
 
                 _response.Result = _mapper.Map<ProductDto>(product);
