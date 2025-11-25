@@ -56,7 +56,8 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
                 cart.CartHeader.Phone = userDto.PhoneNumber;
                 cart.CartDetails = _mapper.Map<List<CartDetailsDto>>(_db.CartDetails.Where(u => u.CartHeaderId == cart.CartHeader.CartHeaderId));
 
-                var cartDetailsToDelete = new List<CartDetailsDto>();
+                bool atLeastOneProductMissing = false;
+				var cartDetailsToDelete = new List<CartDetails>();
                 foreach (var item in cart.CartDetails)
                 {
                     var existingProductResponse = await _productHttpClient.GetProductById(item.ProductId);
@@ -68,13 +69,9 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
                     }
                     else
                     {
-                        cartDetailsToDelete.Add(item);
+                        atLeastOneProductMissing = true;
+						cartDetailsToDelete.Add(_db.CartDetails.First((cd) => cd.CartDetailsId == item.CartDetailsId));
                     }
-                }
-
-                foreach (var detail in cartDetailsToDelete)
-                {
-                    cart.CartDetails.Remove(detail);
                 }
 
                 //apply coupon if any and if the shopping cart is not empty
@@ -90,6 +87,21 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
                         cart.CartHeader.Discount = coupon.DiscountAmount;
                     }
                 }
+
+                if (atLeastOneProductMissing)
+                {
+                    var newCartDetails = new List<CartDetailsDto>();
+					foreach (var cartDetail in cart.CartDetails) 
+                    {
+                        if (cartDetailsToDelete.FirstOrDefault((cd) => cd.CartDetailsId == cartDetail.CartDetailsId) == null)
+                        {
+                            newCartDetails.Add(cartDetail);
+						}
+					}
+                    cart.CartDetails = newCartDetails;
+					_db.CartDetails.RemoveRange(cartDetailsToDelete);
+					_db.SaveChanges();
+				}
 
                 _response.Result = cart;
             }
