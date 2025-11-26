@@ -1,17 +1,18 @@
 ﻿using AutoMapper;
-using Xango.Services.ShoppingCartAPI.Data;
-using Xango.Services.ShoppingCartAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Xango.Models.Dto;
-using Xango.Services.Client.Utility;
-using Xango.Service.CouponAPI.Client;
-using Xango.Services.Utility;
-using Xango.Service.AuthenticationAPI.Client;
-using Xango.Service.ProductAPI.Client;
 using System.Collections.Generic;
 using System.Linq;
+using Xango.Models.Dto;
+using Xango.Service.AuthenticationAPI.Client;
+using Xango.Service.CouponAPI.Client;
+using Xango.Service.ProductAPI.Client;
+using Xango.Services.Client.Utility;
+using Xango.Services.Interfaces;
+using Xango.Services.ShoppingCartAPI.Data;
+using Xango.Services.ShoppingCartAPI.Models;
+using Xango.Services.Utility;
 
 namespace Xango.Services.ShoppingCartAPI.Controllers
 {
@@ -124,7 +125,12 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
         {
             try
             {
-                var cartFromDb = await _db.CartHeaders.FirstAsync(u => u.UserId == cartDto.CartHeader.UserId);
+				ResponseDto couponResponse = await _couponHttpClient.GetCoupon(cartDto.CartHeader.CouponCode);
+                if (couponResponse.IsSuccess == false)
+                {
+                    throw new ApplicationException($"Coupon {cartDto.CartHeader.CouponCode} does not exist");
+                }
+				var cartFromDb = await _db.CartHeaders.FirstAsync(u => u.UserId == cartDto.CartHeader.UserId);
                 cartFromDb.CouponCode = cartDto.CartHeader.CouponCode;
                 _db.CartHeaders.Update(cartFromDb);
                 await _db.SaveChangesAsync();
@@ -142,6 +148,11 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
 		{
 			try
 			{
+				ResponseDto couponResponse = await _couponHttpClient.GetCoupon(coupon.CouponCode);
+				if (couponResponse.IsSuccess == false)
+				{
+					throw new ApplicationException($"Coupon {coupon.CouponCode} does not exist");
+				}
 				var cartFromDb = await _db.CartHeaders.FirstAsync(u => u.UserId == coupon.UserId);
 				cartFromDb.CouponCode = coupon.CouponCode;
 				_db.CartHeaders.Update(cartFromDb);
