@@ -133,13 +133,13 @@ namespace Xango.Service.ShoppingCartAPI.Client
             return ResponseProducer.ErrorResponse("Could not find cart");
         }
 
-        public Task<ResponseDto?> RemoveProductFromCart(int cartDetailsId)
+        public Task<ResponseDto?> RemoveProductFromCart(RemoveProductFromCartDto cartDetailsId)
         {
             var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = client.PostAsync("/api/cart/RemoveCart/", new StringContent($"{cartDetailsId}", Encoding.UTF8, "application/json")).GetAwaiter().GetResult();
+            var response = client.PostAsync("/api/cart/RemoveCart/", new StringContent($"{cartDetailsId.CartDetailsId}", Encoding.UTF8, "application/json")).GetAwaiter().GetResult();
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
             if (resp != null && resp.IsSuccess)

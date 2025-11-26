@@ -13,7 +13,7 @@ namespace Xango.Services.Interfaces
 		Task<ResponseDto?> EmailCart(CartDto cartDto);
         Task<ResponseDto> DeleteCart(string userId);
 
-		Task<ResponseDto?> RemoveProductFromCart(int cartDetailsId);
+		Task<ResponseDto?> RemoveProductFromCart(RemoveProductFromCartDto removeCartDetail);
 		Task<ResponseDto> AddProductToCart(AddProductToCartDto addProductToCart);
 	}
 }

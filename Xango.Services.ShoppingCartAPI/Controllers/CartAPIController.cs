@@ -47,8 +47,14 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
             {
                 CartDto cart = new CartDto()
                 {
-                    CartHeader = _mapper.Map<CartHeaderDto>(_db.CartHeaders.First(u => u.UserId== userId))
+                    CartHeader = _mapper.Map<CartHeaderDto>(_db.CartHeaders.FirstOrDefault(u => u.UserId== userId))
                 };
+                if (cart.CartHeader == null)
+                {
+                    _response.Result = cart;
+                    _response.IsSuccess = true;
+                    return _response; ;
+                }
                 var response = await _authenticationHttpClient.GetUserById(userId);
                 var userDto = DtoConverter.ToDto<UserDto>(Convert.ToString(response.Result));
                 cart.CartHeader.Name = userDto.Name;
@@ -170,7 +176,7 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
 		}
 
 		[HttpPost("AddProductToCart")]
-        public async Task<ResponseDto> AddProductToCart([FromBody] AddProductToCartDto addProductToCart)
+        public async Task<ResponseDto> AddProductToCart(AddProductToCartDto addProductToCart)
         {
             try
             {
@@ -297,12 +303,12 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
 
 
         [HttpPost("RemoveProductFromCart")]
-        public async Task<ResponseDto> RemoveProductFromCart([FromBody] int cartDetailsId)
+        public async Task<ResponseDto> RemoveProductFromCart(RemoveProductFromCartDto detail)
         {
             try
             {
                 CartDetails cartDetails = _db.CartDetails
-                   .First(u => u.CartDetailsId == cartDetailsId);
+                   .First(u => u.CartDetailsId == Convert.ToInt32(detail.CartDetailsId));
 
                 int totalCountofCartItem = _db.CartDetails.Where(u => u.CartHeaderId == cartDetails.CartHeaderId).Count();
                 _db.CartDetails.Remove(cartDetails);

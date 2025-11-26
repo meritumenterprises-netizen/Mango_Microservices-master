@@ -105,10 +105,10 @@ namespace Xango.Web.Controllers
             return View(orderId);
         }
 
-        public async Task<IActionResult> Remove(int cartDetailsId)
+        public async Task<IActionResult> Remove(RemoveProductFromCartDto cartDetails)
         {
             var userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
-            ResponseDto? response = await _shoppingCartClient.RemoveProductFromCart(cartDetailsId);
+            ResponseDto? response = await _shoppingCartClient.RemoveProductFromCart(cartDetails);
             if (response != null & response.IsSuccess)
             {
                 TempData["success"] = "Cart updated successfully";
