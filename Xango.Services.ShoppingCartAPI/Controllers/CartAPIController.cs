@@ -131,7 +131,100 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
             return _response;
         }
 
-        [HttpPost("CartUpsert")]
+		[HttpPost("ApplyCouponToCart")]
+		public async Task<object> ApplyCoupon([FromBody] ApplyCouponDto coupon)
+		{
+			try
+			{
+				var cartFromDb = await _db.CartHeaders.FirstAsync(u => u.UserId == coupon.UserId);
+				cartFromDb.CouponCode = coupon.CouponCode;
+				_db.CartHeaders.Update(cartFromDb);
+				await _db.SaveChangesAsync();
+				_response.Result = true;
+			}
+			catch (Exception ex)
+			{
+				return ResponseProducer.ErrorResponse(ex.Message);
+			}
+			return _response;
+		}
+
+
+		[HttpPost("RemoveCoupon")]
+		public async Task<object> RemoveCoupon([FromBody] RemoveCouponDto userId)
+		{
+			try
+			{
+				var cartFromDb = await _db.CartHeaders.FirstAsync(u => u.UserId == userId.UserId);
+                cartFromDb.CouponCode = null;
+                cartFromDb.Discount = 0;
+				_db.CartHeaders.Update(cartFromDb);
+				await _db.SaveChangesAsync();
+				_response.Result = true;
+			}
+			catch (Exception ex)
+			{
+				return ResponseProducer.ErrorResponse(ex.Message);
+			}
+			return _response;
+		}
+
+		[HttpPost("AddProductToCart")]
+        public async Task<ResponseDto> AddProductToCart([FromBody] AddProductToCartDto addProductToCart)
+        {
+            try
+            {
+                var cartFromDb = await _db.CartHeaders.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == addProductToCart.UserId);
+                if (cartFromDb == null)
+                {
+                    CartHeader cartHeader = new CartHeader()
+                    {
+                        UserId = addProductToCart.UserId
+                    };
+                    _db.CartHeaders.Add(cartHeader);
+                    await _db.SaveChangesAsync();
+                    CartDetails cartDetails = new CartDetails()
+                    {
+                        CartHeaderId = cartHeader.CartHeaderId,
+                        ProductId = addProductToCart.ProductId,
+                        Count = addProductToCart.Quantity
+                    };
+                    _db.CartDetails.Add(cartDetails);
+                    await _db.SaveChangesAsync();
+                }
+                else
+                {
+                    var cartDetailsFromDb = await _db.CartDetails.AsNoTracking().FirstOrDefaultAsync(
+                        u => u.ProductId == addProductToCart.ProductId &&
+                        u.CartHeaderId == cartFromDb.CartHeaderId);
+                    if (cartDetailsFromDb == null)
+                    {
+                        CartDetails cartDetails = new CartDetails()
+                        {
+                            CartHeaderId = cartFromDb.CartHeaderId,
+                            ProductId = addProductToCart.ProductId,
+                            Count = addProductToCart.Quantity
+                        };
+                        _db.CartDetails.Add(cartDetails);
+                        await _db.SaveChangesAsync();
+                    }
+                    else
+                    {
+                        cartDetailsFromDb.Count += addProductToCart.Quantity;
+                        _db.CartDetails.Update(cartDetailsFromDb);
+                        await _db.SaveChangesAsync();
+					}
+				}
+                return ResponseProducer.OkResponse();
+			}
+            catch (Exception ex)
+            {
+                return ResponseProducer.ErrorResponse(ex.Message);
+            }
+            return _response;
+		}
+
+		[HttpPost("CartUpsert")]
         public async Task<ResponseDto> CartUpsert(CartDto cartDto)
         {
             try
@@ -203,8 +296,8 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
         }
 
 
-        [HttpPost("RemoveCart")]
-        public async Task<ResponseDto> RemoveCart([FromBody] int cartDetailsId)
+        [HttpPost("RemoveProductFromCart")]
+        public async Task<ResponseDto> RemoveProductFromCart([FromBody] int cartDetailsId)
         {
             try
             {

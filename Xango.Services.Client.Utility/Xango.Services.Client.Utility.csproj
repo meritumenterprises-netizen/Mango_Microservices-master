@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Xango.Services.Dto\Xango.Services.Dto.csproj" />
+    <ProjectReference Include="..\Xango.Services.Dto\Xango.Models.Dto.csproj" />
   </ItemGroup>
 
 </Project>

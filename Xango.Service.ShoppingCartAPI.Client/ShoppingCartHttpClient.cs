@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xango.Models.Dto;
 using Xango.Services.Client.Utility;
+using Xango.Services.Dto;
 using Xango.Services.Server.Utility;
 using Xango.Services.Utility;
 
@@ -28,7 +30,24 @@ namespace Xango.Service.ShoppingCartAPI.Client
             _tokenProvider = tokenProvider;
             _baseUri = Environment.GetEnvironmentVariable("ShoppingCartAPI");
         }
-        public Task<ResponseDto?> ApplyCoupon(CartDto cartDto)
+
+        public Task<ResponseDto> AddProductToCart(AddProductToCartDto addProductToCart)
+        {
+            var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
+            client.BaseAddress = new Uri(_baseUri);
+            var token = _tokenProvider.GetToken();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var response = client.PostAsync("/api/cart/AddProductToCart", StringContentUTF8.AsJsonString(addProductToCart)).GetAwaiter().GetResult();
+			response.EnsureSuccessStatusCode();
+			var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
+			if (resp != null && resp.IsSuccess)
+			{
+				return Task.FromResult(ResponseProducer.OkResponse(resp.Result));
+			}
+			return Task.FromResult(ResponseProducer.ErrorResponse("Could not find cart"));
+		}
+
+		public Task<ResponseDto?> ApplyCoupon(CartDto cartDto)
         {
             var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
@@ -44,7 +63,40 @@ namespace Xango.Service.ShoppingCartAPI.Client
             return Task.FromResult(ResponseProducer.ErrorResponse("Could not find cart"));
         }
 
-        public Task<ResponseDto> DeleteCart(string userId)
+		public Task<ResponseDto?> ApplyCoupon(ApplyCouponDto couponDto)
+		{
+			var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
+			client.BaseAddress = new Uri(_baseUri);
+			var token = _tokenProvider.GetToken();
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var response = client.PostAsync("/api/cart/ApplyCoupon/", StringContentUTF8.AsJsonString(couponDto)).GetAwaiter().GetResult();
+			response.EnsureSuccessStatusCode();
+			var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
+			if (resp != null && resp.IsSuccess)
+			{
+				return Task.FromResult(ResponseProducer.OkResponse(resp.Result));
+			}
+			return Task.FromResult(ResponseProducer.ErrorResponse("Could not find cart"));
+		}
+
+		public Task<ResponseDto?> RemoveCoupon(RemoveCouponDto userId)
+		{
+			var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
+			client.BaseAddress = new Uri(_baseUri);
+			var token = _tokenProvider.GetToken();
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var response = client.PostAsync("/api/cart/RemoveCoupon/", StringContentUTF8.AsJsonString(userId)).GetAwaiter().GetResult();
+			response.EnsureSuccessStatusCode();
+			var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
+			if (resp != null && resp.IsSuccess)
+			{
+				return Task.FromResult(ResponseProducer.OkResponse(resp.Result));
+			}
+			return Task.FromResult(ResponseProducer.ErrorResponse("Could not find cart"));
+		}
+
+
+		public Task<ResponseDto> DeleteCart(string userId)
         {
             var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
@@ -81,7 +133,7 @@ namespace Xango.Service.ShoppingCartAPI.Client
             return ResponseProducer.ErrorResponse("Could not find cart");
         }
 
-        public Task<ResponseDto?> RemoveFromCart(int cartDetailsId)
+        public Task<ResponseDto?> RemoveProductFromCart(int cartDetailsId)
         {
             var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
@@ -112,5 +164,5 @@ namespace Xango.Service.ShoppingCartAPI.Client
             }
             return Task.FromResult(ResponseProducer.ErrorResponse("Could not find cart"));
         }
-    }
+	}
 }
