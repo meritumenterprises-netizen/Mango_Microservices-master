@@ -65,8 +65,12 @@ namespace Xango.Services.CouponAPI.Controllers
         {
             try
             {
-                Coupon obj = _db.Coupons.First(u => u.CouponCode.ToLower() == code.ToLower());
-                _response.Result = _mapper.Map<CouponDto>(obj);
+                Coupon obj = _db.Coupons.FirstOrDefault(u => u.CouponCode.ToLower() == code.ToLower());
+                if (obj == null)
+                {
+                    throw new ApplicationException($"Coupon code {code} is invalid");
+				}
+				_response.Result = _mapper.Map<CouponDto>(obj);
             }
             catch (Exception ex)
             {
