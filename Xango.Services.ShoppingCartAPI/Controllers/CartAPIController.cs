@@ -180,6 +180,10 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
         {
             try
             {
+                if (addProductToCart.Quantity > addProductToCart.StockQuantity)
+                {
+                    throw new Exception("Insufficient stock for the product.");
+				}
                 var cartFromDb = await _db.CartHeaders.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == addProductToCart.UserId);
                 if (cartFromDb == null)
                 {
@@ -195,7 +199,7 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
                         ProductId = addProductToCart.ProductId,
                         Count = addProductToCart.Quantity
                     };
-                    _db.CartDetails.Add(cartDetails);
+					_db.CartDetails.Add(cartDetails);
                     await _db.SaveChangesAsync();
                 }
                 else
@@ -217,7 +221,11 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
                     else
                     {
                         cartDetailsFromDb.Count += addProductToCart.Quantity;
-                        _db.CartDetails.Update(cartDetailsFromDb);
+                        if (cartDetailsFromDb.Count > addProductToCart.StockQuantity)
+                        {
+                            throw new Exception("Insufficient stock for the product.");
+						}
+						_db.CartDetails.Update(cartDetailsFromDb);
                         await _db.SaveChangesAsync();
 					}
 				}
