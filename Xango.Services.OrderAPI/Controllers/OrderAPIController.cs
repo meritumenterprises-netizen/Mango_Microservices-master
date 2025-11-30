@@ -46,14 +46,14 @@ namespace Xango.Services.OrderAPI.Controllers
             {
                 IEnumerable<OrderHeader> objList;
 
-                var userEmail = User.Claims.Where((claim) => claim.Type == "name").First().Value;
+                var id = User.Claims.Where((claim) => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").First().Value;
                 if (User.IsInRole(SD.RoleAdmin))
                 {
                     objList = _db.OrderHeaders.AsNoTracking().Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).Where(u => status == "all" || u.Status == status);
                 }
                 else
                 {
-                    objList = _db.OrderHeaders.AsNoTracking().Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).Where(u => (status == "all" || u.Status == status) && u.Email == userEmail);
+                    objList = _db.OrderHeaders.AsNoTracking().Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).Where(u => (status == "all" || u.Status == status) && u.UserId == id );
                 }
                 _response.Result = _mapper.Map<IEnumerable<OrderHeaderDto>>(objList);
             }
