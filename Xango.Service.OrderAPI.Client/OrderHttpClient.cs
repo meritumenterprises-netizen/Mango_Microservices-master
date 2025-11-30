@@ -143,5 +143,22 @@ namespace Xango.Service.OrderAPI.Client
             return ResponseProducer.ErrorResponse("Could not validate Stripe session");
 
         }
-    }
+
+		//public Task<ResponseDto?> SaveUserDetails(SaveUserDetails cartDetails)
+		//{
+		//	var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
+		//	client.BaseAddress = new Uri(_baseUri);
+		//	var token = _tokenProvider.GetToken();
+		//	client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+		//	var response = client.PostAsync("/api/cart/SaveCartDetails/", StringContentUTF8.AsJsonString(cartDetails)).GetAwaiter().GetResult();
+		//	response.EnsureSuccessStatusCode();
+		//	var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
+		//	if (resp != null && resp.IsSuccess)
+		//	{
+		//		return Task.FromResult(ResponseProducer.OkResponse(resp.Result));
+		//	}
+		//	return Task.FromResult(ResponseProducer.ErrorResponse("Could not find cart"));
+		//}
+
+	}
 }

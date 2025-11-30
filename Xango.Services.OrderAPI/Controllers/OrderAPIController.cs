@@ -1,16 +1,16 @@
 ﻿using AutoMapper;
-using Xango.Services.OrderAPI.Data;
-using Xango.Services.OrderAPI.Models;
-
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Stripe;
 using Stripe.Checkout;
+using Stripe.Climate;
 using Xango.Models.Dto;
-using Xango.Services.Dto;
-using Xango.Services.Client.Utility;
 using Xango.Service.InventoryAPI.Client;
+using Xango.Services.Client.Utility;
+using Xango.Services.Dto;
+using Xango.Services.OrderAPI.Data;
+using Xango.Services.OrderAPI.Models;
 using Xango.Services.Utility;
 
 namespace Xango.Services.OrderAPI.Controllers
@@ -23,12 +23,12 @@ namespace Xango.Services.OrderAPI.Controllers
         protected ResponseDto _response;
         private IMapper _mapper;
         private readonly AppDbContext _db;
-        
+
         private readonly IConfiguration _configuration;
         private readonly IInventoryttpClient _inventoryClient;
 
-        public OrderAPIController(AppDbContext db,IInventoryttpClient inventoryClient, IMapper mapper, IConfiguration configuration)
-        
+        public OrderAPIController(AppDbContext db, IInventoryttpClient inventoryClient, IMapper mapper, IConfiguration configuration)
+
         {
             _db = db;
             _response = new ResponseDto();
@@ -109,12 +109,12 @@ namespace Xango.Services.OrderAPI.Controllers
 
         [HttpDelete("DeleteOrder/{id:int}")]
         [Authorize]
-        public async Task<ResponseDto> DeleteOrder (int id)
+        public async Task<ResponseDto> DeleteOrder(int id)
         {
             try
             {
                 OrderHeader orderHeader = _db.OrderHeaders.Include((d) => d.OrderDetails).First(u => u.OrderHeaderId == id);
-                if (orderHeader != null )
+                if (orderHeader != null)
                 {
                     foreach (var orderDetail in orderHeader.OrderDetails)
                     {
@@ -282,5 +282,5 @@ namespace Xango.Services.OrderAPI.Controllers
             }
             return _response;
         }
-    }
+	}
 }

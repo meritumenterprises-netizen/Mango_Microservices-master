@@ -15,5 +15,6 @@ namespace Xango.Services.Interfaces
 
 		Task<ResponseDto?> RemoveProductFromCart(RemoveProductFromCartDto removeCartDetail);
 		Task<ResponseDto> AddProductToCart(AddProductToCartDto addProductToCart);
+
 	}
 }
