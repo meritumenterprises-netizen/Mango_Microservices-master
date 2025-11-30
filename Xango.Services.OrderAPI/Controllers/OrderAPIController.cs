@@ -164,7 +164,7 @@ namespace Xango.Services.OrderAPI.Controllers
         }
 
         [HttpPost("CreateStripeSession")]
-        public async Task<ResponseDto> CreateStripeSession([FromBody] StripeRequestDto stripeRequestDto)
+        public async Task<ResponseDto> CreateStripeSession(StripeRequestDto stripeRequestDto)
         {
             try
             {
