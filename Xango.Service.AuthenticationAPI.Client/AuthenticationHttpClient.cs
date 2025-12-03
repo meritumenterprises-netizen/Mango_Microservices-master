@@ -71,13 +71,13 @@ namespace Xango.Service.AuthenticationAPI.Client
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            var response = await client.PostAsync("/api/auth/login", StringContentUTF8.AsJsonString<LoginRequestDto>(loginRequestDto));
-            if (response.StatusCode != System.Net.HttpStatusCode.BadRequest & response.Content != null)
+			var response = await client.PostAsync("/api/auth/login", StringContentUTF8.AsJsonString<LoginRequestDto>(loginRequestDto));
+			ResponseDto responseAuth = DtoConverter.ToDto<ResponseDto>(response.Content.ReadAsStringAsync().Result);
+			if (responseAuth != null && responseAuth.IsSuccess)
             {
-                var responseDto = DtoConverter.ToDto<ResponseDto>(new ResponseDto() { IsSuccess = true, Result = response.Content.ReadAsStringAsync().Result });    
-                return ResponseProducer.OkResponse(responseDto.Result);
+                return responseAuth;
             }
-            return ResponseProducer.ErrorResponse("Could not log in the user");
+            return ResponseProducer.ErrorResponse(responseAuth.Message);
 
         }
 
@@ -88,13 +88,13 @@ namespace Xango.Service.AuthenticationAPI.Client
             var token = _tokenProvider.GetToken();
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.PostAsync("/api/auth/register", StringContentUTF8.AsJsonString<RegistrationRequestDto>(registrationRequestDto));
-            if (response != null & response.StatusCode != System.Net.HttpStatusCode.BadRequest & response.Content != null)
+			ResponseDto responseAuth = DtoConverter.ToDto<ResponseDto>(response.Content.ReadAsStringAsync().Result);
+			if (responseAuth != null && responseAuth.IsSuccess)
             {
-                var responseDto1 = DtoConverter.ToDto<ResponseDto>(new ResponseDto() { IsSuccess = true, Result = response.Content.ReadAsStringAsync().Result });
-                return ResponseProducer.OkResponse(responseDto1.Result);
+                
+                return ResponseProducer.OkResponse(responseAuth.Result);
             }
-            var responseError = DtoConverter.ToDto<ResponseDto>(await response.Content.ReadAsStringAsync());
-            return ResponseProducer.ErrorResponse(responseError.Message);
+            return ResponseProducer.ErrorResponse(responseAuth.Message);
         }
 
         public async Task<ResponseDto?> Logout()

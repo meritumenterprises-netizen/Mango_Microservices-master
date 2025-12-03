@@ -31,14 +31,21 @@ namespace Xango.Services.AuthAPI.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegistrationRequestDto model)
         {
-            var result = await _authService.Register(model);
-            if (string.IsNullOrEmpty(result))
+            try
             {
-                return BadRequest(ResponseProducer.ErrorResponse($"User id {model.Email} is already taken"));
+                var result = await _authService.Register(model);
+                if (result != "Registration successful")
+                {
+                    throw new ApplicationException(result);
+                }
+                _response.IsSuccess = true;
+                _response.Message = "Registration successful";
+                return Ok(_response);
             }
-            _response.IsSuccess = true;
-            _response.Message = "Registration successful";
-            return Ok(_response);
+            catch (Exception ex)
+            {
+                return Ok(ResponseProducer.ErrorResponse(ex.Message));
+            }
         }
 
         [HttpPost("login")]
@@ -49,7 +56,7 @@ namespace Xango.Services.AuthAPI.Controllers
             {
                 _response.IsSuccess = false;
                 _response.Message = "Username or password is incorrect";
-                return BadRequest(_response);
+                return Ok(_response);
             }
 			_response.Result = loginResponse;
             return Ok(_response);
