@@ -31,7 +31,8 @@ namespace Xango.Services.ProductAPI.Controllers
         }
 
         [HttpGet]
-        public ResponseDto Get()
+		[ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any, NoStore = true)]
+		public ResponseDto Get()
         {
             try
             {

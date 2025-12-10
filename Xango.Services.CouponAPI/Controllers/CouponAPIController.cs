@@ -29,6 +29,7 @@ namespace Xango.Services.CouponAPI.Controllers
 
         [HttpGet]
 		[Authorize(Roles = "ADMIN")]
+		[ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any, NoStore = true)]
 		public async Task<ResponseDto> Get()
         {
             try
