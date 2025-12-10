@@ -91,7 +91,10 @@ namespace Xango.Services.ProductAPI.Controllers
                 }
                 else
                 {
-                    product.ImageUrl = "https://placehold.co/600x400";
+                    if (product.ImageUrl == null)
+                    {
+                        product.ImageUrl = "https://placehold.co/600x400";
+                    }
                 }
                 _db.Products.Update(product);
                 _db.SaveChanges();
@@ -129,7 +132,10 @@ namespace Xango.Services.ProductAPI.Controllers
                 }
 				else
 				{
-					product.ImageUrl = "https://placehold.co/600x400";
+                    if (product.ImageUrl == null)
+                    {
+                        product.ImageUrl = "https://placehold.co/600x400";
+                    }
 				}
 
 				_db.Products.Update(product);
