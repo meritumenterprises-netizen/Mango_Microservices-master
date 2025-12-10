@@ -144,7 +144,8 @@ namespace Xango.Services.OrderAPI.Controllers
                 OrderHeaderDto orderHeaderDto = _mapper.Map<OrderHeaderDto>(cartDto.CartHeader);
                 orderHeaderDto.OrderTime = DateTime.Now;
                 orderHeaderDto.Status = SD.Status_Pending;
-                orderHeaderDto.OrderDetails = _mapper.Map<IEnumerable<OrderDetailsDto>>(cartDto.CartDetails);
+                orderHeaderDto.UserEmail = User.Claims.Where((claim) => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress").First().Value;
+				orderHeaderDto.OrderDetails = _mapper.Map<IEnumerable<OrderDetailsDto>>(cartDto.CartDetails);
                 foreach (var orderDetail in orderHeaderDto.OrderDetails)
                 {
                     await _inventoryClient.SubtractFromStock(orderDetail.ProductId, orderDetail.Count);

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Xango.Services.OrderAPI.Data;
 
@@ -11,9 +12,11 @@ using Xango.Services.OrderAPI.Data;
 namespace Xango.Services.OrderAPI.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251210220740_Added UserEmail to OrderHeader")]
+    partial class AddedUserEmailtoOrderHeader
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -89,9 +92,6 @@ namespace Xango.Services.OrderAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("StripeSessionId")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UserEmail")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserId")

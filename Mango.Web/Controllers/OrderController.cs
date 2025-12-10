@@ -52,7 +52,7 @@ namespace Xango.Web.Controllers
                 orderHeaderDto.OrderTotalWithCurrency = orderHeaderDto.OrderTotal.ToString("C2");
 
             }
-            if (!User.IsInRole(SD.RoleAdmin) && User.Identity.Name != orderHeaderDto.Email)
+            if (!User.IsInRole(SD.RoleAdmin) && User.Identity.Name != orderHeaderDto.UserEmail)
             {
                 return NotFound();
             }
