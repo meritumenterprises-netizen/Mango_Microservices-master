@@ -118,5 +118,20 @@ namespace Xango.Service.AuthenticationAPI.Client
             }
             return ResponseProducer.ErrorResponse("Could not log in the user");
         }
-    }
+
+		public async Task<ResponseDto> IsUserInRole(string email,string role)
+		{
+			var client = _httpClientFactory.NewClientNoSslErrors("Authentication");
+			client.BaseAddress = new Uri(_baseUri);
+			var token = _tokenProvider.GetToken();
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var response = await client.GetAsync("/api/auth/InRole/" + email + "/" + role);
+			if (response != null & response.Content != null)
+			{
+				var responseDto = DtoConverter.ToDto<ResponseDto>(await response.Content.ReadAsStringAsync());
+				return ResponseProducer.OkResponse(responseDto.Result);
+			}
+			return ResponseProducer.ErrorResponse("Could not log in the user");
+		}
+	}
 }

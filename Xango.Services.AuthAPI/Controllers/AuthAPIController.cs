@@ -91,7 +91,20 @@ namespace Xango.Services.AuthAPI.Controllers
             return Ok(ResponseProducer.OkResponse(result: userDto));
         }
 
-        [HttpGet("GetUserById/{id}")]
+		[HttpGet("InRole/{email}/{role}")]
+		public async Task<IActionResult> IsUserInRole(string email, string role)
+		{
+			var userDto = await _authService.GetUser(email);
+			if (userDto == null || userDto.Email.ToLower() != email.ToLower())
+			{
+				return BadRequest(ResponseProducer.ErrorResponse("User not found"));
+			}
+            bool userInRole = await _authService.IsUserInRole(email, role);
+			return Ok(ResponseProducer.OkResponse(result: userInRole));
+		}
+
+
+		[HttpGet("GetUserById/{id}")]
         public async Task<IActionResult> GetUserById(string id)
         {
             var userDto = await _authService.GetUserById(id);

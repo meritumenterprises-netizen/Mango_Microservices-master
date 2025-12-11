@@ -45,7 +45,6 @@ namespace Xango.Services.AuthAPI.Service
                 Email = user.Email,
                 Name = user.Name,
                 PhoneNumber = user.PhoneNumber,
-                Role = (await _userManager.GetRolesAsync(user)).FirstOrDefault()
 			};
         }
 
@@ -64,7 +63,6 @@ namespace Xango.Services.AuthAPI.Service
                 Email = user.Email,
                 Name = user.Name,
                 PhoneNumber = user.PhoneNumber,
-				Role = (await _userManager.GetRolesAsync(user)).FirstOrDefault()
 			};
         }
 
@@ -82,9 +80,8 @@ namespace Xango.Services.AuthAPI.Service
 
             //if user was found , Generate JWT Token
             var roles = await _userManager.GetRolesAsync(user);
-            var token = _jwtTokenGenerator.GenerateToken(user, roles);
+			var token = _jwtTokenGenerator.GenerateToken(user, roles);
             var userDto = _mapper.Map<UserDto>(user);
-            userDto.Role = roles.FirstOrDefault();
 			LoginResponseDto loginResponseDto = new LoginResponseDto()
             {
                 User = userDto,
@@ -141,5 +138,21 @@ namespace Xango.Services.AuthAPI.Service
             }
             return false;
         }
-    }
+
+        public async Task<bool> IsUserInRole(string email, string role)
+        {
+			var user = _db.ApplicationUsers.FirstOrDefault(u => u.Email.ToLower() == email.ToLower());
+			if (user != null)
+			{
+				var roleExists = await _roleManager.RoleExistsAsync(role);
+				if (!roleExists)
+				{
+					await _roleManager.CreateAsync(new IdentityRole(role));
+				}
+                return await _userManager.IsInRoleAsync(user, role);
+			}
+			return false;
+
+		}
+	}
 }

@@ -11,6 +11,8 @@ namespace Xango.Services.Interfaces
 
         Task<ResponseDto> GetUser(string email);
         Task<ResponseDto> GetUserById(string id);
+
+        Task<ResponseDto> IsUserInRole(string email, string role);
          
         Task<ResponseDto?> Logout();
         
