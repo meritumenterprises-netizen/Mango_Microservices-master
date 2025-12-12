@@ -9,9 +9,8 @@ using Xango.Services.Interfaces;
 
 namespace Xango.Service.QueueAPI.Client
 {
-	public interface IQueueHttpClient
+	public interface IQueueHttpClient : IQueueService, ISetToken
 	{
-		ResponseDto PostOrderApproved(OrderHeaderDto orderHeader);
-		ResponseDto PostOrderPending(OrderHeaderDto orderHeader);
+
 	}
 }

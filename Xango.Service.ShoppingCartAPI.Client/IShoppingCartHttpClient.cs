@@ -2,7 +2,7 @@
 
 namespace Xango.Service.ShoppingCartAPI.Client
 {
-    public interface IShoppingCartHttpClient : ICartService
+    public interface IShoppingCartHttpClient : ICartService, ISetToken
     {
 
     }

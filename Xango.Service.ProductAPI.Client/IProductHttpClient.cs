@@ -2,7 +2,8 @@
 
 namespace Xango.Service.ProductAPI.Client
 {
-    public interface IProductHttpClient: IProductService
+    public interface IProductHttpClient: IProductService, ISetToken
     {
+        
     }
 }

@@ -20,6 +20,7 @@
 	<ItemGroup>
 		<ProjectReference Include="..\Xango.Services.Client.Utility\Xango.Services.Client.Utility.csproj" />
 		<ProjectReference Include="..\Xango.Services.Dto\Xango.Models.Dto.csproj" />
+		<ProjectReference Include="..\Xango.Services.Interfaces\Xango.Services.Interfaces.csproj" />
 	</ItemGroup>
 
 </Project>

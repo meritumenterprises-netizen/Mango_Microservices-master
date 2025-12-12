@@ -10,6 +10,7 @@ using Xango.Service.CouponAPI.Client;
 using Xango.Service.ProductAPI.Client;
 using Xango.Services.Client.Utility;
 using Xango.Services.Interfaces;
+using Xango.Services.Server.Utility;
 using Xango.Services.ShoppingCartAPI.Data;
 using Xango.Services.ShoppingCartAPI.Models;
 using Xango.Services.Utility;
@@ -28,9 +29,10 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
         private IAuthenticationHttpClient _authenticationHttpClient;
         private IConfiguration _configuration;
         private ICouponHttpClient _couponHttpClient;
+        private ITokenProvider _tokenProvider;
 
-        public CartAPIController(AppDbContext db,
-            IMapper mapper, IProductHttpClient productHttpClient, IConfiguration configuration, IAuthenticationHttpClient authenticationHttpClient, ICouponHttpClient couponHttpClient)
+		public CartAPIController(AppDbContext db,
+            IMapper mapper, IProductHttpClient productHttpClient, IConfiguration configuration, IAuthenticationHttpClient authenticationHttpClient, ICouponHttpClient couponHttpClient, ITokenProvider tokenProvider)
         {
             _db = db;
             _productHttpClient = productHttpClient;
@@ -39,8 +41,8 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
             _configuration = configuration;
             _authenticationHttpClient = authenticationHttpClient;
             _couponHttpClient = couponHttpClient;
-
-        }
+            _tokenProvider = tokenProvider;
+		}
         [HttpGet("GetCart/{userId}")]
         public async Task<ResponseDto> GetCart(string userId)
         {
@@ -65,6 +67,7 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
 
                 bool atLeastOneProductMissing = false;
 				var cartDetailsToDelete = new List<CartDetails>();
+                this.SetClientToken(_productHttpClient, _tokenProvider);
                 foreach (var item in cart.CartDetails)
                 {
                     var existingProductResponse = await _productHttpClient.GetProductById(item.ProductId);
@@ -86,7 +89,8 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
                 {
                     //CouponDto coupon = await _couponService.GetCoupon(cart.CartHeader.CouponCode);
 
-                    var response2 = await _couponHttpClient.GetCoupon(cart.CartHeader.CouponCode);
+                    this.SetClientToken(_couponHttpClient, _tokenProvider);
+					var response2 = await _couponHttpClient.GetCoupon(cart.CartHeader.CouponCode);
                     CouponDto coupon = DtoConverter.ToDto<CouponDto>((ResponseDto)(response2.Result));
                     if (coupon != null && cart.CartHeader.CartTotal > coupon.MinAmount)
                     {
@@ -125,6 +129,7 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
         {
             try
             {
+                this.SetClientToken(_couponHttpClient, _tokenProvider);
 				ResponseDto couponResponse = await _couponHttpClient.GetCoupon(cartDto.CartHeader.CouponCode);
                 if (couponResponse.IsSuccess == false)
                 {
@@ -148,6 +153,7 @@ namespace Xango.Services.ShoppingCartAPI.Controllers
 		{
 			try
 			{
+                this.SetClientToken(_couponHttpClient, _tokenProvider);
 				ResponseDto couponResponse = await _couponHttpClient.GetCoupon(coupon.CouponCode);
 				if (couponResponse.IsSuccess == false)
 				{

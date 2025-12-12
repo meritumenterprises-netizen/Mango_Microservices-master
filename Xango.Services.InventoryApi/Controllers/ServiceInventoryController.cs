@@ -6,12 +6,14 @@ using Xango.Services.Client.Utility;
 using Xango.Services.InventoryApi.Data;
 using Xango.Services.InventoryApi.Service.IService;
 using Xango.Services.Utility;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Xango.Services.InventoryApi.Controllers
 {
     
     [Route("api/inventory")]
     [ApiController]
+    [Authorize]
     public class ServiceInventoryController : Controller
     {
         private AppDbContext _db;

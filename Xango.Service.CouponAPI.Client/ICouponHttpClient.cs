@@ -7,7 +7,8 @@ using Xango.Services.Interfaces;
 
 namespace Xango.Service.CouponAPI.Client
 {
-    public interface ICouponHttpClient : ICouponService
+    public interface ICouponHttpClient : ICouponService, ISetToken
     {
+
     }
 }

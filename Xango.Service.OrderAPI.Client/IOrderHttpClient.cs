@@ -2,8 +2,8 @@
 
 namespace Xango.Service.OrderAPI.Client
 {
-    public interface IOrderHttpClient : IOrderService
+    public interface IOrderHttpClient : IOrderService, ISetToken
     {
 
-    }
+	}
 }

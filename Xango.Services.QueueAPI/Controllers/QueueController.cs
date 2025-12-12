@@ -17,7 +17,7 @@ namespace Xango.Services.Queue.Controllers
 		[HttpPost]
 		[Authorize]
 		[Route("OrderApproved")]
-		public ResponseDto PostOrderApproved(OrderHeaderDto orderHeader)
+		public ResponseDto OrderApproved(OrderHeaderDto orderHeader)
 		{
 			return new ResponseDto
 			{
@@ -29,7 +29,7 @@ namespace Xango.Services.Queue.Controllers
 		[HttpPost]
 		[Authorize]
 		[Route("OrderPending")]
-		public ResponseDto PostOrderPending(OrderHeaderDto orderHeader)
+		public ResponseDto OrderPending(OrderHeaderDto orderHeader)
 		{
 			return new ResponseDto
 			{

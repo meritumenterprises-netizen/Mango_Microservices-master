@@ -7,12 +7,14 @@ using Stripe.Checkout;
 using Stripe.Climate;
 using Xango.Models.Dto;
 using Xango.Service.InventoryAPI.Client;
+using Xango.Service.QueueAPI.Client;
 using Xango.Services.Client.Utility;
 using Xango.Services.Dto;
 using Xango.Services.OrderAPI.Data;
 using Xango.Services.OrderAPI.Models;
 using Xango.Services.Utility;
 using Xango.Services.Server.Utility;
+using Xango.Service.QueueAPI.Client;
 
 namespace Xango.Services.OrderAPI.Controllers
 {
@@ -27,8 +29,10 @@ namespace Xango.Services.OrderAPI.Controllers
 
         private readonly IConfiguration _configuration;
         private readonly IInventoryttpClient _inventoryClient;
+        private readonly IQueueHttpClient _queueClient;
+        private readonly ITokenProvider _tokenProvider;
 
-        public OrderAPIController(AppDbContext db, IInventoryttpClient inventoryClient, IMapper mapper, IConfiguration configuration)
+		public OrderAPIController(AppDbContext db, IInventoryttpClient inventoryClient, IQueueHttpClient queueClient, IMapper mapper, IConfiguration configuration, ITokenProvider tokenProvider)
 
         {
             _db = db;
@@ -36,7 +40,10 @@ namespace Xango.Services.OrderAPI.Controllers
             _mapper = mapper;
             _configuration = configuration;
             _inventoryClient = inventoryClient;
-        }
+            _queueClient = queueClient;
+            _tokenProvider = tokenProvider;
+            _inventoryClient.SetToken(_tokenProvider.GetToken());
+		}
 
         [HttpGet("GetAll")]
         [Authorize]
@@ -90,10 +97,10 @@ namespace Xango.Services.OrderAPI.Controllers
                 OrderHeader orderHeader = _db.OrderHeaders.First(u => u.OrderHeaderId == id);
                 if (orderHeader != null && orderHeader.Status == SD.Status_Pending)
                 {
-                    foreach (var orderDetail in orderHeader.OrderDetails)
+                    this.SetClientToken(_inventoryClient, _tokenProvider);
+					foreach (var orderDetail in orderHeader.OrderDetails)
                     {
                         await _inventoryClient.ReturnQty(orderDetail.ProductId, orderDetail.Count);
-                        //await _inventoryService.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                     }
                     orderHeader.Status = SD.Status_Cancelled;
                     _db.SaveChanges();
@@ -117,9 +124,9 @@ namespace Xango.Services.OrderAPI.Controllers
                 OrderHeader orderHeader = _db.OrderHeaders.Include((d) => d.OrderDetails).First(u => u.OrderHeaderId == id);
                 if (orderHeader != null)
                 {
-                    foreach (var orderDetail in orderHeader.OrderDetails)
+                    this.SetClientToken(_inventoryClient, _tokenProvider);
+					foreach (var orderDetail in orderHeader.OrderDetails)
                     {
-                        //await _inventoryService.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                         await _inventoryClient.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                         _db.OrderDetails.Remove(orderDetail);
                     }
@@ -137,6 +144,7 @@ namespace Xango.Services.OrderAPI.Controllers
         }
 
         [HttpPost("CreateOrder")]
+        [Authorize]
 
         public async Task<ResponseDto> CreateOrder(CartDto cartDto)
         {
@@ -147,15 +155,25 @@ namespace Xango.Services.OrderAPI.Controllers
                 orderHeaderDto.Status = SD.Status_Pending;
                 orderHeaderDto.UserEmail = User.Claims.Where((claim) => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress").First().Value;
 				orderHeaderDto.OrderDetails = _mapper.Map<IEnumerable<OrderDetailsDto>>(cartDto.CartDetails);
-                foreach (var orderDetail in orderHeaderDto.OrderDetails)
+
+                this.SetClientToken(_inventoryClient, _tokenProvider);
+				foreach (var orderDetail in orderHeaderDto.OrderDetails)
                 {
                     await _inventoryClient.SubtractFromStock(orderDetail.ProductId, orderDetail.Count);
                 }
                 orderHeaderDto.OrderTotal = Math.Round(orderHeaderDto.OrderTotal, 2);
                 OrderHeader orderCreated = _db.OrderHeaders.Add(_mapper.Map<OrderHeader>(orderHeaderDto)).Entity;
-                await _db.SaveChangesAsync();
 
-                orderHeaderDto.OrderHeaderId = orderCreated.OrderHeaderId;
+				await _db.SaveChangesAsync();
+				orderHeaderDto.OrderHeaderId = orderCreated.OrderHeaderId;
+
+                this.SetClientToken(_queueClient, _tokenProvider);
+                var response = await _queueClient.PostOrderPending(orderHeaderDto);
+                if (!response.IsSuccess)
+                {
+                    throw new ApplicationException("Could not post order in status of Pending to the queue");
+                }
+
                 _response.Result = orderHeaderDto;
             }
             catch (Exception ex)
@@ -247,6 +265,10 @@ namespace Xango.Services.OrderAPI.Controllers
                     //then payment was successful
                     orderHeader.PaymentIntentId = paymentIntent.Id;
                     orderHeader.Status = SD.Status_Approved;
+                    this.SetClientToken(_queueClient, _tokenProvider);
+                    var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
+                    orderHeaderDto.OrderTotalWithCurrency = orderHeaderDto.OrderTotal.ToString("C2");   
+					await _queueClient.PostOrderApproved(orderHeaderDto);
                     _db.SaveChanges();
                     _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
                 }
@@ -267,9 +289,21 @@ namespace Xango.Services.OrderAPI.Controllers
                 OrderHeader orderHeader = _db.OrderHeaders.Include((od) => od.OrderDetails).First(u => u.OrderHeaderId == orderId);
                 if (orderHeader != null)
                 {
+                    if (newStatus == SD.Status_Approved)
+                    {
+                        var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
+                        this.SetClientToken(_queueClient, _tokenProvider);
+                        var response = await _queueClient.PostOrderApproved(orderHeaderDto);
+                        if (!response.IsSuccess)
+                        {
+                            throw new ApplicationException("Could not post order in status of Approved to the queue");
+                        }
+
+                    }
                     if (newStatus == SD.Status_Cancelled)
                     {
-                        foreach (var orderDetail in orderHeader.OrderDetails)
+                        this.SetClientToken(_inventoryClient, _tokenProvider);
+						foreach (var orderDetail in orderHeader.OrderDetails)
                         {
                             await _inventoryClient.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                         }

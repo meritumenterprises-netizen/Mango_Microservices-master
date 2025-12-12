@@ -192,6 +192,8 @@ services:
       environment:
         RABBITMQ_DEFAULT_USER: guest
         RABBITMQ_DEFAULT_PASS: guest 
+        ASPNETCORE_URLS : http://queue-api.default.svc.cluster.local:80
+
       build:
          context: .
          dockerfile: Xango.Services.QueueAPI/Dockerfile

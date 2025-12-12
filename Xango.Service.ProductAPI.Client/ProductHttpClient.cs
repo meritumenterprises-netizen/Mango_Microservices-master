@@ -25,8 +25,9 @@ namespace Xango.Service.ProductAPI.Client
         private readonly IConfiguration _configuration;
         private readonly string _baseUri;
         private readonly ITokenProvider _tokenProvider;
+        private string _token = string.Empty;
 
-        public ProductHttpClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, ITokenProvider tokenProvider)
+		public ProductHttpClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, ITokenProvider tokenProvider)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
@@ -34,12 +35,21 @@ namespace Xango.Service.ProductAPI.Client
             _tokenProvider = tokenProvider;
 
         }
-        public async Task<ResponseDto?> CreateProducts(ProductDto productDto)
+
+        public void SetToken(string token)
+        {
+            this._token = token;
+		}
+		public async Task<ResponseDto?> CreateProducts(ProductDto productDto)
         {
             var client = _httpClientFactory.NewClientNoSslErrors("Product");
             client.BaseAddress = new Uri(_baseUri);
-            var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.PostAsync("/api/product", StringContentUTF8.AsJsonString(productDto));
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
@@ -54,8 +64,12 @@ namespace Xango.Service.ProductAPI.Client
         {
             var client = _httpClientFactory.NewClientNoSslErrors("Product");
             client.BaseAddress = new Uri(_baseUri);
-            var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
             var response = await client.PutAsync("/api/product", StringContentUTF8.AsJsonString(productDto));
             response.EnsureSuccessStatusCode();
@@ -71,8 +85,12 @@ namespace Xango.Service.ProductAPI.Client
         {
             var client = _httpClientFactory.NewClientNoSslErrors("Product");
             client.BaseAddress = new Uri(_baseUri);
-            var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = client.DeleteAsync("/api/product/" + id).GetAwaiter().GetResult();
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
@@ -88,14 +106,14 @@ namespace Xango.Service.ProductAPI.Client
             var client = _httpClientFactory.NewClientNoSslErrors("Product");
             client.BaseAddress = new Uri(_baseUri);
             
-            var token = _tokenProvider.GetToken();
-            if (token != null)
-            {
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            }
+			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
 
-            // this is a Retry microservices design pattern
-            HttpResponseMessage response = null;
+			// this is a Retry microservices design pattern
+			HttpResponseMessage response = null;
             var error = true;
             for (int i = 0; i < 10; i++)
             {
@@ -127,8 +145,12 @@ namespace Xango.Service.ProductAPI.Client
         {
             var client = _httpClientFactory.NewClientNoSslErrors("Product");
             client.BaseAddress = new Uri(_baseUri);
-            var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.GetAsync("/api/product/" + id, HttpCompletionOption.ResponseContentRead);
             response.EnsureSuccessStatusCode();
             var resp = await response.Content.ReadFromJsonAsync<ResponseDto?>();

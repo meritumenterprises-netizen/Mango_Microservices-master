@@ -8,6 +8,8 @@ using Xango.Service.ProductAPI.Client;
 using Xango.Services.Client.Utility;
 using Xango.Services.Dto;
 using Xango.Services.Interfaces;
+using Xango.Services.Server.Utility;
+using Xango.Web.Extensions;
 
 namespace Xango.Web.Controllers
 {
@@ -15,11 +17,13 @@ namespace Xango.Web.Controllers
     {
         private readonly IProductHttpClient _productHttpClient;
         private readonly IMapper _mapper;
-        public ProductController(IProductHttpClient productHttpClient, IMapper mapper)
+        private readonly ITokenProvider _tokenProvider;
+		public ProductController(IProductHttpClient productHttpClient, IMapper mapper, ITokenProvider tokenProvider)
         {
             _productHttpClient = productHttpClient;
             _mapper = mapper;
-        }
+            _tokenProvider = tokenProvider;
+		}
 
 
         public async Task<IActionResult> ProductIndex()
@@ -60,7 +64,8 @@ namespace Xango.Web.Controllers
                     model.Base64Image = Convert.ToBase64String(ms.GetAllBytes());
                     model.Image = null;
                 }
-                ResponseDto? response = await _productHttpClient.CreateProducts(model);
+				this.SetClientToken(_productHttpClient, _tokenProvider);
+				ResponseDto? response = await _productHttpClient.CreateProducts(model);
 
                 if (response != null && response.IsSuccess)
                 {
@@ -78,7 +83,8 @@ namespace Xango.Web.Controllers
 		[Authorize(Roles = "ADMIN")]
 		public async Task<IActionResult> DeleteProduct(int productId)
         {
-            var response = await _productHttpClient.DeleteProduct(productId);
+			this.SetClientToken(_productHttpClient, _tokenProvider);
+			var response = await _productHttpClient.DeleteProduct(productId);
 
             if (response != null && response.IsSuccess)
             {
@@ -95,7 +101,8 @@ namespace Xango.Web.Controllers
 		[Authorize(Roles = "ADMIN")]
 		public async Task<IActionResult> ProductEdit(int productId)
         {
-            ResponseDto? response = await _productHttpClient.GetProductById(productId);
+			this.SetClientToken(_productHttpClient, _tokenProvider);
+			ResponseDto? response = await _productHttpClient.GetProductById(productId);
 
             if (response != null && response.IsSuccess)
             {
@@ -123,7 +130,8 @@ namespace Xango.Web.Controllers
                     productDto.Base64Image = Convert.ToBase64String(ms.GetAllBytes());
                     productDto.Image = null;
                 }
-                ResponseDto? response = await _productHttpClient.UpdateProducts(productDto);
+				this.SetClientToken(_productHttpClient, _tokenProvider);
+				ResponseDto? response = await _productHttpClient.UpdateProducts(productDto);
 
                 if (response != null && response.IsSuccess)
                 {

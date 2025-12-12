@@ -22,8 +22,8 @@ namespace Xango.Service.ShoppingCartAPI.Client
         private readonly IConfiguration _configuration;
         private readonly ITokenProvider _tokenProvider;
         private readonly string _baseUri;
-
-        public ShoppingCartHttpClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, ITokenProvider tokenProvider)
+        private string _token = string.Empty;
+		public ShoppingCartHttpClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, ITokenProvider tokenProvider)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
@@ -31,12 +31,23 @@ namespace Xango.Service.ShoppingCartAPI.Client
             _baseUri = Environment.GetEnvironmentVariable("ShoppingCartAPI");
         }
 
-        public Task<ResponseDto> AddProductToCart(AddProductToCartDto addProductToCart)
+		public void SetToken(string token)
+		{
+			this._token = token;
+		}
+
+
+
+		public Task<ResponseDto> AddProductToCart(AddProductToCartDto addProductToCart)
         {
             var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
-            var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = client.PostAsync("/api/cart/AddProductToCart", StringContentUTF8.AsJsonString(addProductToCart)).GetAwaiter().GetResult();
 			response.EnsureSuccessStatusCode();
 			var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
@@ -51,8 +62,12 @@ namespace Xango.Service.ShoppingCartAPI.Client
         {
             var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
-            var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = client.PostAsync("/api/cart/ApplyCoupon/", StringContentUTF8.AsJsonString(cartDto)).GetAwaiter().GetResult();
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
@@ -68,6 +83,10 @@ namespace Xango.Service.ShoppingCartAPI.Client
 			var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
 			client.BaseAddress = new Uri(_baseUri);
 			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
 			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 			var response = client.PostAsync("/api/cart/ApplyCoupon/", StringContentUTF8.AsJsonString(couponDto)).GetAwaiter().GetResult();
 			response.EnsureSuccessStatusCode();
@@ -84,6 +103,10 @@ namespace Xango.Service.ShoppingCartAPI.Client
 			var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
 			client.BaseAddress = new Uri(_baseUri);
 			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
 			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 			var response = client.PostAsync("/api/cart/RemoveCoupon/", StringContentUTF8.AsJsonString(userId)).GetAwaiter().GetResult();
 			response.EnsureSuccessStatusCode();
@@ -100,8 +123,12 @@ namespace Xango.Service.ShoppingCartAPI.Client
         {
             var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
-            var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = client.DeleteAsync("/api/cart/DeleteCart/" + userId).GetAwaiter().GetResult();
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
@@ -121,8 +148,12 @@ namespace Xango.Service.ShoppingCartAPI.Client
         {
             var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
-            var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.GetAsync("/api/cart/GetCart/" + userId);
             response.EnsureSuccessStatusCode();
             var resp = await response.Content.ReadFromJsonAsync<ResponseDto?>();
@@ -137,8 +168,12 @@ namespace Xango.Service.ShoppingCartAPI.Client
         {
             var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
-            var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = client.PostAsync("/api/cart/RemoveCart/", new StringContent($"{cartDetailsId.CartDetailsId}", Encoding.UTF8, "application/json")).GetAwaiter().GetResult();
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
@@ -153,8 +188,12 @@ namespace Xango.Service.ShoppingCartAPI.Client
         {
             var client = _httpClientFactory.NewClientNoSslErrors("ShoppingCart");
             client.BaseAddress = new Uri(_baseUri);
-            var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = client.PostAsync("/api/cart/CartUpsert/", StringContentUTF8.AsJsonString(cartDto)).GetAwaiter().GetResult();
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();

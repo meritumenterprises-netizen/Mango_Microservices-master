@@ -8,6 +8,7 @@ using Xango.Service.InventoryAPI.Client;
 using Xango.Services.OrderAPI;
 using Xango.Services.OrderAPI.Data;
 using Xango.Services.Server.Utility.Extensions;
+using Xango.Service.QueueAPI.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.ConfigureKestrel(options =>
@@ -38,6 +39,7 @@ builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 //builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IInventoryttpClient, InventoryHttpClient>();
+builder.Services.AddScoped<IQueueHttpClient, QueueHttpClient>();
 
 
 //builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

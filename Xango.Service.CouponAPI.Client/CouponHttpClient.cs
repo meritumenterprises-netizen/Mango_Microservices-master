@@ -22,8 +22,8 @@ namespace Xango.Service.CouponAPI.Client
         private readonly IConfiguration _configuration;
         private readonly string _baseUri;
         private readonly ITokenProvider _tokenProvider;
-
-        readonly string _baseAddress;
+        private string _token = string.Empty;
+		readonly string _baseAddress;
         public CouponHttpClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, ITokenProvider tokenProvider)
         {
             _httpClientFactory = httpClientFactory;
@@ -32,12 +32,21 @@ namespace Xango.Service.CouponAPI.Client
             _tokenProvider = tokenProvider;
         }
 
-        public async Task<ResponseDto?> CreateCoupons(CouponDto couponDto)
+        public void SetToken(string token)
+        {
+            this._token = token;
+		}
+
+		public async Task<ResponseDto?> CreateCoupons(CouponDto couponDto)
         {
             var client = _httpClientFactory.NewClientNoSslErrors("Coupon");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            if (token == null)
+            {
+                token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var resp = await client.PostAsync("/api/coupon", StringContentUTF8.AsJsonString<CouponDto>(couponDto));
             if (resp != null & resp.IsSuccessStatusCode)
             {
@@ -51,7 +60,11 @@ namespace Xango.Service.CouponAPI.Client
             var client = _httpClientFactory.NewClientNoSslErrors("Coupon");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = client.DeleteAsync("/api/coupon/" + id).GetAwaiter().GetResult();
             response.EnsureSuccessStatusCode();
             if (response != null & response.IsSuccessStatusCode)
@@ -66,7 +79,11 @@ namespace Xango.Service.CouponAPI.Client
             var client = _httpClientFactory.NewClientNoSslErrors("Coupon");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.GetAsync("/api/coupon",HttpCompletionOption.ResponseContentRead);
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
@@ -82,7 +99,11 @@ namespace Xango.Service.CouponAPI.Client
             var client = _httpClientFactory.NewClientNoSslErrors("Coupon");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.GetAsync($"/api/coupon/GetByCode/{couponCode}");
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto>().Result;
@@ -98,7 +119,11 @@ namespace Xango.Service.CouponAPI.Client
             var client = _httpClientFactory.NewClientNoSslErrors("Coupon");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.GetAsync($"/api/coupon/" + id);
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto>().Result;

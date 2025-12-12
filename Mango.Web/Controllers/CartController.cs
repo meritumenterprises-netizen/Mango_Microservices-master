@@ -10,7 +10,9 @@ using Xango.Service.ShoppingCartAPI.Client;
 using Xango.Services.Client.Utility;
 using Xango.Services.Dto;
 using Xango.Services.Interfaces;
+using Xango.Services.Server.Utility;
 using Xango.Services.Utility;
+using Xango.Web.Extensions;
 
 namespace Xango.Web.Controllers
 {
@@ -20,12 +22,14 @@ namespace Xango.Web.Controllers
         private readonly IShoppingCartHttpClient _shoppingCartClient;
         private readonly IOrderHttpClient _orderHttpClient;
         private readonly IAuthenticationHttpClient _authenticationClient;
-        public CartController(IOrderHttpClient orderHttpClient, IShoppingCartHttpClient shoppingCartHttpClient, IAuthenticationHttpClient authenticationHttpClient)
+        private readonly ITokenProvider _tokenProvider;
+        public CartController(IOrderHttpClient orderHttpClient, IShoppingCartHttpClient shoppingCartHttpClient, IAuthenticationHttpClient authenticationHttpClient, ITokenProvider tokenProvider)
         {
             _shoppingCartClient = shoppingCartHttpClient;
             _orderHttpClient = orderHttpClient;
             _authenticationClient = authenticationHttpClient;
-        }
+            _tokenProvider = tokenProvider;
+		}
 
         [HttpGet]
         public async Task<IActionResult> CartIndex()
@@ -59,9 +63,12 @@ namespace Xango.Web.Controllers
         {
 
             CartDto cart = await LoadCartDtoBasedOnLoggedInUser();
-            cart.CartHeader.Phone = cartDto.CartHeader.Phone;
+            cart.CartHeader.CartHeaderId = cartDto.CartHeader.CartHeaderId;
+			cart.CartHeader.Phone = cartDto.CartHeader.Phone;
             cart.CartHeader.Email = cartDto.CartHeader.Email;
             cart.CartHeader.Name = cartDto.CartHeader.Name;
+
+            this.SetClientToken(_orderHttpClient, _tokenProvider);
 
             var response = await _orderHttpClient.CreateOrder(cart);
             OrderHeaderDto orderHeaderDto = DtoConverter.ToDto<OrderHeaderDto>(response);
@@ -81,7 +88,7 @@ namespace Xango.Web.Controllers
 
                 var stripeResponse = await _orderHttpClient.CreateStripeSession(stripeRequestDto);
                 StripeRequestDto stripeResponseResult = DtoConverter.ToDto<StripeRequestDto>(stripeResponse);
-                Response.Headers.Add("Location", stripeResponseResult.StripeSessionUrl);
+                Response.Headers.Append("Location", stripeResponseResult.StripeSessionUrl);
 
                 return new StatusCodeResult(303);
             }
@@ -94,7 +101,8 @@ namespace Xango.Web.Controllers
             if (response != null & response.IsSuccess)
             {
                 OrderHeaderDto orderHeader = DtoConverter.ToDto<OrderHeaderDto>(response);
-                var cartDto = _shoppingCartClient.GetCartByUserId(orderHeader.UserId);
+                this.SetClientToken(_shoppingCartClient, _tokenProvider);
+				var cartDto = _shoppingCartClient.GetCartByUserId(orderHeader.UserId);
                 _shoppingCartClient.DeleteCart(orderHeader.UserId);
                 if (orderHeader.Status == SD.Status_Approved)
                 {
@@ -120,7 +128,14 @@ namespace Xango.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> ApplyCoupon(CartDto cartDto)
         {
-            ResponseDto? response = await _shoppingCartClient.ApplyCoupon(cartDto);
+			var authHeader = Request.Headers["Authorization"].ToString();
+			if (!string.IsNullOrEmpty(authHeader) && authHeader.StartsWith("Bearer "))
+			{
+				var token = authHeader.Substring("Bearer ".Length).Trim();
+				_shoppingCartClient.SetToken(token);
+			}
+
+			ResponseDto? response = await _shoppingCartClient.ApplyCoupon(cartDto);
             if (response != null & response.IsSuccess)
             {
                 TempData["success"] = "Cart updated successfully";
@@ -133,7 +148,10 @@ namespace Xango.Web.Controllers
         public async Task<IActionResult> RemoveCoupon(CartDto cartDto)
         {
             cartDto.CartHeader.CouponCode = "";
-            ResponseDto? response = await _shoppingCartClient.ApplyCoupon(cartDto);
+			var authHeader = Request.Headers["Authorization"].ToString();
+            this.SetClientToken(_shoppingCartClient, _tokenProvider);
+
+			ResponseDto? response = await _shoppingCartClient.ApplyCoupon(cartDto);
             if (response != null & response.IsSuccess)
             {
                 TempData["success"] = "Cart updated successfully";
@@ -149,7 +167,10 @@ namespace Xango.Web.Controllers
                 var userEmail = User.Claims.Where((claim) => claim.Type == "email").First().Value;
                 var response = await _authenticationClient.GetUser(userEmail);
                 var userDto = DtoConverter.ToDto<UserDto>(response);
-                ResponseDto? responseDto = await _shoppingCartClient.GetCartByUserId(userDto.Id);
+				var authHeader = Request.Headers["Authorization"].ToString();
+                this.SetClientToken(_shoppingCartClient, _tokenProvider);
+
+				ResponseDto? responseDto = await _shoppingCartClient.GetCartByUserId(userDto.Id);
                 if (responseDto != null & responseDto.IsSuccess)
                 {
                     CartDto cartDto = JsonConvert.DeserializeObject<CartDto>(Convert.ToString(DtoConverter.ToResponseDto(responseDto).Result));

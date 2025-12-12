@@ -19,8 +19,9 @@ namespace Xango.Service.InventoryAPI.Client
         private readonly IConfiguration _configuration;
         private readonly string _baseUri;
         private readonly ITokenProvider _tokenProvider;
+        private string _token = string.Empty;
 
-        public InventoryHttpClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, ITokenProvider tokenProvider)
+		public InventoryHttpClient(IHttpClientFactory httpClientFactory, IConfiguration configuration, ITokenProvider tokenProvider)
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
@@ -28,11 +29,20 @@ namespace Xango.Service.InventoryAPI.Client
             _tokenProvider = tokenProvider;
         }
 
+        public void SetToken ( string token )
+        {
+            this._token = token;
+        }
+
         public async Task<ResponseDto?> CurrentStock(int productId)
         {
             var client = _httpClientFactory.NewClientNoSslErrors("Inventory");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
+            if (token == null)
+            {
+                token = this._token;
+			}
             client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.GetAsync($"/api/inventory/currentstock/{productId}");
             response.EnsureSuccessStatusCode();
@@ -49,7 +59,11 @@ namespace Xango.Service.InventoryAPI.Client
             var client = _httpClientFactory.NewClientNoSslErrors("Inventory");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.GetAsync($"/api/inventory/instock/{productId}");
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ResponseDto>().Result;
@@ -65,7 +79,11 @@ namespace Xango.Service.InventoryAPI.Client
             var client = _httpClientFactory.NewClientNoSslErrors("Inventory");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.PostAsync($"/api/inventory/returnqty", StringContentUTF8.AsJsonString(new InventoryQuantityDto { ProductId = productId, Quantity = quantity }));
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ProductDto>().Result;
@@ -86,7 +104,11 @@ namespace Xango.Service.InventoryAPI.Client
             var client = _httpClientFactory.NewClientNoSslErrors("Inventory");
             client.BaseAddress = new Uri(_baseUri);
             var token = _tokenProvider.GetToken();
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			if (token == null)
+			{
+				token = this._token;
+			}
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
             var response = await client.PostAsync($"/api/inventory/subtractfromstock", StringContentUTF8.AsJsonString(new InventoryQuantityDto { ProductId = productId, Quantity = quantity }));
             response.EnsureSuccessStatusCode();
             var resp = response.Content.ReadFromJsonAsync<ProductDto>().Result;

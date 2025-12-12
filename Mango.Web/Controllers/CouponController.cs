@@ -3,19 +3,23 @@ using Xango.Models.Dto;
 using Xango.Service.CouponAPI.Client;
 using Xango.Services.Client.Utility;
 using Xango.Services.Interfaces;
+using Xango.Services.Server.Utility;
+using Xango.Web.Extensions;
 
 namespace Xango.Web.Controllers
 {
     public class CouponController : Controller
     {
         private readonly ICouponHttpClient _couponClient;
-        public CouponController(ICouponHttpClient couponClient)
-        {
-            _couponClient = couponClient;
-        }
+        private readonly ITokenProvider _tokenProvider;
+		public CouponController(ICouponHttpClient couponClient, ITokenProvider tokenProvider)
+		{
+			_couponClient = couponClient;
+			_tokenProvider = tokenProvider;
+		}
 
 
-        public async Task<IActionResult> CouponIndex()
+		public async Task<IActionResult> CouponIndex()
         {
             List<CouponDto>? list = new();
             ResponseDto? response = await _couponClient.GetAllCoupons();
@@ -42,6 +46,7 @@ namespace Xango.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                this.SetClientToken(_couponClient, _tokenProvider);
                 ResponseDto? response = await _couponClient.CreateCoupons(model);
                 if (response != null && response.IsSuccess)
                 {
@@ -58,7 +63,8 @@ namespace Xango.Web.Controllers
 
         public async Task<IActionResult> CouponDelete(int couponId)
         {
-            ResponseDto? response = await _couponClient.DeleteCoupons(couponId);
+            this.SetClientToken(_couponClient, _tokenProvider);
+			ResponseDto? response = await _couponClient.DeleteCoupons(couponId);
 
             if (response != null && response.IsSuccess)
             {
