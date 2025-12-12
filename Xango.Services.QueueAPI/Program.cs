@@ -6,7 +6,9 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Xango.Services.Server.Utility;
 using Xango.Services.Server.Utility.Extensions;
-
+using RabbitMQ.Client;
+using IModel = RabbitMQ.Client.IModel;
+using IConnection = RabbitMQ.Client.IConnection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +34,21 @@ builder.Services.AddCors(options =>
 //builder.Services.AddSingleton(mapper);
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+builder.Services.AddSingleton<IConnection>(sp =>
+{
+	var factory = new ConnectionFactory
+	{
+		HostName = "rabbitmq.default.svc.cluster.local",
+		UserName = "guest",
+		Password = "guest",
+		AutomaticRecoveryEnabled = true,
+		NetworkRecoveryInterval = TimeSpan.FromSeconds(15),
+		TopologyRecoveryEnabled = true,
+		RequestedHeartbeat = TimeSpan.FromSeconds(30)
+	};
+
+	return factory.CreateConnection();
+});
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -75,4 +92,6 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+
 app.Run();

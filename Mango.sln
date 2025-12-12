@@ -59,6 +59,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Service.QueueAPI.Clie
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.Server.Utility", "Xango.Services.Server.Utility\Xango.Services.Server.Utility.csproj", "{9EB69BA7-BDA0-13F7-782B-A2DA27DF82A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.RabbitMQ.Utility", "Xango.Services.RabbitMQ.Utility\Xango.Services.RabbitMQ.Utility.csproj", "{4D09E7EE-4150-47B8-A88C-562D8043EF89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -149,6 +151,10 @@ Global
 		{9EB69BA7-BDA0-13F7-782B-A2DA27DF82A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EB69BA7-BDA0-13F7-782B-A2DA27DF82A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EB69BA7-BDA0-13F7-782B-A2DA27DF82A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D09E7EE-4150-47B8-A88C-562D8043EF89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D09E7EE-4150-47B8-A88C-562D8043EF89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D09E7EE-4150-47B8-A88C-562D8043EF89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D09E7EE-4150-47B8-A88C-562D8043EF89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -178,6 +184,7 @@ Global
 		{2D2B9CA1-DDD3-3897-9D52-E9EEE452073A} = {93124727-AAF7-4047-BC08-006CF8E31074}
 		{0FAB602A-5747-C926-7ECB-5EFF565340F8} = {8C19D64C-29AC-4997-9035-6664E2B8CA97}
 		{9EB69BA7-BDA0-13F7-782B-A2DA27DF82A0} = {889AA4C7-BA45-481F-AF1F-8A8C11195C93}
+		{4D09E7EE-4150-47B8-A88C-562D8043EF89} = {889AA4C7-BA45-481F-AF1F-8A8C11195C93}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {929D2BC7-133A-46CF-89C4-0315B8019576}

@@ -21,7 +21,7 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.9" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="RabbitMQ.Client" Version="7.2.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="9.0.6" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="9.0.6" />
@@ -29,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Xango.Services.RabbitMQ.Utility\Xango.Services.RabbitMQ.Utility.csproj" />
     <ProjectReference Include="..\Xango.Services.Server.Utility\Xango.Services.Server.Utility.csproj" />
     <ProjectReference Include="..\Xango.Services.Dto\Xango.Models.Dto.csproj" />
     <ProjectReference Include="..\Xango.Services.Interfaces\Xango.Services.Interfaces.csproj" />
