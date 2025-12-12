@@ -22,10 +22,10 @@ namespace Xango.Services.Queue.Controllers
 			this._connection = connection;
 			using (var channel = connection.CreateModel())
 			{
-				RabbitMQUtils.EnsureQueueExists(connection, channel, "Xango.Orders.Approved");
-				RabbitMQUtils.EnsureQueueExists(connection, channel, "Xango.Orders.Pending");
-				RabbitMQUtils.EnsureQueueExists(connection, channel, "Xango.Orders.ReadyForPickup");
-				RabbitMQUtils.EnsureQueueExists(connection, channel, "Xango.Orders.Cancelled");
+				RabbitMQUtils.EnsureQueueExists(connection, channel, QueueConstants.ORDERS_APPROVED_QUEUE);
+				RabbitMQUtils.EnsureQueueExists(connection, channel, QueueConstants.ORDERS_PENDING_QUEUE);
+				RabbitMQUtils.EnsureQueueExists(connection, channel, QueueConstants.ORDERS_READYFORPICKUP_QUEUE);
+				RabbitMQUtils.EnsureQueueExists(connection, channel, QueueConstants.ORDERS_CANCELLED_QUEUE);
 			}
 		}
 
@@ -34,7 +34,7 @@ namespace Xango.Services.Queue.Controllers
 		[Route("OrderApproved")]
 		public ResponseDto OrderApproved(OrderHeaderDto orderHeader)
 		{
-			RabbitMQUtils.PostMessage(_connection.CreateModel(), "Xango.Orders.Approved", System.Text.Json.JsonSerializer.Serialize(orderHeader));
+			RabbitMQUtils.PostMessage(_connection.CreateModel(), QueueConstants.ORDERS_APPROVED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
 			return new ResponseDto
 			{
 				IsSuccess = true,
@@ -47,7 +47,7 @@ namespace Xango.Services.Queue.Controllers
 		[Route("OrderPending")]
 		public ResponseDto OrderPending(OrderHeaderDto orderHeader)
 		{
-			RabbitMQUtils.PostMessage(_connection.CreateModel(), "Xango.Orders.Pending", System.Text.Json.JsonSerializer.Serialize(orderHeader));
+			RabbitMQUtils.PostMessage(_connection.CreateModel(), QueueConstants.ORDERS_PENDING_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
 			return new ResponseDto
 			{
 				IsSuccess = true,
