@@ -29,7 +29,7 @@ namespace Xango.Services.AuthAPI.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegistrationRequestDto model)
+        public async Task<IActionResult> Register(RegistrationRequestDto model)
         {
             try
             {
@@ -37,6 +37,11 @@ namespace Xango.Services.AuthAPI.Controllers
                 if (result != "Registration successful")
                 {
                     throw new ApplicationException(result);
+                }
+                var result2 = await _authService.AssignRole(model.Email, model.Role);
+                if (result2 == false )
+                {
+                    throw new ApplicationException("Unable to assign user role");
                 }
                 _response.IsSuccess = true;
                 _response.Message = "Registration successful";

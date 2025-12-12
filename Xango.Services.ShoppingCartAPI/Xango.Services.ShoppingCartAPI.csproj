@@ -36,12 +36,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Xango.Serrvices.Server.Utility\Xango.Serrvices.Server.Utility.csproj" />
     <ProjectReference Include="..\Xango.Service.AuthenticationAPI.Client\Xango.Service.AuthenticationAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Service.CouponAPI.Client\Xango.Service.CouponAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Service.ProductAPI.Client\Xango.Service.ProductAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Services.Client.Utility\Xango.Services.Client.Utility.csproj" />
     <ProjectReference Include="..\Xango.Services.Dto\Xango.Models.Dto.csproj" />
+    <ProjectReference Include="..\Xango.Services.Server.Utility\Xango.Services.Server.Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>

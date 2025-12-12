@@ -25,7 +25,7 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Debug
 WORKDIR /src
 COPY ["Xango.Services.ProductAPI/Xango.Services.ProductAPI.csproj", "Xango.Services.ProductAPI/"]
-COPY ["Xango.Serrvices.Server.Utility/Xango.Serrvices.Server.Utility.csproj", "Xango.Serrvices.Server.Utility/"]
+COPY ["Xango.Services.Server.Utility/Xango.Services.Server.Utility.csproj", "Xango.Services.Server.Utility/"]
 COPY ["Xango.Services.Client.Utility/Xango.Services.Client.Utility.csproj", "Xango.Services.Client.Utility/"]
 COPY ["Xango.Services.Dto/Xango.Services.Dto.csproj", "Xango.Services.Dto/"]
 RUN dotnet restore "./Xango.Services.ProductAPI/Xango.Services.ProductAPI.csproj"

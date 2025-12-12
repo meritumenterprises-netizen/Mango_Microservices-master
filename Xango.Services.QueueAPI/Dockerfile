@@ -6,11 +6,6 @@ USER $APP_UID
 WORKDIR /app
 EXPOSE 80
 
-ENV LANG=en_US.UTF-8
-ENV LANGUAGE=en_US:en
-ENV LC_ALL=en_US.UTF-8
-ENV CURRENCY=USD
-
 ENV AuthenticaionAPI="http://auth-api.default.svc.cluster.local"
 ENV CouponAPI="http://coupon-api.default.svc.cluster.local"
 ENV ProductAPI="http://product-api.default.svc.cluster.local"
@@ -18,30 +13,27 @@ ENV ShoppingCartAPI="http://shoppingcart-api.default.svc.cluster.local"
 ENV OrderAPI="http://order-api.default.svc.cluster.local"
 ENV InventoryAPI="http://inventory-api.default.svc.cluster.local"
 
-ENV SQL_CONNECTION_STRING=Server="tcp:mssql.default.svc.cluster.local,1433;Database=Xango_Authentication;User ID=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
-
-ENV ASPNETCORE_ENVIRONMENT=Production
+ENV SQL_CONNECTION_STRING=Server="tcp:mssql.default.svc.cluster.local,1433;Database=Xango_Product;User ID=sa;Password=YourStrong!Passw0rd;TrustServerCertificate=True"
 
 # This stage is used to build the service project
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Debug
+ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Xango.Services.AuthAPI/Xango.Services.AuthAPI.csproj", "Xango.Services.AuthAPI/"]
-COPY ["Xango.Services.Server.Utility/Xango.Services.Server.Utility.csproj", "Xango.Services.Server.Utility/"]
-COPY ["Xango.Services.Client.Utility/Xango.Services.Client.Utility.csproj", "Xango.Services.Client.Utility/"]
-COPY ["Xango.Services.Dto/Xango.Services.Dto.csproj", "Xango.Services.Dto/"]
-RUN dotnet restore "./Xango.Services.AuthAPI/Xango.Services.AuthAPI.csproj"
+COPY ["Xango.Services.Queue/Xango.Services.QueueAPI.csproj", "Xango.Services.Queue/"]
+COPY ["Xango.Services.Dto/Xango.Models.Dto.csproj", "Xango.Services.Dto/"]
+COPY ["Xango.Services.Interfaces/Xango.Services.Interfaces.csproj", "Xango.Services.Interfaces/"]
+RUN dotnet restore "./Xango.Services.Queue/Xango.Services.QueueAPI.csproj"
 COPY . .
-WORKDIR "/src/Xango.Services.AuthAPI"
-RUN dotnet build "./Xango.Services.AuthAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
+WORKDIR "/src/Xango.Services.Queue"
+RUN dotnet build "./Xango.Services.QueueAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage
 FROM build AS publish
 ARG BUILD_CONFIGURATION=Debug
-RUN dotnet publish "./Xango.Services.AuthAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./Xango.Services.QueueAPI.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Xango.Services.AuthAPI.dll"]
+ENTRYPOINT ["dotnet", "Xango.Services.QueueAPI.dll"]

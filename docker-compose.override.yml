@@ -74,5 +74,26 @@ services:
     labels:
       - "com.microsoft.visualstudio.debuggee.openBrowser=true"
       - "com.microsoft.visualstudio.debuggee.url=http://myhost.local"
-
+  rabbitmq:
+    ports:
+      - "192.168.0.141:5672:5672"
+      - "192.168.0.141:15672:15672"
+  queue-api:
+    environment:  
+    - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "192.168.0.141:80:80"
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  queueprocessor:
+    environment:
+    - ASPNETCORE_ENVIRONMENT=Development
+    volumes:
+      - ${APPDATA}/Microsoft/UserSecrets:/home/app/.microsoft/usersecrets:ro
+      - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
+      - ${APPDATA}/ASP.NET/Https:/home/app/.aspnet/https:ro
+      - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
   

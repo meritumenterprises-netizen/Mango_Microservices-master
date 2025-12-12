@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
-using Xango.Serrvices.Server.Utility;
+using Xango.Services.Server.Utility;
 using Xango.Services.CouponAPI;
 using Xango.Services.CouponAPI.Data;
 using Xango.Services.Server.Utility.Extensions;

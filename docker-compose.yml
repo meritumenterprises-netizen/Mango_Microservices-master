@@ -171,5 +171,51 @@ services:
       - order-api
       - shoppingcart-api
       - product-api
-  
-  
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    container_name: rabbitmq
+    extra_hosts:
+      rabbitmq.default.svc.cluster.local : 192.168.0.141
+    ports:
+      - "192.168.0.141:5672:5672"
+      - "192.168.0.141:15672:15672"
+    networks:
+      appnet:
+        aliases:
+          - rabbitmq.default.svc.cluster.local
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest 
+  queue-api:
+      image: ${docker_registry-}queueapi
+      container_name: queue-api
+      environment:
+        RABBITMQ_DEFAULT_USER: guest
+        RABBITMQ_DEFAULT_PASS: guest 
+      build:
+         context: .
+         dockerfile: Xango.Services.QueueAPI/Dockerfile
+      extra_hosts:
+        queue.default.svc.cluster.local : 192.168.0.142
+      ports:
+      - "192.168.0.141:80:80"
+      depends_on:
+      - rabbitmq
+  queueprocessor:
+      image: ${docker_registry-}queueprocessor
+      container_name: queue-processor
+      environment:
+        RABBITMQ_DEFAULT_USER: guest
+        RABBITMQ_DEFAULT_PASS: guest 
+      build:
+         context: .
+         dockerfile: Xango.Services.Queue.Processor/Dockerfile
+      networks:
+        appnet:
+          aliases:
+            - rabbitmq.default.svc.cluster.local
+      depends_on:
+        - rabbitmq
+        - queue-api
+      extra_hosts:
+        queue.default.svc.cluster.local : 192.168.0.142

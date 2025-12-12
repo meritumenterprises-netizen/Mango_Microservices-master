@@ -4,12 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Http;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Xango.Serrvices.Server.Utility;
+using Xango.Services.Server.Utility;
 using Xango.Services.ProductAPI;
 using Xango.Services.ProductAPI.Data;
-using Xango.Services.Server.Utility;
 using Xango.Services.Server.Utility.Extensions;
-using Xango.Web;
 
 var builder = WebApplication.CreateBuilder(args);
 

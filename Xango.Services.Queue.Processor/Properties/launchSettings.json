@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Xango.Services.Queue.Processor": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}

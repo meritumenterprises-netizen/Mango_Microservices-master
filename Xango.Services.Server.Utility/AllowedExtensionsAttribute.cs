@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
 
-namespace Xango.Web.Utility
+namespace Xango.Services.Server.Utility
 {
     public class AllowedExtensionsAttribute : ValidationAttribute
     {

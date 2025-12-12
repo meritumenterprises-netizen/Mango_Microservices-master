@@ -2,15 +2,13 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Xango.Serrvices.Server.Utility;
+using Xango.Services.Server.Utility;
 using Xango.Service.AuthenticationAPI.Client;
 using Xango.Service.CouponAPI.Client;
 using Xango.Service.ProductAPI.Client;
-using Xango.Services.Server.Utility;
 using Xango.Services.Server.Utility.Extensions;
 using Xango.Services.ShoppingCartAPI;
 using Xango.Services.ShoppingCartAPI.Data;
-using Xango.Services.Utility;
 
 
 var builder = WebApplication.CreateBuilder(args);

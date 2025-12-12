@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using Xango.Serrvices.Server.Utility;
+using Xango.Services.Server.Utility;
 using Xango.Services.InventoryApi;
 using Xango.Services.InventoryApi.Data;
 using Xango.Services.InventoryApi.Service;
