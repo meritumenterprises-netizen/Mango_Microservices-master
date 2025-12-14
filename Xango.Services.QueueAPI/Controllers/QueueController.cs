@@ -26,6 +26,8 @@ namespace Xango.Services.Queue.Controllers
 				RabbitMQUtils.EnsureQueueExists(connection, channel, QueueConstants.ORDERS_PENDING_QUEUE);
 				RabbitMQUtils.EnsureQueueExists(connection, channel, QueueConstants.ORDERS_READYFORPICKUP_QUEUE);
 				RabbitMQUtils.EnsureQueueExists(connection, channel, QueueConstants.ORDERS_CANCELLED_QUEUE);
+				RabbitMQUtils.EnsureQueueExists(connection, channel, QueueConstants.ORDERS_COMPLETED_QUEUE);
+				RabbitMQUtils.EnsureQueueExists(connection, channel, QueueConstants.ORDERS_SHIPPED_QUEUE);
 			}
 		}
 
@@ -80,5 +82,32 @@ namespace Xango.Services.Queue.Controllers
 				Result = orderHeader,
 			};
 		}
+
+		[HttpPost]
+		[Authorize]
+		[Route("OrderCompleted")]
+		public ResponseDto OrderCompleted(OrderHeaderDto orderHeader)
+		{
+			RabbitMQUtils.PostMessage(_connection.CreateModel(), QueueConstants.ORDERS_COMPLETED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
+			return new ResponseDto
+			{
+				IsSuccess = true,
+				Result = orderHeader,
+			};
+		}
+
+		[HttpPost]
+		[Authorize]
+		[Route("OrderShipped")]
+		public ResponseDto OrderShipped(OrderHeaderDto orderHeader)
+		{
+			RabbitMQUtils.PostMessage(_connection.CreateModel(), QueueConstants.ORDERS_SHIPPED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
+			return new ResponseDto
+			{
+				IsSuccess = true,
+				Result = orderHeader,
+			};
+		}
+
 	}
 }

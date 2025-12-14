@@ -58,20 +58,28 @@ namespace Xango.Services.Queue.Processor
 				this.OrderClient = this.ServiceProvider.GetRequiredService<IOrderHttpClient>();
 				this.MaxRunTime = TimeSpan.FromMinutes(Convert.ToInt32(Environment.GetEnvironmentVariable("MAX_RUNTIME_MINUTES")));
 				this.StartTime = DateTime.Now;
+
+				Console.WriteLine($"{this.GetType().FullName} Check queue every {this.CheckQueueEverySeconds} seconds");
+				Console.WriteLine($"{this.GetType().FullName} Pick messages older than {this.PickMessageOlderThanSeconds} seconds");
+				Console.WriteLine($"{this.GetType().FullName} Maximum run time of the task is {(this.MaxRunTime == TimeSpan.Zero ? "indefinite" : this.MaxRunTime.ToString() + " minutes")}");
 			}
 
 			protected void AddOrderMessage(BasicGetResult message, OrderHeaderDto orderHeader)
 			{
+				Console.WriteLine($"[{this.GetType().FullName}] Adding order id {orderHeader.OrderHeaderId} with status {orderHeader.Status} to the processing queue...");
 				this.OrderQueue.Enqueue(new QueueMessage() { Message = message, OrderHeader = orderHeader });
 			}
 
 			protected void RemoveOrderMessage()
 			{
+				var message = this.OrderQueue.Peek();
+				Console.WriteLine($"[{this.GetType().FullName}] Removing message for order id {message.OrderHeader.OrderHeaderId} with status {message.OrderHeader.Status}");
 				this.Channel.BasicAck(this.OrderQueue.Dequeue().Message.DeliveryTag, false);
 			}
 
 			internal void BeginProcessingMessages()
 			{
+				Console.WriteLine($"[{this.GetType().FullName}] BeginProcessingMessages starting...");
 				this.Channel = this.RabbitMqConnection.CreateModel();
 				this.StartedProcessingMessages = true;
 
@@ -92,10 +100,12 @@ namespace Xango.Services.Queue.Processor
 					this.CancellationTokenSource.Cancel();
 					Console.WriteLine($"{this.GetType().FullName}] Failed to authenticate with the Authentication API Client.");
 				}
+				Console.WriteLine($"[{this.GetType().FullName}] BeginProcessMessages ending...");
 			}
 
 			internal void EndProcessingMessages()
 			{
+				Console.WriteLine($"[{this.GetType().FullName}] EndProcessingMessages starting...");
 				this.Channel.Close();
 				this.Channel.Dispose();
 				this.StartedProcessingMessages = false;
@@ -108,7 +118,7 @@ namespace Xango.Services.Queue.Processor
 				if (this.MaxRunTime.TotalMinutes != 0)
 				{
 					var runDuration = DateTime.Now - this.StartTime;
-					Console.WriteLine($"[{this.GetType().FullName}] Run duration: {runDuration.TotalMinutes} minutes.");
+					Console.WriteLine($"[{this.GetType().FullName}] Task running duration: {runDuration.TotalMinutes:F2} minutes.");
 					if (runDuration >= this.MaxRunTime)
 					{
 						Console.WriteLine($"[{this.GetType().FullName}] Max run time of {this.MaxRunTime.TotalMinutes} minutes reached. Stopping processor.");
@@ -116,16 +126,19 @@ namespace Xango.Services.Queue.Processor
 						this.CancellationToken.ThrowIfCancellationRequested();
 					}
 				}
+				Console.WriteLine($"[{this.GetType().FullName}] EndMessageProcessing ending...");
 			}
 
 			protected bool AreOrderMessagesAvailable()
 			{
+				Console.WriteLine($"Messages are {(this.OrderQueue.Count > 0 ? "available" : "unavailable")}");
 				return this.OrderQueue.Count > 0;
 			}
 
 			public virtual bool CheckForMessages()
 			{
 				BasicGetResult message = null;
+				Console.WriteLine($"[{this.GetType().FullName}] Starting checking for messages...");
 				do
 				{
 					if (this.CancellationToken.IsCancellationRequested)
@@ -140,14 +153,17 @@ namespace Xango.Services.Queue.Processor
 							var orderHeader = DtoConverter.ToDto<OrderHeaderDto>(Encoding.UTF8.GetString(message.Body.ToArray()));
 							if (orderHeader != null)
 							{
+								Console.WriteLine($"[{this.GetType().FullName}] Found message for order id {orderHeader.OrderHeaderId}...");
 								var messageAgeSeconds = (DateTime.UtcNow - orderHeader.OrderTime).TotalSeconds;
 								if (messageAgeSeconds >= this.PickMessageOlderThanSeconds)
 								{
+									Console.WriteLine($"[{this.GetType().FullName}] Message for order id {orderHeader.OrderHeaderId} qualifies for processing...");
 									this.AddOrderMessage(message, orderHeader);
 									continue;
 								}
 								else
 								{
+									Console.WriteLine($"[{this.GetType().FullName}] Message for order id {orderHeader.OrderHeaderId} does not quality for processing, it is too new...");
 									// Not old enough, requeue
 									this.Channel.BasicNack(message.DeliveryTag, false, true);
 									break;
@@ -156,6 +172,7 @@ namespace Xango.Services.Queue.Processor
 							else
 							{
 								// Invalid message, discard
+								Console.WriteLine($"[{this.GetType().FullName}] Message for order id {orderHeader.OrderHeaderId} is invalid, removing message from queue {this.QueueName}...");
 								this.Channel.BasicNack(message.DeliveryTag, false, false);
 								message = null;
 								break;
@@ -167,19 +184,27 @@ namespace Xango.Services.Queue.Processor
 						Console.WriteLine($"[{this.GetType().FullName}] Exception: " + ex.Message);
 					}
 				} while (message != null);
-
+				Console.WriteLine($"[{this.GetType().FullName}] Ending checking for messages...");
 				return this.AreOrderMessagesAvailable();
 			}
 
 			protected abstract bool ProcessSingleMessage(QueueMessage message);
+
+			internal void DeleteOrhpanedMessage(QueueMessage message)
+			{
+				RemoveOrderMessage();
+			}
 			public virtual bool ProcessMessages()
 			{
+				Console.WriteLine($"[{this.GetType().FullName}] Starting processing messages...");
 				while (this.AreOrderMessagesAvailable())
 				{
+					Console.WriteLine($"[{this.GetType().FullName}] messages are available...");
 					var message = this.OrderQueue.Peek();
 					var result = this.ProcessSingleMessage(message);
 					if (result)
 					{
+						Console.WriteLine($"[{this.GetType().FullName}] Processed message for order id {message.OrderHeader.OrderHeaderId} successfully...");
 						this.RemoveOrderMessage();
 					}
 					else
@@ -188,6 +213,7 @@ namespace Xango.Services.Queue.Processor
 						this.RemoveOrderMessage(); // TODO: in the future, replace this with a dead-letter queue mechanism
 					}
 				}
+				Console.WriteLine($"[{this.GetType().FullName}] Ending processing messages...");
 				return true;
 			}
 

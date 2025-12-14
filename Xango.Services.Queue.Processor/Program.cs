@@ -78,8 +78,17 @@ public class Program
 		{
 			Thread.Sleep(30000); // Wait for dependent services to be ready, this is a simple approach, consider using a more robust solution in production
 			Console.WriteLine("[Xango.Services.Queue.Processor] Starting");
+			var maxRuntimeMinutes = Convert.ToInt32(Environment.GetEnvironmentVariable("MAX_RUNTIME_MINUTES"));
+			if (maxRuntimeMinutes > 0)
+			{
+				Console.WriteLine($"[Xango.Services.QueueProcessor] the process will run for max. {maxRuntimeMinutes} minutes");
+			}
+			else
+			{
+				Console.WriteLine("[Xango.Services.QueueProcessor] the process will run indefinitely");
+			}
 			var mqReader = new RabbitMqReader(serviceProvider);
-			mqReader.Start();
+			mqReader.StartAsync();
 			host.Run();
 		}
 		catch (Exception ex)

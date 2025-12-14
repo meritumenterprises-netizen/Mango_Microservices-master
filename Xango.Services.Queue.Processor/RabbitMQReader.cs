@@ -29,35 +29,81 @@ namespace Xango.Services.Queue.Processor
 			_startTime = DateTime.Now;
 		}
 
-		public async void Start()
+		public async Task StartAsync()
 		{
+			Console.WriteLine("[QueueMessageProcessor] Starting Queue Message Processor...");
+
 			var cts = new CancellationTokenSource();
 			var token = cts.Token;
+
 			try
 			{
-				var ordersPendingProcessor = new OrdersPendingProcessor(_serviceProvider, cts) { PickMessageOlderThanSeconds = 10 };
-				var ordersCancelledProcessor = new OrdersCancelledProcessor(_serviceProvider, cts) { PickMessageOlderThanSeconds = 10 };
-				var ordersReadyForPickupProcessor = new OrdersReadyForPickupProcessor(_serviceProvider, cts) { PickMessageOlderThanSeconds = 10 };
-				var ordersApprovedProcessor = new OrdersApprovedProcessor(_serviceProvider, cts) { PickMessageOlderThanSeconds = 10 };
-				var tasks = new List<Task> // if one task cancels, all should cancel
+				var processors = new QueueMessageProcessorBase[]
 				{
-					ConsumeQueuePeriodically(token, ordersCancelledProcessor),
-					ConsumeQueuePeriodically(token, ordersReadyForPickupProcessor),
-					ConsumeQueuePeriodically(token, ordersApprovedProcessor),
-					ConsumeQueuePeriodically(token, ordersPendingProcessor)
+			new OrdersCancelledProcessor(_serviceProvider, cts)
+			{
+				PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_CANCELLED_PICK_INTERVAL_SECONDS"),
+				CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_CANCELLED_INTERVAL_SECONDS")
+			},
+			new OrdersReadyForPickupProcessor(_serviceProvider, cts)
+			{
+				PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_READYFORPICKUP_PICK_INTERVAL_SECONDS"),
+				CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_READYFORPICKUP_INTERVAL_SECONDS")
+			},
+			new OrdersApprovedProcessor(_serviceProvider, cts)
+			{
+				PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_APPROVED_PICK_INTERVAL_SECONDS"),
+				CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_APPROVED_INTERVAL_SECONDS")
+			},
+			new OrdersPendingProcessor(_serviceProvider, cts)
+			{
+				PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_PENDING_PICK_INTERVAL_SECONDS"),
+				CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_PENDING_INTERVAL_SECONDS")
+			},
+			new OrdersCompletedProcessor(_serviceProvider, cts)
+			{
+				PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_COMPLETED_PICK_INTERVAL_SECONDS"),
+				CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_COMPLETED_INTERVAL_SECONDS")
+			},
+			new OrdersShippedProcessor(_serviceProvider, cts)
+			{
+				PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_SHIPPED_PICK_INTERVAL_SECONDS"),
+				CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_SHIPPED_INTERVAL_SECONDS")
+			}
 				};
+
+				var tasks = new List<Task>();
+
+				Console.WriteLine($"[QueueMessageProcessor] Task staggering delay is {EnvironmentEx.GetEnvironmentVariableOrThrow<int>("STAGGER_TASKS_SECONDS")} seconds");
+
+				foreach (var processor in processors)
+				{
+					Console.WriteLine($"[QueueMessageProcessor] Starting {processor.QueueName} processor...");
+					tasks.Add(ConsumeQueuePeriodically(token, processor));
+
+
+					// stagger startup
+					await Task.Delay(TimeSpan.FromSeconds(EnvironmentEx.GetEnvironmentVariableOrThrow<int>("STAGGER_TASKS_SECONDS")), token);
+				}
+
+				Console.WriteLine("[QueueMessageProcessor] All processor tasks started.");
 				await Task.WhenAll(tasks);
+			}
+			catch (OperationCanceledException)
+			{
+				Console.WriteLine("[QueueMessageProcessor] Shutdown requested.");
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"[QueueMessageProcessor] Exception: {ex.Message}");
+				Console.WriteLine($"[QueueMessageProcessor] Exception: {ex}");
+				cts.Cancel();
+				throw;
 			}
 		}
 
-
 		private async Task ConsumeQueuePeriodically(CancellationToken cancellationToken, QueueMessageProcessorBase processor)
 		{
-			var queueCheckIntervalSeconds = Convert.ToInt32(Environment.GetEnvironmentVariable("QUEUE_CHECK_INTERVAL_SECONDS"));
+			var queueCheckIntervalSeconds = processor.CheckQueueEverySeconds;
 			do
 			{
 				try

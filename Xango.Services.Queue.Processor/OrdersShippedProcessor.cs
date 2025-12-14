@@ -6,15 +6,15 @@ using Xango.Services.Client.Utility;
 using Xango.Services.RabbitMQ.Utility;
 using static Xango.Services.Queue.Processor.QueueMessage;
 
-
 namespace Xango.Services.Queue.Processor
 {
-	internal class OrdersPendingProcessor : QueueMessageProcessorBase
+	internal class OrdersShippedProcessor : QueueMessageProcessorBase
 	{
-		internal OrdersPendingProcessor(IServiceProvider _serviceProvider, CancellationTokenSource cancellationTokenSource) : 
-			base(QueueConstants.ORDERS_PENDING_QUEUE, _serviceProvider, cancellationTokenSource)
+		internal OrdersShippedProcessor(IServiceProvider _serviceProvider, CancellationTokenSource cancellationTokenSource) :
+			base(QueueConstants.ORDERS_SHIPPED_QUEUE, _serviceProvider, cancellationTokenSource)
 		{
 		}
+
 		protected override bool ProcessSingleMessage(QueueMessage message)
 		{
 			bool processed = false;
@@ -26,25 +26,27 @@ namespace Xango.Services.Queue.Processor
 				try
 				{
 					var correspondingOrderHeader = DtoConverter.ToDto<OrderHeaderDto>(this.OrderClient.GetOrder(orderHeader.OrderHeaderId).Result);
-					if (correspondingOrderHeader == null || correspondingOrderHeader.Status != SD.Status_Pending)
+					if (correspondingOrderHeader == null || correspondingOrderHeader.Status != SD.Status_Shipped)
 					{
-						Console.WriteLine($"[{this.GetType().FullName}] Unable to retrieve order with ID {orderHeader.OrderHeaderId} and status Pending.");
+						Console.WriteLine($"[{this.GetType().FullName}] Unable to retrieve order with ID {orderHeader.OrderHeaderId} and status Shipped.");
 						RemoveOrderMessage();
 						return true;
 					}
 
-					var response = this.OrderClient.UpdateOrderStatus(orderHeader.OrderHeaderId, SD.Status_Cancelled).Result;
-					if (response != null && response.IsSuccess)
-					{
-						processed = true;
-					}
+					// DO NOTHING ELSE, just remove orders shipped messages from the queue that have no corresponding order in the database
+
+
+					//var response = this.OrderClient.UpdateOrderStatus(orderHeader.OrderHeaderId, SD.Status_Completed).Result;
+					//if (response != null && response.IsSuccess)
+					//{
+					//	processed = true;
+					//}
 				}
 				catch (Exception exc)
 				{
 					Console.WriteLine($"[{this.GetType().FullName}] Exception: {exc.Message}");
 				}
 			}
-
 			if (processed)
 			{
 				Console.WriteLine($"[{this.GetType().FullName}] Successfully processed order with ID {message.OrderHeader.OrderHeaderId}.");

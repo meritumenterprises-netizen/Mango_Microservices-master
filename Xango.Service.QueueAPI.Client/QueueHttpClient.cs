@@ -119,7 +119,51 @@ namespace Xango.Service.QueueAPI.Client
 			{
 				return ResponseProducer.OkResponse(resp.Result);
 			}
-			return ResponseProducer.ErrorResponse("Could cancelled order to the queue");
+			return ResponseProducer.ErrorResponse("Could not post cancelled order to the queue");
+		}
+
+		public async Task<ResponseDto> PostOrderCompleted(OrderHeaderDto orderHeader)
+		{
+			var client = _httpClientFactory.NewClientNoSslErrors("Queue");
+			client.BaseAddress = new Uri(_baseUri);
+			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
+
+			orderHeader.OrderTotalWithCurrency = orderHeader.OrderTotal.ToString("C2");
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var response = await client.PostAsync("/api/queue/OrderCompleted", StringContentUTF8.AsJsonString(orderHeader));
+			response.EnsureSuccessStatusCode();
+			var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
+			if (resp != null && resp.IsSuccess)
+			{
+				return ResponseProducer.OkResponse(resp.Result);
+			}
+			return ResponseProducer.ErrorResponse("Could not posted completed order to the queue");
+		}
+
+		public async Task<ResponseDto> PostOrderShipped(OrderHeaderDto orderHeader)
+		{
+			var client = _httpClientFactory.NewClientNoSslErrors("Queue");
+			client.BaseAddress = new Uri(_baseUri);
+			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
+
+			orderHeader.OrderTotalWithCurrency = orderHeader.OrderTotal.ToString("C2");
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var response = await client.PostAsync("/api/queue/OrderShipped", StringContentUTF8.AsJsonString(orderHeader));
+			response.EnsureSuccessStatusCode();
+			var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
+			if (resp != null && resp.IsSuccess)
+			{
+				return ResponseProducer.OkResponse(resp.Result);
+			}
+			return ResponseProducer.ErrorResponse("Could not posted shipped order to the queue");
 		}
 
 	}

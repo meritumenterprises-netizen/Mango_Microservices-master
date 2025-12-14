@@ -210,10 +210,27 @@ services:
         RABBITMQ_HOST: rabbitmq.default.svc.cluster.local
         RABBITMQ_USER: guest
         RABBITMQ_PASSWORD: guest
-        QUEUE_CHECK_INTERVAL_SECONDS: 15
-        MAX_RUNTIME_MINUTES: 2
+        
+        MAX_RUNTIME_MINUTES: 0 # set to 0 to make the processor run indefinitely
+        STAGGER_TASKS_SECONDS: 5 # how long to wait between starting each task
+
+        QUEUE_PENDING_PICK_INTERVAL_SECONDS: 120 # how old pending orders need to be to pick them up
+        QUEUE_COMPLETED_PICK_INTERVAL_SECONDS: 30 # how old completed orders need to be to pick them up
+        QUEUE_CANCELLED_PICK_INTERVAL_SECONDS: 30 # how old cancelled orders need to be to pick them up
+        QUEUE_READYFORPICKUP_PICK_INTERVAL_SECONDS: 30 # how old readyforpickup orders need to be to pick them up
+        QUEUE_APPROVED_PICK_INTERVAL_SECONDS: 30 # how old approved orders need to be to pick them up
+        QUEUE_SHIPPED_PICK_INTERVAL_SECONDS: 30 # how old shipped orders need to be to pick them up
+
+        QUEUE_CANCELLED_INTERVAL_SECONDS: 300 # how often to check for cancelled orders
+        QUEUE_PENDING_INTERVAL_SECONDS: 60 # how often to check for pending orders
+        QUEUE_COMPLETED_INTERVAL_SECONDS: 300 # how often to check for completed orders
+        QUEUE_READYFORPICKUP_INTERVAL_SECONDS: 300 # how often to check for readyforpickup orders
+        QUEUE_APPROVED_INTERVAL_SECONDS: 300 # how often to check for approved orders
+        QUEUE_SHIPPED_INTERVAL_SECONDS: 30 # how often to check for shipped orders
+
         AUTH_USER: admin@none.com
         AUTH_PASSWORD: Password1!
+
         AuthenticaionAPI: http://auth-api.default.svc.cluster.local:80
         OrderAPI : http://order-api.default.svc.cluster.local:80
       build:

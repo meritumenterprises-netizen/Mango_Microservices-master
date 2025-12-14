@@ -1,18 +1,19 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Threading;
-using Xango.Models.Dto;
+using System.Threading.Tasks;
 using Xango.Services.Client.Utility;
 using Xango.Services.RabbitMQ.Utility;
 using static Xango.Services.Queue.Processor.QueueMessage;
 
-
 namespace Xango.Services.Queue.Processor
 {
-	internal class OrdersPendingProcessor : QueueMessageProcessorBase
+	internal class OrdersCompletedProcessor : QueueMessageProcessorBase
 	{
-		internal OrdersPendingProcessor(IServiceProvider _serviceProvider, CancellationTokenSource cancellationTokenSource) : 
-			base(QueueConstants.ORDERS_PENDING_QUEUE, _serviceProvider, cancellationTokenSource)
+		internal OrdersCompletedProcessor(IServiceProvider _serviceProvider, CancellationTokenSource cancellationTokenSource) :
+			base(QueueConstants.ORDERS_COMPLETED_QUEUE, _serviceProvider, cancellationTokenSource)
 		{
 		}
 		protected override bool ProcessSingleMessage(QueueMessage message)
@@ -25,15 +26,15 @@ namespace Xango.Services.Queue.Processor
 				Console.WriteLine($"[{this.GetType().FullName}] Processing order with ID {orderHeader.OrderHeaderId}.");
 				try
 				{
-					var correspondingOrderHeader = DtoConverter.ToDto<OrderHeaderDto>(this.OrderClient.GetOrder(orderHeader.OrderHeaderId).Result);
-					if (correspondingOrderHeader == null || correspondingOrderHeader.Status != SD.Status_Pending)
+					var correspondingOrderHeader = this.OrderClient.GetOrder(orderHeader.OrderHeaderId).Result;
+					if (correspondingOrderHeader == null || !correspondingOrderHeader.IsSuccess || correspondingOrderHeader.Result == null)
 					{
-						Console.WriteLine($"[{this.GetType().FullName}] Unable to retrieve order with ID {orderHeader.OrderHeaderId} and status Pending.");
+						Console.WriteLine($"[{this.GetType().FullName}] Unable to retrieve order with ID {orderHeader.OrderHeaderId}.");
 						RemoveOrderMessage();
 						return true;
 					}
 
-					var response = this.OrderClient.UpdateOrderStatus(orderHeader.OrderHeaderId, SD.Status_Cancelled).Result;
+					var response = this.OrderClient.UpdateOrderStatus(orderHeader.OrderHeaderId, SD.Status_Shipped).Result;
 					if (response != null && response.IsSuccess)
 					{
 						processed = true;
@@ -44,7 +45,6 @@ namespace Xango.Services.Queue.Processor
 					Console.WriteLine($"[{this.GetType().FullName}] Exception: {exc.Message}");
 				}
 			}
-
 			if (processed)
 			{
 				Console.WriteLine($"[{this.GetType().FullName}] Successfully processed order with ID {message.OrderHeader.OrderHeaderId}.");
@@ -54,6 +54,8 @@ namespace Xango.Services.Queue.Processor
 			{
 				Console.WriteLine($"[{this.GetType().FullName}] Failed to process order with ID {message.OrderHeader.OrderHeaderId}.");
 			}
+			return processed;
+
 			return processed;
 		}
 	}

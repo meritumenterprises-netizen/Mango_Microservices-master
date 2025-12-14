@@ -1,16 +1,19 @@
 ﻿@using System.IdentityModel.Tokens.Jwt
 @{
 
+
+
 	var status = Context.Request.Query["status"];
 	if (string.IsNullOrEmpty(status))
 	{
 		status = "all";
-    }
+	}
 
 	var userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
 	var approved = "";
 	var readyforpickup = "";
 	var cancelled = "";
+	var shipped = "";
 	var pending = "";
 
 	var completed = "";
@@ -25,13 +28,17 @@
 			break;
 		case "pending":
 			pending = "active text-white bg-secondary";
-            break;
+			break;
 		case "cancelled":
 			cancelled = "active text-white bg-secondary";
 			break;
 		case "completed":
 			completed = "active text-white bg-secondary";
-            break;
+			break;
+		case "shipped":
+			shipped = "active text-white bg-secondary";
+
+			break;
 		default:
 			all = "active text-white bg-secondary";
 			break;
@@ -61,6 +68,9 @@
 			</a>
 			<a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="completed">
 			<li class="list-group-item @completed">Completed</li>
+			</a>
+			<a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="shipped">
+			<li class="list-group-item @shipped">Shipped</li>
 			</a>
 			<a style="text-decoration:none" asp-controller="Order" asp-action="OrderIndex" asp-route-status="all">
 			<li class="list-group-item @all">All</li>

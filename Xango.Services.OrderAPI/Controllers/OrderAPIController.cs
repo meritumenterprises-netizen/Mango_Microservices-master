@@ -57,11 +57,11 @@ namespace Xango.Services.OrderAPI.Controllers
                 var id = User.Claims.Where((claim) => claim.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier").First().Value;
                 if (User.IsInRole(SD.RoleAdmin))
                 {
-                    objList = _db.OrderHeaders.AsNoTracking().Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).Where(u => status == "all" || u.Status == status);
+                    objList = _db.OrderHeaders.AsNoTracking().Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).Where(u => status == "all" || u.Status.ToLower() == status.ToLower());
                 }
                 else
                 {
-                    objList = _db.OrderHeaders.AsNoTracking().Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).Where(u => (status == "all" || u.Status == status) && u.UserId == id );
+                    objList = _db.OrderHeaders.AsNoTracking().Include(u => u.OrderDetails).OrderByDescending(u => u.OrderHeaderId).Where(u => (status == "all" || u.Status.ToLower() == status.ToLower()) && u.UserId == id );
                 }
                 _response.Result = _mapper.Map<IEnumerable<OrderHeaderDto>>(objList);
             }
@@ -293,13 +293,15 @@ namespace Xango.Services.OrderAPI.Controllers
                     {
                         var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
                         this.SetClientToken(_queueClient, _tokenProvider);
-                        var response = await _queueClient.PostOrderApproved(orderHeaderDto);
+                        var response = await _queueClient.PostOrderReadyForPickup(orderHeaderDto);
                         if (!response.IsSuccess)
                         {
                             throw new ApplicationException("Could not post order in status of Approved to the queue");
                         }
+                        orderHeader.Status = SD.Status_Approved;
+                        _db.SaveChanges();
 
-                    }
+					}
                     if (newStatus == SD.Status_Cancelled)
                     {
                         this.SetClientToken(_inventoryClient, _tokenProvider);
@@ -308,11 +310,14 @@ namespace Xango.Services.OrderAPI.Controllers
                             await _inventoryClient.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                         }
 						var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
+						this.SetClientToken(_queueClient, _tokenProvider);
 						var response = await _queueClient.PostOrderCancelled(orderHeaderDto);
 						if (!response.IsSuccess)
 						{
 							throw new ApplicationException("Could not post order in status of Cancelled to the queue");
 						}
+						orderHeader.Status = SD.Status_Cancelled;
+						_db.SaveChanges();
 
 					}
                     if (newStatus == SD.Status_ReadyForPickup)
@@ -324,10 +329,35 @@ namespace Xango.Services.OrderAPI.Controllers
                         {
                             throw new ApplicationException("Could not post order in status of Ready for Pickup to the queue");
                         }
+						orderHeader.Status = SD.Status_ReadyForPickup;
+						_db.SaveChanges();
 					}
-					orderHeader.Status = newStatus;
-                    _db.SaveChanges();
-                }
+					if (newStatus == SD.Status_Completed)
+					{
+						var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
+						this.SetClientToken(_queueClient, _tokenProvider);
+						var response = await _queueClient.PostOrderCompleted(orderHeaderDto);
+						if (!response.IsSuccess)
+						{
+							throw new ApplicationException("Could not post order in status of Completed to the queue");
+						}
+						orderHeader.Status = SD.Status_Completed;
+						_db.SaveChanges();
+					}
+                    if (newStatus == SD.Status_Shipped)
+                    {
+						var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
+						this.SetClientToken(_queueClient, _tokenProvider);
+						var response = await _queueClient.PostOrderShipped(orderHeaderDto);
+						if (!response.IsSuccess)
+						{
+							throw new ApplicationException("Could not post order in status of Shipped to the queue");
+						}
+						orderHeader.Status = SD.Status_Shipped;
+						_db.SaveChanges();
+
+					}
+				}
             }
             catch (Exception ex)
             {
