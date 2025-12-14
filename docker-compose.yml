@@ -213,6 +213,7 @@ services:
         
         MAX_RUNTIME_MINUTES: 0 # set to 0 to make the processor run indefinitely
         STAGGER_TASKS_SECONDS: 5 # how long to wait between starting each task
+        INITIAL_DELAY_SECONDS: 30 # how long to wait before starting the first task
 
         QUEUE_PENDING_PICK_INTERVAL_SECONDS: 120 # how old pending orders need to be to pick them up
         QUEUE_COMPLETED_PICK_INTERVAL_SECONDS: 30 # how old completed orders need to be to pick them up

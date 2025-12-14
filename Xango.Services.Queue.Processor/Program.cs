@@ -13,6 +13,7 @@ using System.IO;
 using System.Threading;
 using Xango.Service.AuthenticationAPI.Client;
 using Xango.Service.OrderAPI.Client;
+using Xango.Services.Client.Utility;
 using Xango.Services.Queue.Processor;
 using Xango.Services.RabbitMQ;
 using Xango.Services.Server.Utility;
@@ -76,7 +77,8 @@ public class Program
 
 		try
 		{
-			Thread.Sleep(30000); // Wait for dependent services to be ready, this is a simple approach, consider using a more robust solution in production
+			Console.WriteLine($"[Xango.Services.Queue.Processor] Sleeping for {EnvironmentEx.GetEnvironmentVariableOrThrow<int>("INITIAL_DELAY_SECONDS")} before starting full processing.");
+			Thread.Sleep(EnvironmentEx.GetEnvironmentVariableOrThrow<int>("INITIAL_DELAY_SECONDS") * 1000); // Wait for dependent services to be ready, this is a simple approach, consider using a more robust solution in production
 			Console.WriteLine("[Xango.Services.Queue.Processor] Starting");
 			var maxRuntimeMinutes = Convert.ToInt32(Environment.GetEnvironmentVariable("MAX_RUNTIME_MINUTES"));
 			if (maxRuntimeMinutes > 0)
