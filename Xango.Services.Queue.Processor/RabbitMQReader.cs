@@ -89,6 +89,7 @@ namespace Xango.Services.Queue.Processor
 
 
 					// stagger startup
+					Console.WriteLine($"[QueueMessageProcessor] Waiting {EnvironmentEx.GetEnvironmentVariableOrThrow<int>("STAGGER_TASKS_SECONDS")} seconds before starting next processor...");
 					await Task.Delay(TimeSpan.FromSeconds(EnvironmentEx.GetEnvironmentVariableOrThrow<int>("STAGGER_TASKS_SECONDS")), token);
 				}
 
