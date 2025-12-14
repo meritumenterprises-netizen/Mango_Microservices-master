@@ -22,7 +22,7 @@ namespace Xango.Services.Queue.Processor
 		public OrderHeaderDto OrderHeader { get; set; }
 		public bool ProcessedSuccessfully { get; set; } = false;
 
-		public abstract class QueueMessageProcessorBase
+		public abstract class QueueMessageProcessorBase : IDisposable
 		{
 			protected IConnection RabbitMqConnection { get; set; }
 			protected IAuthenticationHttpClient AuthClient { get; set; }
@@ -132,7 +132,7 @@ namespace Xango.Services.Queue.Processor
 
 			protected bool AreOrderMessagesAvailable()
 			{
-				Console.WriteLine($"Messages are {(this.OrderQueue.Count > 0 ? "available" : "unavailable")}");
+				Console.WriteLine($"[{this.GetType().FullName}] Messages are {(this.OrderQueue.Count > 0 ? "available" : "unavailable")}");
 				return this.OrderQueue.Count > 0;
 			}
 
@@ -218,6 +218,14 @@ namespace Xango.Services.Queue.Processor
 				return true;
 			}
 
+			public void Dispose()
+			{
+				if (this.RabbitMqConnection != null && this.RabbitMqConnection.IsOpen)
+				{
+					this.RabbitMqConnection.Close();
+					this.RabbitMqConnection.Dispose();
+				}
+			}
 		}	
 	}
 }

@@ -122,11 +122,13 @@ namespace Xango.Services.Queue.Processor
 				}
 				catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
 				{
+					processor.Dispose();
 					Console.WriteLine($"[{processor.QueueName}] task cancelled.");
 					break;
 				}
 				catch (Exception ex)
 				{
+					processor.Dispose();
 					Console.WriteLine($"[{processor.QueueName}] Exception {ex.Message}.");
 				}
 			} while (true);
