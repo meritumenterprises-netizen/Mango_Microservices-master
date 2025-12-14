@@ -131,7 +131,7 @@ namespace Xango.Services.Queue.Processor
 				}
 			} while (true);
 
-			Console.WriteLine($"[{processor.QueueName}] Task exiting.");
+			Console.WriteLine($"[{processor.QueueName}] Task exiting at {DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")}.");
 		}
 	}
 }

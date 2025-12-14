@@ -56,9 +56,10 @@ namespace Xango.Services.Queue.Processor
 				this.RabbitMqConnection = this.ServiceProvider.GetRequiredService<IConnection>();
 				this.AuthClient = this.ServiceProvider.GetRequiredService<IAuthenticationHttpClient>();
 				this.OrderClient = this.ServiceProvider.GetRequiredService<IOrderHttpClient>();
-				this.MaxRunTime = TimeSpan.FromMinutes(Convert.ToInt32(Environment.GetEnvironmentVariable("MAX_RUNTIME_MINUTES")));
+				this.MaxRunTime = TimeSpan.FromMinutes(EnvironmentEx.GetEnvironmentVariableOrThrow<int>("MAX_RUNTIME_MINUTES"));
 				this.StartTime = DateTime.Now;
 
+				Console.WriteLine($"{this.GetType().FullName} Initialized at {this.StartTime.ToString("dd.MM.yyyy HH:mm:ss")}");
 				Console.WriteLine($"{this.GetType().FullName} Check queue every {this.CheckQueueEverySeconds} seconds");
 				Console.WriteLine($"{this.GetType().FullName} Pick messages older than {this.PickMessageOlderThanSeconds} seconds");
 				Console.WriteLine($"{this.GetType().FullName} Maximum run time of the task is {(this.MaxRunTime == TimeSpan.Zero ? "indefinite" : this.MaxRunTime.ToString() + " minutes")}");
