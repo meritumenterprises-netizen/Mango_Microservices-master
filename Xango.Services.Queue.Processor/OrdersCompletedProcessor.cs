@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Xango.Models.Dto;
 using Xango.Services.Client.Utility;
 using Xango.Services.RabbitMQ.Utility;
 using static Xango.Services.Queue.Processor.QueueMessage;
@@ -26,10 +27,10 @@ namespace Xango.Services.Queue.Processor
 				Console.WriteLine($"[{this.GetType().FullName}] Processing order with ID {orderHeader.OrderHeaderId}.");
 				try
 				{
-					var correspondingOrderHeader = this.OrderClient.GetOrder(orderHeader.OrderHeaderId).Result;
-					if (correspondingOrderHeader == null || !correspondingOrderHeader.IsSuccess || correspondingOrderHeader.Result == null)
+					var correspondingOrderHeader = DtoConverter.ToDto<OrderHeaderDto>(this.OrderClient.GetOrder(orderHeader.OrderHeaderId).Result);
+					if (correspondingOrderHeader == null || correspondingOrderHeader.Status != SD.Status_Completed)
 					{
-						Console.WriteLine($"[{this.GetType().FullName}] Unable to retrieve order with ID {orderHeader.OrderHeaderId}.");
+						Console.WriteLine($"[{this.GetType().FullName}] Unable to retrieve order with ID {orderHeader.OrderHeaderId} and status Completed.");
 						RemoveOrderMessage();
 						return true;
 					}
@@ -54,8 +55,6 @@ namespace Xango.Services.Queue.Processor
 			{
 				Console.WriteLine($"[{this.GetType().FullName}] Failed to process order with ID {message.OrderHeader.OrderHeaderId}.");
 			}
-			return processed;
-
 			return processed;
 		}
 	}

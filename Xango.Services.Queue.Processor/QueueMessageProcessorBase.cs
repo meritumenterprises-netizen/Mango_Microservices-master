@@ -22,7 +22,7 @@ namespace Xango.Services.Queue.Processor
 		public OrderHeaderDto OrderHeader { get; set; }
 		public bool ProcessedSuccessfully { get; set; } = false;
 
-		public abstract class QueueMessageProcessorBase : IDisposable
+		public abstract class QueueMessageProcessorBase
 		{
 			protected IConnection RabbitMqConnection { get; set; }
 			protected IAuthenticationHttpClient AuthClient { get; set; }
@@ -53,7 +53,6 @@ namespace Xango.Services.Queue.Processor
 				this.PickMessageOlderThanSeconds = pickMessagesOlderThanSeconds;
 				this.CheckQueueEverySeconds = checkQueueEverySeconds;
 				this.ServiceProvider = serviceProvider;
-				this.RabbitMqConnection = this.ServiceProvider.GetRequiredService<IConnection>();
 				this.AuthClient = this.ServiceProvider.GetRequiredService<IAuthenticationHttpClient>();
 				this.OrderClient = this.ServiceProvider.GetRequiredService<IOrderHttpClient>();
 				this.MaxRunTime = TimeSpan.FromMinutes(EnvironmentEx.GetEnvironmentVariableOrThrow<int>("MAX_RUNTIME_MINUTES"));
@@ -62,7 +61,7 @@ namespace Xango.Services.Queue.Processor
 				Console.WriteLine($"{this.GetType().FullName} Initialized at {this.StartTime.ToString("dd.MM.yyyy HH:mm:ss")}");
 				Console.WriteLine($"{this.GetType().FullName} Check queue every {this.CheckQueueEverySeconds} seconds");
 				Console.WriteLine($"{this.GetType().FullName} Pick messages older than {this.PickMessageOlderThanSeconds} seconds");
-				Console.WriteLine($"{this.GetType().FullName} Maximum run time of the task is {(this.MaxRunTime == TimeSpan.Zero ? "indefinite" : this.MaxRunTime.ToString() + " minutes")}");
+				Console.WriteLine($"{this.GetType().FullName} Maximum run time of the processor is {(this.MaxRunTime == TimeSpan.Zero ? "indefinite" : this.MaxRunTime.ToString() + " minutes")}");
 			}
 
 			protected void AddOrderMessage(BasicGetResult message, OrderHeaderDto orderHeader)
@@ -73,18 +72,48 @@ namespace Xango.Services.Queue.Processor
 
 			protected void RemoveOrderMessage()
 			{
-				var message = this.OrderQueue.Peek();
-				Console.WriteLine($"[{this.GetType().FullName}] Removing message for order id {message.OrderHeader.OrderHeaderId} with status {message.OrderHeader.Status}");
-				this.Channel.BasicAck(this.OrderQueue.Dequeue().Message.DeliveryTag, false);
+				try
+				{
+					var message = this.OrderQueue.Peek();
+					Console.WriteLine($"[{this.GetType().FullName}] Removing message for order id {message.OrderHeader.OrderHeaderId} with status {message.OrderHeader.Status}");
+					this.Channel.BasicAck(message.Message.DeliveryTag, false);
+					this.OrderQueue.Dequeue();
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"[{this.GetType().FullName}] Exception while removing message from queue: " + ex.Message);
+				}
 			}
 
 			internal void BeginProcessingMessages()
 			{
 				Console.WriteLine($"[{this.GetType().FullName}] BeginProcessingMessages starting...");
-				this.Channel = this.RabbitMqConnection.CreateModel();
+				try
+				{
+					this.RabbitMqConnection = this.ServiceProvider.GetRequiredService<IConnection>();
+					this.Channel = this.RabbitMqConnection.CreateModel();
+				}
+				catch (Exception ex) when (ex is BrokerUnreachableException || ex is OperationInterruptedException)
+				{
+					Console.WriteLine($"[{this.GetType().FullName}] Exception: " + ex.Message);
+					try
+					{
+						this.RabbitMqConnection = this.ServiceProvider.GetRequiredService<IConnection>();
+						this.Channel = this.RabbitMqConnection.CreateModel();
+						Console.WriteLine($"[{this.GetType().FullName}] Recovered connection to the message queue broker");
+					}
+					catch (Exception innerEx) when (innerEx is BrokerUnreachableException || innerEx is OperationInterruptedException)
+					{
+						Console.WriteLine($"[{this.GetType().FullName}] Unrecoverable exception: " + innerEx.Message);
+						this.CancellationTokenSource.Cancel();
+						throw new FatalMessageBrokerException("Unable to connect to the message broker.", innerEx);
+					}
+					return;
+				}
 				this.StartedProcessingMessages = true;
 
-				var loginRequest = new LoginRequestDto() { 
+				var loginRequest = new LoginRequestDto()
+				{
 					UserName = Environment.GetEnvironmentVariable("AUTH_USER"),
 					Password = Environment.GetEnvironmentVariable("AUTH_PASSWORD")
 				};
@@ -107,9 +136,13 @@ namespace Xango.Services.Queue.Processor
 			internal void EndProcessingMessages()
 			{
 				Console.WriteLine($"[{this.GetType().FullName}] EndProcessingMessages starting...");
+				this.StartedProcessingMessages = false;
 				this.Channel.Close();
 				this.Channel.Dispose();
-				this.StartedProcessingMessages = false;
+				this.Channel = null;
+				this.RabbitMqConnection.Close();
+				this.RabbitMqConnection.Dispose();
+				this.RabbitMqConnection = null;
 				var response = this.AuthClient?.Logout().Result;
 				if (response != null && response.IsSuccess)
 				{
@@ -218,14 +251,22 @@ namespace Xango.Services.Queue.Processor
 				return true;
 			}
 
-			public void Dispose()
+			public void CloseMessageQueueConnection()
 			{
+				Console.WriteLine($"[{this.GetType().FullName}] Closing message queue connection...");
 				if (this.RabbitMqConnection != null && this.RabbitMqConnection.IsOpen)
 				{
 					this.RabbitMqConnection.Close();
 					this.RabbitMqConnection.Dispose();
 				}
 			}
-		}	
+
+			public void Finish()
+			{
+				Console.WriteLine($"[{this.GetType().FullName}] Finishing processor and closing scope...");
+				//this.CloseMessageQueueConnection();
+				Console.WriteLine($"[{this.GetType().FullName}] Processor finished.");
+			}
+		}
 	}
 }

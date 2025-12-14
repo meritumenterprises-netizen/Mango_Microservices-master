@@ -126,19 +126,24 @@ namespace Xango.Services.Queue.Processor
 						Console.WriteLine($"[{this.GetType().FullName}] Waiting {queueCheckIntervalSeconds} seconds before checking queue {processor.QueueName} again.");
 						await Task.Delay(queueCheckIntervalSeconds * 1000);
 					}
+					processor.Finish();
 				}
 				catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
 				{
-					processor.Dispose();
 					Console.WriteLine($"[{processor.GetType().FullName}] task cancelled.");
+					break;
+				}
+				catch (FatalMessageBrokerException ex)
+				{
+					Console.WriteLine($"[{processor.GetType().FullName}] FatalMessageBrokerException: {ex.Message}, stopping processor.");
 					break;
 				}
 				catch (Exception ex)
 				{
-					processor.Dispose();
 					Console.WriteLine($"[{processor.GetType().FullName}] Exception {ex.Message}.");
 				}
 			} while (true);
+			processor.CloseMessageQueueConnection();
 
 			Console.WriteLine($"[{processor.GetType().FullName}] Processor exiting at {DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")}.");
 		}

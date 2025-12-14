@@ -57,12 +57,12 @@ public class Program
 					UserName = Environment.GetEnvironmentVariable("RABBITMQ_USER"),
 					Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD"),
 					AutomaticRecoveryEnabled = true,
-					NetworkRecoveryInterval = TimeSpan.FromSeconds(15),
+					NetworkRecoveryInterval = TimeSpan.FromSeconds(10),
 					TopologyRecoveryEnabled = true,
-					RequestedHeartbeat = TimeSpan.FromSeconds(30)
+					RequestedHeartbeat = TimeSpan.FromSeconds(10)
 				};
 			});
-			services.AddSingleton<IConnection>(sp =>
+			services.AddTransient<IConnection>(sp =>
 			{
 				var factory = sp.GetRequiredService<IConnectionFactory>();
 				return factory.CreateConnection();

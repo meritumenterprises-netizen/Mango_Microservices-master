@@ -53,7 +53,6 @@ namespace Xango.Services.Queue.Processor
 			}
 			return processed;
 
-			return processed;
 		}
 
 	}

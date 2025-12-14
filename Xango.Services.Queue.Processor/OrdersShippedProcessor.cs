@@ -34,13 +34,6 @@ namespace Xango.Services.Queue.Processor
 					}
 
 					// DO NOTHING ELSE, just remove orders shipped messages from the queue that have no corresponding order in the database
-
-
-					//var response = this.OrderClient.UpdateOrderStatus(orderHeader.OrderHeaderId, SD.Status_Completed).Result;
-					//if (response != null && response.IsSuccess)
-					//{
-					//	processed = true;
-					//}
 				}
 				catch (Exception exc)
 				{

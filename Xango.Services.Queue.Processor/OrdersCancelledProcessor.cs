@@ -25,7 +25,7 @@ namespace Xango.Services.Queue.Processor
 				try
 				{
 					var correspondingOrderHeader = DtoConverter.ToDto<OrderHeaderDto>(this.OrderClient.GetOrder(orderHeader.OrderHeaderId).Result);
-					if (correspondingOrderHeader == null || correspondingOrderHeader.Status != SD.Status_Approved)
+					if (correspondingOrderHeader == null || correspondingOrderHeader.Status != SD.Status_Cancelled)
 					{
 						Console.WriteLine($"[{this.GetType().FullName}] Unable to retrieve order with ID {orderHeader.OrderHeaderId} and status Cancelled.");
 						RemoveOrderMessage();
@@ -54,7 +54,6 @@ namespace Xango.Services.Queue.Processor
 			}
 			return processed;
 
-			return processed;
 		}
 
 	}

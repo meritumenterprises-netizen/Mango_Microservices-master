@@ -34,7 +34,7 @@ builder.Services.AddCors(options =>
 //builder.Services.AddSingleton(mapper);
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
-builder.Services.AddSingleton<IConnection>(sp =>
+builder.Services.AddScoped<IConnection>(sp =>
 {
 	var factory = new ConnectionFactory
 	{
@@ -42,9 +42,9 @@ builder.Services.AddSingleton<IConnection>(sp =>
 		UserName = "guest",
 		Password = "guest",
 		AutomaticRecoveryEnabled = true,
-		NetworkRecoveryInterval = TimeSpan.FromSeconds(15),
+		NetworkRecoveryInterval = TimeSpan.FromSeconds(10),
 		TopologyRecoveryEnabled = true,
-		RequestedHeartbeat = TimeSpan.FromSeconds(30)
+		RequestedHeartbeat = TimeSpan.FromSeconds(10)
 	};
 
 	return factory.CreateConnection();
