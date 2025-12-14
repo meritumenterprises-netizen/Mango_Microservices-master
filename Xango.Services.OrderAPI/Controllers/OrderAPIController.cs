@@ -307,8 +307,25 @@ namespace Xango.Services.OrderAPI.Controllers
                         {
                             await _inventoryClient.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                         }
-                    }
-                    orderHeader.Status = newStatus;
+						var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
+						var response = await _queueClient.PostOrderCancelled(orderHeaderDto);
+						if (!response.IsSuccess)
+						{
+							throw new ApplicationException("Could not post order in status of Cancelled to the queue");
+						}
+
+					}
+                    if (newStatus == SD.Status_ReadyForPickup)
+                    {
+                        var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
+                        this.SetClientToken(_queueClient, _tokenProvider);
+                        var response = await _queueClient.PostOrderReadyForPickup(orderHeaderDto);
+                        if (!response.IsSuccess)
+                        {
+                            throw new ApplicationException("Could not post order in status of Ready for Pickup to the queue");
+                        }
+					}
+					orderHeader.Status = newStatus;
                     _db.SaveChanges();
                 }
             }
