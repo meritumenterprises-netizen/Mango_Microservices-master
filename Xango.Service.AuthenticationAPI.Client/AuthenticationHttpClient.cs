@@ -29,7 +29,7 @@ namespace Xango.Service.AuthenticationAPI.Client
         {
             _httpClientFactory = httpClientFactory;
             _configuration = configuration;
-            _baseUri = Environment.GetEnvironmentVariable("AuthenticaionAPI");
+            _baseUri = Environment.GetEnvironmentVariable("AuthenticationAPI");
             _tokenProvider = tokenProvider;
             _contextAccessor = contextAccessor;
         }

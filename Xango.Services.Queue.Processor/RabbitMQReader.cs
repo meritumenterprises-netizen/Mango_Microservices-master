@@ -123,7 +123,7 @@ namespace Xango.Services.Queue.Processor
 					processor.EndProcessingMessages();
 					if (!cancellationToken.IsCancellationRequested)
 					{
-						Console.WriteLine($"[Processor for {processor.QueueName}] Waiting {queueCheckIntervalSeconds} seconds before checking queue again.");
+						Console.WriteLine($"[{this.GetType().FullName}] Waiting {queueCheckIntervalSeconds} seconds before checking queue {processor.QueueName} again.");
 						await Task.Delay(queueCheckIntervalSeconds * 1000);
 					}
 				}

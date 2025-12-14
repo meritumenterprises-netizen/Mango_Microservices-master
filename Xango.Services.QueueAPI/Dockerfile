@@ -6,7 +6,7 @@ USER $APP_UID
 WORKDIR /app
 EXPOSE 80
 
-ENV AuthenticaionAPI="http://auth-api.default.svc.cluster.local"
+ENV AuthenticationAPI="http://auth-api.default.svc.cluster.local"
 ENV CouponAPI="http://coupon-api.default.svc.cluster.local"
 ENV ProductAPI="http://product-api.default.svc.cluster.local"
 ENV ShoppingCartAPI="http://shoppingcart-api.default.svc.cluster.local"

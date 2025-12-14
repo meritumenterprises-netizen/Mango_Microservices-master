@@ -11,7 +11,7 @@ ENV LANGUAGE=en_US:en
 ENV LC_ALL=en_US.UTF-8
 ENV CURRENCY=USD
 
-ENV AuthenticaionAPI="http://auth-api.default.svc.cluster.local"
+ENV AuthenticationAPI="http://auth-api.default.svc.cluster.local"
 ENV CouponAPI="http://coupon-api.default.svc.cluster.local"
 ENV ProductAPI="http://product-api.default.svc.cluster.local"
 ENV ShoppingCartAPI="http://shoppingcart-api.default.svc.cluster.local"
