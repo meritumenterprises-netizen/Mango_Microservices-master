@@ -7,5 +7,7 @@ namespace Xango.Services.Interfaces
 	{
 		Task<ResponseDto> PostOrderApproved(OrderHeaderDto orderHeaderDto);
 		Task<ResponseDto> PostOrderPending(OrderHeaderDto orderHeaderDto);
+		Task<ResponseDto> PostOrderReadyForPickup(OrderHeaderDto orderHeaderDto);
+		Task<ResponseDto> PostOrderCancelled(OrderHeaderDto orderHeaderDto);
 	}
 }

@@ -54,5 +54,31 @@ namespace Xango.Services.Queue.Controllers
 				Result = orderHeader,
 			};
 		}
+
+		[HttpPost]
+		[Authorize]
+		[Route("OrderReadyForPickup")]
+		public ResponseDto OrderReadyForPickup(OrderHeaderDto orderHeader)
+		{
+			RabbitMQUtils.PostMessage(_connection.CreateModel(), QueueConstants.ORDERS_READYFORPICKUP_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
+			return new ResponseDto
+			{
+				IsSuccess = true,
+				Result = orderHeader,
+			};
+		}
+
+		[HttpPost]
+		[Authorize]
+		[Route("OrderCancelled")]
+		public ResponseDto OrderCancelled(OrderHeaderDto orderHeader)
+		{
+			RabbitMQUtils.PostMessage(_connection.CreateModel(), QueueConstants.ORDERS_CANCELLED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
+			return new ResponseDto
+			{
+				IsSuccess = true,
+				Result = orderHeader,
+			};
+		}
 	}
 }
