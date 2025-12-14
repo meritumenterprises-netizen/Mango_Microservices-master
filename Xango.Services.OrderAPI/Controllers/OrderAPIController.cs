@@ -163,6 +163,7 @@ namespace Xango.Services.OrderAPI.Controllers
                 }
                 orderHeaderDto.OrderTotal = Math.Round(orderHeaderDto.OrderTotal, 2);
                 OrderHeader orderCreated = _db.OrderHeaders.Add(_mapper.Map<OrderHeader>(orderHeaderDto)).Entity;
+                orderCreated.ModifiedTime = DateTime.Now;
 
 				await _db.SaveChangesAsync();
 				orderHeaderDto.OrderHeaderId = orderCreated.OrderHeaderId;
@@ -292,7 +293,8 @@ namespace Xango.Services.OrderAPI.Controllers
                     if (newStatus == SD.Status_Approved)
                     {
                         var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
-                        this.SetClientToken(_queueClient, _tokenProvider);
+                        orderHeaderDto.ModifiedTime = DateTime.Now;
+						this.SetClientToken(_queueClient, _tokenProvider);
                         var response = await _queueClient.PostOrderReadyForPickup(orderHeaderDto);
                         if (!response.IsSuccess)
                         {
@@ -310,6 +312,7 @@ namespace Xango.Services.OrderAPI.Controllers
                             await _inventoryClient.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                         }
 						var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
+						orderHeaderDto.ModifiedTime = DateTime.Now;
 						this.SetClientToken(_queueClient, _tokenProvider);
 						var response = await _queueClient.PostOrderCancelled(orderHeaderDto);
 						if (!response.IsSuccess)
@@ -323,7 +326,8 @@ namespace Xango.Services.OrderAPI.Controllers
                     if (newStatus == SD.Status_ReadyForPickup)
                     {
                         var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
-                        this.SetClientToken(_queueClient, _tokenProvider);
+						orderHeaderDto.ModifiedTime = DateTime.Now;
+						this.SetClientToken(_queueClient, _tokenProvider);
                         var response = await _queueClient.PostOrderReadyForPickup(orderHeaderDto);
                         if (!response.IsSuccess)
                         {
@@ -335,6 +339,7 @@ namespace Xango.Services.OrderAPI.Controllers
 					if (newStatus == SD.Status_Completed)
 					{
 						var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
+						orderHeaderDto.ModifiedTime = DateTime.Now;
 						this.SetClientToken(_queueClient, _tokenProvider);
 						var response = await _queueClient.PostOrderCompleted(orderHeaderDto);
 						if (!response.IsSuccess)
@@ -347,6 +352,7 @@ namespace Xango.Services.OrderAPI.Controllers
                     if (newStatus == SD.Status_Shipped)
                     {
 						var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
+						orderHeaderDto.ModifiedTime = DateTime.Now;
 						this.SetClientToken(_queueClient, _tokenProvider);
 						var response = await _queueClient.PostOrderShipped(orderHeaderDto);
 						if (!response.IsSuccess)

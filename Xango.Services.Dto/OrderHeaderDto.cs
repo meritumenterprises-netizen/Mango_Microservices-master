@@ -16,6 +16,7 @@ namespace Xango.Models.Dto
         public string? Email { get; set; }
         public string UserEmail { get; set; }
 		public DateTime OrderTime { get; set; }
+        public DateTime ModifiedTime { get; set; }
         public string? Status { get; set; }
         public string? PaymentIntentId { get; set; }
         public string? StripeSessionId { get; set; }

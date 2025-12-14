@@ -188,7 +188,7 @@ namespace Xango.Services.Queue.Processor
 							if (orderHeader != null)
 							{
 								Console.WriteLine($"[{this.GetType().FullName}] Found message for order id {orderHeader.OrderHeaderId}...");
-								var messageAgeSeconds = (DateTime.UtcNow - orderHeader.OrderTime).TotalSeconds;
+								var messageAgeSeconds = (DateTime.UtcNow - orderHeader.ModifiedTime).TotalSeconds;
 								if (messageAgeSeconds >= this.PickMessageOlderThanSeconds)
 								{
 									Console.WriteLine($"[{this.GetType().FullName}] Message for order id {orderHeader.OrderHeaderId} qualifies for processing...");
