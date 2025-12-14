@@ -19,11 +19,11 @@ namespace Xango.Services.Queue.Processor
 {
 	internal class RabbitMqReader
 	{
-		private readonly ServiceProvider _serviceProvider;
+		private readonly IServiceProvider _serviceProvider;
 
 		private readonly DateTime _startTime;
 
-		public RabbitMqReader(ServiceProvider serviceProvider)
+		public RabbitMqReader(IServiceProvider serviceProvider)
 		{
 			_serviceProvider = serviceProvider;
 			_startTime = DateTime.Now;
@@ -71,7 +71,7 @@ namespace Xango.Services.Queue.Processor
 					if (!cancellationToken.IsCancellationRequested)
 					{
 						Console.WriteLine($"[Processor for {processor.QueueName}] Waiting {queueCheckIntervalSeconds} seconds before checking queue again.");
-						await Task.Delay(queueCheckIntervalSeconds);
+						await Task.Delay(queueCheckIntervalSeconds * 1000);
 					}
 				}
 				catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)

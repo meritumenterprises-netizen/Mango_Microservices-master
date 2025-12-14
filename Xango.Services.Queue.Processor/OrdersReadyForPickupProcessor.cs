@@ -8,7 +8,7 @@ namespace Xango.Services.Queue.Processor
 {
 	internal class OrdersReadyForPickupProcessor : QueueMessageProcessorBase
 	{
-		internal OrdersReadyForPickupProcessor(ServiceProvider _serviceProvider, CancellationTokenSource cancellationTokenSource) :
+		internal OrdersReadyForPickupProcessor(IServiceProvider _serviceProvider, CancellationTokenSource cancellationTokenSource) :
 			base(QueueConstants.ORDERS_READYFORPICKUP_QUEUE, _serviceProvider, cancellationTokenSource)
 		{
 		}

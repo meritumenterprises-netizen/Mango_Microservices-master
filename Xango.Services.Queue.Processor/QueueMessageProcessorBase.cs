@@ -42,8 +42,8 @@ namespace Xango.Services.Queue.Processor
 
 			protected IModel Channel { get; set; }
 			protected Queue<QueueMessage> OrderQueue { get; set; }
-			protected ServiceProvider ServiceProvider { get; set; }
-			protected QueueMessageProcessorBase(string queueName, ServiceProvider serviceProvider, CancellationTokenSource cancellationTokenSource, int pickMessagesOlderThanSeconds = 3600, int checkQueueEverySeconds = 60)
+			protected IServiceProvider ServiceProvider { get; set; }
+			protected QueueMessageProcessorBase(string queueName, IServiceProvider serviceProvider, CancellationTokenSource cancellationTokenSource, int pickMessagesOlderThanSeconds = 3600, int checkQueueEverySeconds = 60)
 			{
 				this.CancellationTokenSource = cancellationTokenSource;
 				this.CancellationToken = this.CancellationTokenSource.Token;
@@ -108,10 +108,10 @@ namespace Xango.Services.Queue.Processor
 				if (this.MaxRunTime.TotalMinutes != 0)
 				{
 					var runDuration = DateTime.Now - this.StartTime;
-					Console.WriteLine($"[{this.GetType().FullName}] Run duration: {runDuration.TotalMinutes:2} minutes.");
+					Console.WriteLine($"[{this.GetType().FullName}] Run duration: {runDuration.TotalMinutes} minutes.");
 					if (runDuration >= this.MaxRunTime)
 					{
-						Console.WriteLine($"[{this.GetType().FullName}] Max run time of {this.MaxRunTime.TotalMinutes:2} minutes reached. Stopping processor.");
+						Console.WriteLine($"[{this.GetType().FullName}] Max run time of {this.MaxRunTime.TotalMinutes} minutes reached. Stopping processor.");
 						this.CancellationTokenSource.Cancel();
 						this.CancellationToken.ThrowIfCancellationRequested();
 					}

@@ -8,7 +8,7 @@ namespace Xango.Services.Queue.Processor
 {
 	internal class OrdersCancelledProcessor : QueueMessageProcessorBase
 	{
-		internal OrdersCancelledProcessor(ServiceProvider _serviceProvider, CancellationTokenSource cancellationTokenSource) :
+		internal OrdersCancelledProcessor(IServiceProvider _serviceProvider, CancellationTokenSource cancellationTokenSource) :
 			base(QueueConstants.ORDERS_CANCELLED_QUEUE, _serviceProvider, cancellationTokenSource)
 		{
 		}

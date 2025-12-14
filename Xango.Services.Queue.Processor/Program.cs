@@ -21,42 +21,12 @@ public class Program
 {
 	public static void Main(string[] args)
 	{
-
-		var services = new ServiceCollection();
-
 		var configuration = new ConfigurationBuilder()
 			.SetBasePath(Directory.GetCurrentDirectory())
 			.AddJsonFile("appsettings.json", optional: true)
 			.AddEnvironmentVariables()
 			.Build();
 
-		services.AddHttpContextAccessor();
-		services.AddHttpClient();
-
-		services.AddSingleton<IConfiguration>(configuration);
-		services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
-		services.AddTransient<IAuthenticationHttpClient, AuthenticationHttpClient>();
-		services.AddTransient<IOrderHttpClient, OrderHttpClient>();
-		services.AddTransient<ITokenProvider, TokenProvider>();
-		services.AddSingleton<IConnectionFactory>((serviceProvider) =>
-		{
-			return new ConnectionFactory
-			{
-				HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST"),
-				UserName = Environment.GetEnvironmentVariable("RABBITMQ_USER"),
-				Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD"),
-				AutomaticRecoveryEnabled = true,
-				NetworkRecoveryInterval = TimeSpan.FromSeconds(15),
-				TopologyRecoveryEnabled = true,
-				RequestedHeartbeat = TimeSpan.FromSeconds(30)
-			};
-		});
-		services.AddSingleton<IConnection>(sp =>
-		{
-			var factory = sp.GetRequiredService<IConnectionFactory>();
-			return factory.CreateConnection();
-		});
-		services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 		var builder = Host.CreateDefaultBuilder(args)
 			.ConfigureLogging(logging =>
 		{
@@ -71,11 +41,38 @@ public class Program
 			services.AddSingleton<OrdersReadyForPickupProcessor>();
 			services.AddSingleton<OrdersApprovedProcessor>();
 			services.AddSingleton<RabbitMqReader>();
+			services.AddHttpClient();
+
+			services.AddSingleton<IConfiguration>(configuration);
+			services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
+			services.AddTransient<IAuthenticationHttpClient, AuthenticationHttpClient>();
+			services.AddTransient<IOrderHttpClient, OrderHttpClient>();
+			services.AddTransient<ITokenProvider, TokenProvider>();
+			services.AddSingleton<IConnectionFactory>((serviceProvider) =>
+			{
+				return new ConnectionFactory
+				{
+					HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST"),
+					UserName = Environment.GetEnvironmentVariable("RABBITMQ_USER"),
+					Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD"),
+					AutomaticRecoveryEnabled = true,
+					NetworkRecoveryInterval = TimeSpan.FromSeconds(15),
+					TopologyRecoveryEnabled = true,
+					RequestedHeartbeat = TimeSpan.FromSeconds(30)
+				};
+			});
+			services.AddSingleton<IConnection>(sp =>
+			{
+				var factory = sp.GetRequiredService<IConnectionFactory>();
+				return factory.CreateConnection();
+			});
+			services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+			services.AddHttpContextAccessor();
 		});
 
 		var host = builder.Build();
-
-		var serviceProvider = services.BuildServiceProvider();
+		
+		var serviceProvider = host.Services;
 
 		try
 		{
