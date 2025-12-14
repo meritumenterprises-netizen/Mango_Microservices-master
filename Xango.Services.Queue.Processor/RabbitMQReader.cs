@@ -80,29 +80,29 @@ namespace Xango.Services.Queue.Processor
 
 				var tasks = new List<Task>();
 
-				Console.WriteLine($"[QueueMessageProcessor] Task staggering delay is {EnvironmentEx.GetEnvironmentVariableOrThrow<int>("STAGGER_TASKS_SECONDS")} seconds");
+				Console.WriteLine($"[{this.GetType().FullName}] Task staggering delay is {EnvironmentEx.GetEnvironmentVariableOrThrow<int>("STAGGER_TASKS_SECONDS")} seconds");
 
 				foreach (var processor in processors)
 				{
-					Console.WriteLine($"[QueueMessageProcessor] Starting {processor.QueueName} processor...");
+					Console.WriteLine($"[{this.GetType().FullName}] Starting {processor.QueueName} processor...");
 					tasks.Add(ConsumeQueuePeriodically(token, processor));
 
 
 					// stagger startup
-					Console.WriteLine($"[QueueMessageProcessor] Waiting {EnvironmentEx.GetEnvironmentVariableOrThrow<int>("STAGGER_TASKS_SECONDS")} seconds before starting next processor...");
+					Console.WriteLine($"[{this.GetType().FullName}] Waiting {EnvironmentEx.GetEnvironmentVariableOrThrow<int>("STAGGER_TASKS_SECONDS")} seconds before starting next processor...");
 					await Task.Delay(TimeSpan.FromSeconds(EnvironmentEx.GetEnvironmentVariableOrThrow<int>("STAGGER_TASKS_SECONDS")), token);
 				}
 
-				Console.WriteLine("[QueueMessageProcessor] All processor tasks started.");
+				Console.WriteLine($"[{this.GetType().FullName}] All processor tasks are now started.");
 				await Task.WhenAll(tasks);
 			}
 			catch (OperationCanceledException)
 			{
-				Console.WriteLine("[QueueMessageProcessor] Shutdown requested.");
+				Console.WriteLine($"[{this.GetType().FullName}] Shutdown requested.");
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"[QueueMessageProcessor] Exception: {ex}");
+				Console.WriteLine($"[{this.GetType().FullName}] Exception: {ex}, cancelling all queue processors");
 				cts.Cancel();
 				throw;
 			}
@@ -130,17 +130,17 @@ namespace Xango.Services.Queue.Processor
 				catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
 				{
 					processor.Dispose();
-					Console.WriteLine($"[{processor.QueueName}] task cancelled.");
+					Console.WriteLine($"[{processor.GetType().FullName}] task cancelled.");
 					break;
 				}
 				catch (Exception ex)
 				{
 					processor.Dispose();
-					Console.WriteLine($"[{processor.QueueName}] Exception {ex.Message}.");
+					Console.WriteLine($"[{processor.GetType().FullName}] Exception {ex.Message}.");
 				}
 			} while (true);
 
-			Console.WriteLine($"[{processor.QueueName}] Task exiting at {DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")}.");
+			Console.WriteLine($"[{processor.GetType().FullName}] Processor exiting at {DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")}.");
 		}
 	}
 }
