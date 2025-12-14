@@ -1,6 +1,0 @@
-@Xango.Services.Queue_HostAddress = http://localhost:5087
-
-GET {{Xango.Services.Queue_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

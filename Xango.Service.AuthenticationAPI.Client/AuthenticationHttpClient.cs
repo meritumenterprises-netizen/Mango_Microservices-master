@@ -99,8 +99,10 @@ namespace Xango.Service.AuthenticationAPI.Client
 
         public async Task<ResponseDto?> Logout()
         {
-            await _contextAccessor.HttpContext.SignOutAsync();
-            _tokenProvider.ClearToken();
+            if (_contextAccessor != null && _contextAccessor.HttpContext != null)
+            {
+                await _contextAccessor?.HttpContext?.SignOutAsync();
+            }
             return ResponseProducer.OkResponse();
         }
 

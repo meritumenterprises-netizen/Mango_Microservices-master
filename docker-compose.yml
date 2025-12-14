@@ -198,7 +198,7 @@ services:
          context: .
          dockerfile: Xango.Services.QueueAPI/Dockerfile
       extra_hosts:
-        queue.default.svc.cluster.local : 192.168.0.142
+        queue.default.svc.cluster.local : 192.168.0.141
       ports:
       - "192.168.0.141:80:80"
       depends_on:
@@ -207,8 +207,15 @@ services:
       image: ${docker_registry-}queueprocessor
       container_name: queue-processor
       environment:
-        RABBITMQ_DEFAULT_USER: guest
-        RABBITMQ_DEFAULT_PASS: guest 
+        RABBITMQ_HOST: rabbitmq.default.svc.cluster.local
+        RABBITMQ_USER: guest
+        RABBITMQ_PASSWORD: guest
+        QUEUE_CHECK_INTERVAL_SECONDS: 15
+        MAX_RUNTIME_MINUTES: 2
+        AUTH_USER: admin@none.com
+        AUTH_PASSWORD: Password1!
+        AuthenticaionAPI: http://auth-api.default.svc.cluster.local:80
+        OrderAPI : http://order-api.default.svc.cluster.local:80
       build:
          context: .
          dockerfile: Xango.Services.Queue.Processor/Dockerfile
@@ -218,6 +225,10 @@ services:
             - rabbitmq.default.svc.cluster.local
       depends_on:
         - rabbitmq
-        - queue-api
+        - auth-api
+        - order-api
+        - xango.web
       extra_hosts:
-        queue.default.svc.cluster.local : 192.168.0.142
+        auth-api.default.svc.cluster.local : 192.168.0.134
+        order-api.default.svc.cluster.local : 192.168.0.138
+        rabbitmq.default.svc.cluster.local : 192.168.0.141

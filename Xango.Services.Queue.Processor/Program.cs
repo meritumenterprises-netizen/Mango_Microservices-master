@@ -1,6 +1,94 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Abstractions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration.EnvironmentVariables;
+using Microsoft.Extensions.Configuration.Json;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Http;
+using Microsoft.Extensions.Logging;
+using RabbitMQ.Client;
+using System;
+using System.IO;
+using System.Threading;
+using Xango.Service.AuthenticationAPI.Client;
+using Xango.Service.OrderAPI.Client;
+using Xango.Services.Queue.Processor;
+using Xango.Services.RabbitMQ;
+using Xango.Services.Server.Utility;
 
-while (true)
+public class Program
 {
-	Thread.Sleep(60000);
+	public static void Main(string[] args)
+	{
+
+		var services = new ServiceCollection();
+
+		var configuration = new ConfigurationBuilder()
+			.SetBasePath(Directory.GetCurrentDirectory())
+			.AddJsonFile("appsettings.json", optional: true)
+			.AddEnvironmentVariables()
+			.Build();
+
+		services.AddHttpContextAccessor();
+		services.AddHttpClient();
+
+		services.AddSingleton<IConfiguration>(configuration);
+		services.AddScoped<IHttpContextAccessor, HttpContextAccessor>();
+		services.AddTransient<IAuthenticationHttpClient, AuthenticationHttpClient>();
+		services.AddTransient<IOrderHttpClient, OrderHttpClient>();
+		services.AddTransient<ITokenProvider, TokenProvider>();
+		services.AddSingleton<IConnectionFactory>((serviceProvider) =>
+		{
+			return new ConnectionFactory
+			{
+				HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST"),
+				UserName = Environment.GetEnvironmentVariable("RABBITMQ_USER"),
+				Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD"),
+				AutomaticRecoveryEnabled = true,
+				NetworkRecoveryInterval = TimeSpan.FromSeconds(15),
+				TopologyRecoveryEnabled = true,
+				RequestedHeartbeat = TimeSpan.FromSeconds(30)
+			};
+		});
+		services.AddSingleton<IConnection>(sp =>
+		{
+			var factory = sp.GetRequiredService<IConnectionFactory>();
+			return factory.CreateConnection();
+		});
+		services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
+		var builder = Host.CreateDefaultBuilder(args)
+			.ConfigureLogging(logging =>
+		{
+			logging.ClearProviders();
+			logging.AddConsole();
+			logging.SetMinimumLevel(LogLevel.Information);
+		})
+		.ConfigureServices(services =>
+		{
+			services.AddSingleton<OrdersPendingProcessor>();
+			services.AddSingleton<OrdersCancelledProcessor>();
+			services.AddSingleton<OrdersReadyForPickupProcessor>();
+			services.AddSingleton<OrdersApprovedProcessor>();
+			services.AddSingleton<RabbitMqReader>();
+		});
+
+		var host = builder.Build();
+
+		var serviceProvider = services.BuildServiceProvider();
+
+		try
+		{
+			Thread.Sleep(30000); // Wait for dependent services to be ready, this is a simple approach, consider using a more robust solution in production
+			Console.WriteLine("[Xango.Services.Queue.Processor] Starting");
+			var mqReader = new RabbitMqReader(serviceProvider);
+			mqReader.Start();
+			host.Run();
+		}
+		catch (Exception ex)
+		{
+			Console.WriteLine($"[Xango.Services.QueueProcessor] Exception: {ex.Message}");
+		}
+		Console.WriteLine("[Xango.Services.Queue.Processor] Exiting");
+	}
 }
