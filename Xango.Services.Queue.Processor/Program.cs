@@ -52,19 +52,19 @@ public class Program
 			{
 				return new ConnectionFactory
 				{
-					HostName = Environment.GetEnvironmentVariable("RABBITMQ_HOST"),
-					UserName = Environment.GetEnvironmentVariable("RABBITMQ_USER"),
-					Password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD"),
+					HostName = QueueConstants.RABBITMQ_HOST(),
+					UserName = QueueConstants.RABBITMQ_USER(),
+					Password = QueueConstants.RABBITMQ_PASSWORD(),
 					AutomaticRecoveryEnabled = true,
 					NetworkRecoveryInterval = TimeSpan.FromSeconds(10),
 					TopologyRecoveryEnabled = true,
-					RequestedHeartbeat = TimeSpan.FromSeconds(30)
+					RequestedHeartbeat = TimeSpan.FromSeconds(30),
 				};
 			});
-			services.AddTransient<IConnection>(sp =>
+			services.AddSingleton<IConnection>(sp =>
 			{
 				var factory = sp.GetRequiredService<IConnectionFactory>();
-				return factory.CreateConnection();
+				return factory.CreateConnection($"Xango.Services.Queue.Processor");
 			});
 			services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
 			services.AddScoped<BackendApiAuthenticationHttpClientHandler>();

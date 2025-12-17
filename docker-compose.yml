@@ -190,9 +190,9 @@ services:
       image: ${docker_registry-}queueapi
       container_name: queue-api
       environment:
-        RABBITMQ_DEFAULT_USER: guest
-        RABBITMQ_DEFAULT_PASS: guest 
-        ASPNETCORE_URLS : http://queue-api.default.svc.cluster.local:80
+        RABBITMQ_HOST: rabbitmq.default.svc.cluster.local
+        RABBITMQ_USER: guest
+        RABBITMQ_PASSWORD: guest
 
         ORDERS_CANCELLED_QUEUE : "Xango.Orders.Cancelled"
         ORDERS_PENDING_QUEUE : "Xango.Orders.Pending"

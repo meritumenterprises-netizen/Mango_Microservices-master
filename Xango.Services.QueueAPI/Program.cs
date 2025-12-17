@@ -38,16 +38,16 @@ builder.Services.AddSingleton<IConnection>(sp =>
 {
 	var factory = new ConnectionFactory
 	{
-		HostName = "rabbitmq.default.svc.cluster.local",
-		UserName = "guest",
-		Password = "guest",
+		HostName = QueueConstants.RABBITMQ_HOST(),
+		UserName = QueueConstants.RABBITMQ_USER(),
+		Password = QueueConstants.RABBITMQ_PASSWORD(),
 		AutomaticRecoveryEnabled = true,
 		NetworkRecoveryInterval = TimeSpan.FromSeconds(10),
 		TopologyRecoveryEnabled = true,
 		RequestedHeartbeat = TimeSpan.FromSeconds(10)
 	};
 
-	return factory.CreateConnection();
+	return factory.CreateConnection("Xango.Services.QueueAPI");
 });
 builder.Services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
 
@@ -88,7 +88,7 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 

@@ -9,6 +9,10 @@ namespace Xango.Services.Server.Utility
 {
 	public class QueueConstants
 	{
+		public static string RABBITMQ_HOST() => EnvironmentEx.GetEnvironmentVariableOrThrow<string>("RABBITMQ_HOST");
+		public static string RABBITMQ_USER() => EnvironmentEx.GetEnvironmentVariableOrThrow<string>("RABBITMQ_USER");
+		public static string RABBITMQ_PASSWORD() => EnvironmentEx.GetEnvironmentVariableOrThrow<string>("RABBITMQ_PASSWORD");
+
 		public static string ORDERS_CANCELLED_QUEUE() => EnvironmentEx.GetEnvironmentVariableOrThrow<string>("ORDERS_CANCELLED_QUEUE");
 		public static string ORDERS_APPROVED_QUEUE() => EnvironmentEx.GetEnvironmentVariableOrThrow<string>("ORDERS_APPROVED_QUEUE");
 		public static string ORDERS_PENDING_QUEUE() => EnvironmentEx.GetEnvironmentVariableOrThrow<string>("ORDERS_PENDING_QUEUE");
