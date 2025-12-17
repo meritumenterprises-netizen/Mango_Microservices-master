@@ -16,6 +16,8 @@ namespace Xango.Services.Queue.Processor
 		internal OrdersCompletedProcessor(IServiceProvider _serviceProvider, CancellationTokenSource cancellationTokenSource) :
 			base(QueueConstants.ORDERS_COMPLETED_QUEUE, _serviceProvider, cancellationTokenSource)
 		{
+			PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_COMPLETED_PICK_INTERVAL_SECONDS");
+			CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_COMPLETED_INTERVAL_SECONDS");
 		}
 		protected override bool ProcessSingleMessage(QueueMessage message)
 		{
@@ -31,7 +33,6 @@ namespace Xango.Services.Queue.Processor
 					if (correspondingOrderHeader == null || correspondingOrderHeader.Status != SD.Status_Completed)
 					{
 						Console.WriteLine($"[{this.GetType().FullName}] Unable to retrieve order with ID {orderHeader.OrderHeaderId} and status Completed.");
-						RemoveOrderMessage();
 						return true;
 					}
 
@@ -49,7 +50,6 @@ namespace Xango.Services.Queue.Processor
 			if (processed)
 			{
 				Console.WriteLine($"[{this.GetType().FullName}] Successfully processed order with ID {message.OrderHeader.OrderHeaderId}.");
-				RemoveOrderMessage();
 			}
 			else
 			{

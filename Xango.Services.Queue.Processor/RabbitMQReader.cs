@@ -31,7 +31,7 @@ namespace Xango.Services.Queue.Processor
 
 		public async Task StartAsync()
 		{
-			Console.WriteLine("[QueueMessageProcessor] Starting Queue Message Processor...");
+			Console.WriteLine("[QueueMessageProcessor] Starting processor...");
 
 			var cts = new CancellationTokenSource();
 			var token = cts.Token;
@@ -40,42 +40,12 @@ namespace Xango.Services.Queue.Processor
 			{
 				var processors = new QueueMessageProcessorBase[]
 				{
-					new OrdersCancelledProcessor(_serviceProvider, cts)
-					{
-						PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_CANCELLED_PICK_INTERVAL_SECONDS"),
-						CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_CANCELLED_INTERVAL_SECONDS"),
-						MaxRunTime = TimeSpan.FromMinutes(EnvironmentEx.GetEnvironmentVariableOrThrow<int>("MAX_RUNTIME_MINUTES"))
-					},
-					new OrdersReadyForPickupProcessor(_serviceProvider, cts)
-					{
-						PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_READYFORPICKUP_PICK_INTERVAL_SECONDS"),
-						CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_READYFORPICKUP_INTERVAL_SECONDS"),
-						MaxRunTime = TimeSpan.FromMinutes(EnvironmentEx.GetEnvironmentVariableOrThrow<int>("MAX_RUNTIME_MINUTES"))
-					},
-					new OrdersApprovedProcessor(_serviceProvider, cts)
-					{
-						PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_APPROVED_PICK_INTERVAL_SECONDS"),
-						CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_APPROVED_INTERVAL_SECONDS"),
-						MaxRunTime = TimeSpan.FromMinutes(EnvironmentEx.GetEnvironmentVariableOrThrow<int>("MAX_RUNTIME_MINUTES"))
-					},
-					new OrdersPendingProcessor(_serviceProvider, cts)
-					{
-						PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_PENDING_PICK_INTERVAL_SECONDS"),
-						CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_PENDING_INTERVAL_SECONDS"),
-						MaxRunTime = TimeSpan.FromMinutes(EnvironmentEx.GetEnvironmentVariableOrThrow<int>("MAX_RUNTIME_MINUTES"))
-					},
-					new OrdersCompletedProcessor(_serviceProvider, cts)
-					{
-						PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_COMPLETED_PICK_INTERVAL_SECONDS"),
-						CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_COMPLETED_INTERVAL_SECONDS"),
-						MaxRunTime = TimeSpan.FromMinutes(EnvironmentEx.GetEnvironmentVariableOrThrow<int>("MAX_RUNTIME_MINUTES"))
-					},
+					new OrdersCancelledProcessor(_serviceProvider, cts),
+					new OrdersReadyForPickupProcessor(_serviceProvider, cts),
+					new OrdersApprovedProcessor(_serviceProvider, cts),
+					new OrdersPendingProcessor(_serviceProvider, cts),
+					new OrdersCompletedProcessor(_serviceProvider, cts),
 					new OrdersShippedProcessor(_serviceProvider, cts)
-					{
-						PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_SHIPPED_PICK_INTERVAL_SECONDS"),
-						CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_SHIPPED_INTERVAL_SECONDS"),
-						MaxRunTime = TimeSpan.FromMinutes(EnvironmentEx.GetEnvironmentVariableOrThrow<int>("MAX_RUNTIME_MINUTES"))
-					}
 				};
 
 				var tasks = new List<Task>();
@@ -111,6 +81,7 @@ namespace Xango.Services.Queue.Processor
 		private async Task ConsumeQueuePeriodically(CancellationToken cancellationToken, QueueMessageProcessorBase processor)
 		{
 			var queueCheckIntervalSeconds = processor.CheckQueueEverySeconds;
+			processor.Begin();
 			do
 			{
 				try
@@ -121,12 +92,12 @@ namespace Xango.Services.Queue.Processor
 						processor.ProcessMessages();
 					}
 					processor.EndProcessingMessages();
+					processor.Finish();
 					if (!cancellationToken.IsCancellationRequested)
 					{
 						Console.WriteLine($"[{this.GetType().FullName}] Waiting {queueCheckIntervalSeconds} seconds before checking queue {processor.QueueName} again.");
 						await Task.Delay(queueCheckIntervalSeconds * 1000);
 					}
-					processor.Finish();
 				}
 				catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
 				{
@@ -143,7 +114,7 @@ namespace Xango.Services.Queue.Processor
 					Console.WriteLine($"[{processor.GetType().FullName}] Exception {ex.Message}.");
 				}
 			} while (true);
-			processor.CloseMessageQueueConnection();
+			processor.End();
 
 			Console.WriteLine($"[{processor.GetType().FullName}] Processor exiting at {DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss")}.");
 		}

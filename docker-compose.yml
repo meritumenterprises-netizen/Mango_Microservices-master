@@ -217,13 +217,13 @@ services:
 
         QUEUE_PENDING_PICK_INTERVAL_SECONDS: 30 # how old pending orders need to be to pick them up
         QUEUE_COMPLETED_PICK_INTERVAL_SECONDS: 30 # how old completed orders need to be to pick them up
-        QUEUE_CANCELLED_PICK_INTERVAL_SECONDS: 30 # how old cancelled orders need to be to pick them up
+        QUEUE_CANCELLED_PICK_INTERVAL_SECONDS: 60 # how old cancelled orders need to be to pick them up
         QUEUE_READYFORPICKUP_PICK_INTERVAL_SECONDS: 30 # how old readyforpickup orders need to be to pick them up
         QUEUE_APPROVED_PICK_INTERVAL_SECONDS: 30 # how old approved orders need to be to pick them up
         QUEUE_SHIPPED_PICK_INTERVAL_SECONDS: 30 # how old shipped orders need to be to pick them up
 
         QUEUE_CANCELLED_INTERVAL_SECONDS: 30 # how often to check for cancelled orders
-        QUEUE_PENDING_INTERVAL_SECONDS: 30 # how often to check for pending orders
+        QUEUE_PENDING_INTERVAL_SECONDS: 120 # how often to check for pending orders
         QUEUE_COMPLETED_INTERVAL_SECONDS: 30 # how often to check for completed orders
         QUEUE_READYFORPICKUP_INTERVAL_SECONDS: 30 # how often to check for readyforpickup orders
         QUEUE_APPROVED_INTERVAL_SECONDS: 30 # how often to check for approved orders

@@ -6,8 +6,9 @@ using Xango.Models.Dto;
 using Xango.Services.Dto;
 using Xango.Services.Interfaces;
 using Xango.Services.RabbitMQ.Utility;
-using IModel = RabbitMQ.Client.IModel;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using IConnection = RabbitMQ.Client.IConnection;
+using IModel = RabbitMQ.Client.IModel;
 
 
 namespace Xango.Services.Queue.Controllers
@@ -17,15 +18,11 @@ namespace Xango.Services.Queue.Controllers
 	public class QueueController : ControllerBase, IDisposable
 	{
 		private IConnection _connection;
+		private RabbitMQUtils _rabbitMqUtils;
 		public QueueController(IConnection connection)
 		{
 			this._connection = connection;
-			RabbitMQUtils.EnsureQueueExists(connection, QueueConstants.ORDERS_APPROVED_QUEUE);
-			RabbitMQUtils.EnsureQueueExists(connection, QueueConstants.ORDERS_PENDING_QUEUE);
-			RabbitMQUtils.EnsureQueueExists(connection, QueueConstants.ORDERS_READYFORPICKUP_QUEUE);
-			RabbitMQUtils.EnsureQueueExists(connection, QueueConstants.ORDERS_CANCELLED_QUEUE);
-			RabbitMQUtils.EnsureQueueExists(connection, QueueConstants.ORDERS_COMPLETED_QUEUE);
-			RabbitMQUtils.EnsureQueueExists(connection, QueueConstants.ORDERS_SHIPPED_QUEUE);
+			this._rabbitMqUtils = new RabbitMQUtils();
 		}
 
 		[HttpPost]
@@ -33,9 +30,10 @@ namespace Xango.Services.Queue.Controllers
 		[Route("OrderApproved")]
 		public ResponseDto OrderApproved(OrderHeaderDto orderHeader)
 		{
+			this._rabbitMqUtils.EnsureQueueExists(_connection, QueueConstants.ORDERS_APPROVED_QUEUE);
 			using (var channel = _connection.CreateModel())
 			{
-				RabbitMQUtils.PostMessage(channel, QueueConstants.ORDERS_APPROVED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
+				_rabbitMqUtils.PostMessage(channel, QueueConstants.ORDERS_APPROVED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
 				return new ResponseDto
 				{
 					IsSuccess = true,
@@ -49,9 +47,10 @@ namespace Xango.Services.Queue.Controllers
 		[Route("OrderPending")]
 		public ResponseDto OrderPending(OrderHeaderDto orderHeader)
 		{
+			this._rabbitMqUtils.EnsureQueueExists(_connection, QueueConstants.ORDERS_PENDING_QUEUE);
 			using (var channel = _connection.CreateModel())
 			{
-				RabbitMQUtils.PostMessage(channel, QueueConstants.ORDERS_PENDING_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
+				_rabbitMqUtils.PostMessage(channel, QueueConstants.ORDERS_PENDING_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
 				return new ResponseDto
 				{
 					IsSuccess = true,
@@ -65,9 +64,10 @@ namespace Xango.Services.Queue.Controllers
 		[Route("OrderReadyForPickup")]
 		public ResponseDto OrderReadyForPickup(OrderHeaderDto orderHeader)
 		{
+			_rabbitMqUtils.EnsureQueueExists(_connection, QueueConstants.ORDERS_READYFORPICKUP_QUEUE);
 			using (var channel = _connection.CreateModel())
 			{
-				RabbitMQUtils.PostMessage(channel, QueueConstants.ORDERS_READYFORPICKUP_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
+				_rabbitMqUtils.PostMessage(channel, QueueConstants.ORDERS_READYFORPICKUP_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
 				return new ResponseDto
 				{
 					IsSuccess = true,
@@ -81,9 +81,10 @@ namespace Xango.Services.Queue.Controllers
 		[Route("OrderCancelled")]
 		public ResponseDto OrderCancelled(OrderHeaderDto orderHeader)
 		{
+			_rabbitMqUtils.EnsureQueueExists(_connection, QueueConstants.ORDERS_CANCELLED_QUEUE);
 			using (var channel = _connection.CreateModel())
 			{
-				RabbitMQUtils.PostMessage(channel, QueueConstants.ORDERS_CANCELLED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
+				_rabbitMqUtils.PostMessage(channel, QueueConstants.ORDERS_CANCELLED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
 				return new ResponseDto
 				{
 					IsSuccess = true,
@@ -97,9 +98,10 @@ namespace Xango.Services.Queue.Controllers
 		[Route("OrderCompleted")]
 		public ResponseDto OrderCompleted(OrderHeaderDto orderHeader)
 		{
+			_rabbitMqUtils.EnsureQueueExists(_connection, QueueConstants.ORDERS_COMPLETED_QUEUE);
 			using (var channel = _connection.CreateModel())
 			{
-				RabbitMQUtils.PostMessage(channel, QueueConstants.ORDERS_COMPLETED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
+				_rabbitMqUtils.PostMessage(channel, QueueConstants.ORDERS_COMPLETED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
 				return new ResponseDto
 				{
 					IsSuccess = true,
@@ -113,9 +115,10 @@ namespace Xango.Services.Queue.Controllers
 		[Route("OrderShipped")]
 		public ResponseDto OrderShipped(OrderHeaderDto orderHeader)
 		{
+			_rabbitMqUtils.EnsureQueueExists(_connection, QueueConstants.ORDERS_SHIPPED_QUEUE);
 			using (var channel = _connection.CreateModel())
 			{
-				RabbitMQUtils.PostMessage(channel, QueueConstants.ORDERS_SHIPPED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
+				_rabbitMqUtils.PostMessage(channel, QueueConstants.ORDERS_SHIPPED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
 				return new ResponseDto
 				{
 					IsSuccess = true,

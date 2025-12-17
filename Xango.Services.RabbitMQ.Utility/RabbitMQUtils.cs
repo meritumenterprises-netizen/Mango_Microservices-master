@@ -1,12 +1,13 @@
 ﻿using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
+using System.Runtime.CompilerServices;
 
 namespace Xango.Services.RabbitMQ.Utility
 {
 	public class RabbitMQUtils
 	{
 
-		public static void EnsureQueueExists(IConnection connection, string queueName)
+		public void EnsureQueueExists(IConnection connection, string queueName)
 		{
 			using (var channel = connection.CreateModel())
 			{
@@ -46,7 +47,7 @@ namespace Xango.Services.RabbitMQ.Utility
 			}
 		}
 
-		public static void PostMessage(IModel channel, string queueName, string message)
+		public void PostMessage(IModel channel, string queueName, string message)
 		{
 			try
 			{
@@ -55,7 +56,7 @@ namespace Xango.Services.RabbitMQ.Utility
 									 routingKey: queueName,
 									 basicProperties: null,
 									 body: body);
-				Console.WriteLine($" [x] Sent {message}");
+				Console.WriteLine($"[RabbitMQUtils] Sent {message}");
 			}
 			catch (Exception ex)
 			{

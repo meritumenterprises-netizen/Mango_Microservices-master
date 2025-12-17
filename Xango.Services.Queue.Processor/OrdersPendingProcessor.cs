@@ -29,7 +29,6 @@ namespace Xango.Services.Queue.Processor
 					if (correspondingOrderHeader == null || correspondingOrderHeader.Status != SD.Status_Pending)
 					{
 						Console.WriteLine($"[{this.GetType().FullName}] Unable to retrieve order with ID {orderHeader.OrderHeaderId} and status Pending.");
-						RemoveOrderMessage();
 						return true;
 					}
 
@@ -48,7 +47,6 @@ namespace Xango.Services.Queue.Processor
 			if (processed)
 			{
 				Console.WriteLine($"[{this.GetType().FullName}] Successfully processed order with ID {message.OrderHeader.OrderHeaderId}.");
-				RemoveOrderMessage();
 			}
 			else
 			{

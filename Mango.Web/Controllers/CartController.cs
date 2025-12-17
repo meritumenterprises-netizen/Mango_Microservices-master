@@ -23,7 +23,7 @@ namespace Xango.Web.Controllers
         private readonly IOrderHttpClient _orderHttpClient;
         private readonly IAuthenticationHttpClient _authenticationClient;
         private readonly ITokenProvider _tokenProvider;
-        public CartController(IOrderHttpClient orderHttpClient, IShoppingCartHttpClient shoppingCartHttpClient, IAuthenticationHttpClient authenticationHttpClient, ITokenProvider tokenProvider)
+        public CartController(IOrderHttpClient orderHttpClient, IShoppingCartHttpClient shoppingCartHttpClient, IAuthenticationHttpClient authenticationHttpClient,  ITokenProvider tokenProvider)
         {
             _shoppingCartClient = shoppingCartHttpClient;
             _orderHttpClient = orderHttpClient;

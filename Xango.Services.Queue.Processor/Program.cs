@@ -49,7 +49,7 @@ public class Program
 			services.AddTransient<IAuthenticationHttpClient, AuthenticationHttpClient>();
 			services.AddTransient<IOrderHttpClient, OrderHttpClient>();
 			services.AddTransient<ITokenProvider, TokenProvider>();
-			services.AddSingleton<IConnectionFactory>((serviceProvider) =>
+			services.AddTransient<IConnectionFactory>((serviceProvider) =>
 			{
 				return new ConnectionFactory
 				{
@@ -59,7 +59,7 @@ public class Program
 					AutomaticRecoveryEnabled = true,
 					NetworkRecoveryInterval = TimeSpan.FromSeconds(10),
 					TopologyRecoveryEnabled = true,
-					RequestedHeartbeat = TimeSpan.FromSeconds(10)
+					RequestedHeartbeat = TimeSpan.FromSeconds(30)
 				};
 			});
 			services.AddTransient<IConnection>(sp =>
@@ -72,7 +72,7 @@ public class Program
 		});
 
 		var host = builder.Build();
-		
+
 		var serviceProvider = host.Services;
 
 		try
