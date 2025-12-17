@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using System;
 using Xango.Models.Dto;
 using Xango.Services.Dto;
 using Xango.Services.OrderAPI.Models;
@@ -12,9 +13,9 @@ namespace Xango.Services.OrderAPI
         {
             var mappingConfig = new MapperConfiguration(config =>
             {
-                config.CreateMap<OrderHeaderDto, CartHeaderDto>()
-                    .ForMember(dest => dest.CartTotal, u => u.MapFrom(src => src.OrderTotal))
-                    .ReverseMap();
+            config.CreateMap<OrderHeaderDto, CartHeaderDto>()
+                .ForMember(dest => dest.CartTotal, u => u.MapFrom(src => src.OrderTotal))
+					.ReverseMap();
 
                 config.CreateMap<CartDetailsDto, OrderDetailsDto>()
                     .ForMember(dest => dest.ProductName, u => u.MapFrom(src => src.Product.Name))
@@ -22,7 +23,9 @@ namespace Xango.Services.OrderAPI
 
                 config.CreateMap<OrderDetailsDto, CartDetailsDto>();
 
-                config.CreateMap<OrderHeader, OrderHeaderDto>().ReverseMap();
+                config.CreateMap<OrderHeader, OrderHeaderDto>()
+                .ForMember(dest => dest.OrderTotalWithCurrency, u => u.MapFrom(src => $"{src.OrderTotal:C2}"))
+                    .ReverseMap();
                 config.CreateMap<OrderDetailsDto, OrderDetails>().ReverseMap();
             }, (ILoggerFactory)new Microsoft.Extensions.Logging.LoggerFactory());
 

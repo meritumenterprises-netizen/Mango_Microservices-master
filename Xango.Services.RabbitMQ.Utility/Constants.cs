@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Xango.Services.RabbitMQ.Utility
 {
-	public class QueueConstants
+	public static class QueueConstants
 	{
 		public const string ORDERS_CANCELLED_QUEUE = "Xango.Orders.Cancelled";
 		public const string ORDERS_APPROVED_QUEUE = "Xango.Orders.Approved";

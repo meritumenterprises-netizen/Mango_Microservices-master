@@ -55,7 +55,6 @@ namespace Xango.Web.Controllers
             if (response != null && response.IsSuccess)
             {
                 orderHeaderDto = DtoConverter.ToDto<OrderHeaderDto>(response);
-                orderHeaderDto.OrderTotalWithCurrency = orderHeaderDto.OrderTotal.ToString("C2");
 
             }
             if (!User.IsInRole(SD.RoleAdmin) && User.Identity.Name != orderHeaderDto.UserEmail)

@@ -12,6 +12,7 @@ using Xango.Service.AuthenticationAPI.Client;
 using Xango.Service.OrderAPI.Client;
 using IConnection = RabbitMQ.Client.IConnection;
 using Microsoft.Extensions.DependencyInjection;
+using Xango.Service.RabbitMQPublisher;
 
 
 namespace Xango.Services.Queue.Processor
@@ -23,6 +24,7 @@ namespace Xango.Services.Queue.Processor
 
 	public abstract class QueueMessageProcessorBase
 	{
+		private IRabbitMqPublisher _rabbitMqPublisher;
 		protected IConnection RabbitMqConnection { get; set; }
 		protected IAuthenticationHttpClient AuthClient { get; set; }
 		protected IOrderHttpClient OrderClient { get; set; }
@@ -41,6 +43,7 @@ namespace Xango.Services.Queue.Processor
 
 		protected Queue<QueueMessage> OrderQueue { get; set; }
 		protected IServiceProvider ServiceProvider { get; set; }
+
 		protected QueueMessageProcessorBase(string queueName, IServiceProvider serviceProvider, CancellationTokenSource cancellationTokenSource, int pickMessagesOlderThanSeconds = 3600, int checkQueueEverySeconds = 60)
 		{
 			this.CancellationTokenSource = cancellationTokenSource;
@@ -55,6 +58,7 @@ namespace Xango.Services.Queue.Processor
 			this.OrderClient = this.ServiceProvider.GetRequiredService<IOrderHttpClient>();
 			this.MaxRunTime = TimeSpan.FromMinutes(EnvironmentEx.GetEnvironmentVariableOrThrow<int>("MAX_RUNTIME_MINUTES"));
 			this.StartTime = DateTime.Now;
+			this._rabbitMqPublisher = this.ServiceProvider.GetRequiredService<IRabbitMqPublisher>();
 
 			Console.WriteLine($"{this.GetType().FullName} Initialized at {this.StartTime.ToString("dd.MM.yyyy HH:mm:ss")}");
 			Console.WriteLine($"{this.GetType().FullName} Maximum run time of the processor is {(this.MaxRunTime == TimeSpan.Zero ? "indefinite" : this.MaxRunTime.ToString() + " minutes")}");
@@ -68,6 +72,9 @@ namespace Xango.Services.Queue.Processor
 
 		internal void Begin()
 		{
+			Console.WriteLine($"[{this.GetType().FullName}] Processor beginning...");
+			Console.WriteLine($"[{this.GetType().FullName}] Ensuring queue {this.QueueName} exists ...");
+			this._rabbitMqPublisher.EnsureQueueExists(this.QueueName);
 			Console.WriteLine($"{this.GetType().FullName} Check queue every {this.CheckQueueEverySeconds} seconds");
 			Console.WriteLine($"{this.GetType().FullName} Pick messages older than {this.PickMessageOlderThanSeconds} seconds");
 			try

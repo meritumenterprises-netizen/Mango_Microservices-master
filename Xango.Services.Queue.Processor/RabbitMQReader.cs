@@ -9,7 +9,6 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 using IModel = RabbitMQ.Client.IModel;
 using IConnectionFactory = RabbitMQ.Client.IConnectionFactory;
-using Xango.Services.RabbitMQ.Utility;
 using Xango.Services.Client.Utility;
 using Microsoft.Extensions.DependencyInjection;
 

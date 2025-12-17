@@ -15,9 +15,8 @@ using Xango.Service.AuthenticationAPI.Client;
 using Xango.Service.OrderAPI.Client;
 using Xango.Services.Client.Utility;
 using Xango.Services.Queue.Processor;
-using Xango.Services.RabbitMQ;
 using Xango.Services.Server.Utility;
-
+using Xango.Service.RabbitMQPublisher;
 public class Program
 {
 	public static void Main(string[] args)
@@ -67,6 +66,7 @@ public class Program
 				var factory = sp.GetRequiredService<IConnectionFactory>();
 				return factory.CreateConnection();
 			});
+			services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
 			services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 			services.AddHttpContextAccessor();
 		});

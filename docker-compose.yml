@@ -194,6 +194,13 @@ services:
         RABBITMQ_DEFAULT_PASS: guest 
         ASPNETCORE_URLS : http://queue-api.default.svc.cluster.local:80
 
+        ORDERS_CANCELLED_QUEUE : "Xango.Orders.Cancelled"
+        ORDERS_PENDING_QUEUE : "Xango.Orders.Pending"
+        ORDERS_COMPLETED_QUEUE : "Xango.Orders.Completed"
+        ORDERS_READYFORPICKUP_QUEUE : "Xango.Orders.ReadyForPickup"
+        ORDERS_APPROVED_QUEUE : "Xango.Orders.Approved"
+        ORDERS_SHIPPED_QUEUE : "Xango.Orders.Shipped"
+
       build:
          context: .
          dockerfile: Xango.Services.QueueAPI/Dockerfile
@@ -214,6 +221,13 @@ services:
         MAX_RUNTIME_MINUTES: 0 # set to 0 to make the processor run indefinitely
         STAGGER_TASKS_SECONDS: 5 # how long to wait between starting each task
         INITIAL_DELAY_SECONDS: 30 # how long to wait before starting the first task
+
+        ORDERS_CANCELLED_QUEUE : "Xango.Orders.Cancelled"
+        ORDERS_PENDING_QUEUE : "Xango.Orders.Pending"
+        ORDERS_COMPLETED_QUEUE : "Xango.Orders.Completed"
+        ORDERS_READYFORPICKUP_QUEUE : "Xango.Orders.ReadyForPickup"
+        ORDERS_APPROVED_QUEUE : "Xango.Orders.Approved"
+        ORDERS_SHIPPED_QUEUE : "Xango.Orders.Shipped"
 
         QUEUE_PENDING_PICK_INTERVAL_SECONDS: 30 # how old pending orders need to be to pick them up
         QUEUE_COMPLETED_PICK_INTERVAL_SECONDS: 30 # how old completed orders need to be to pick them up

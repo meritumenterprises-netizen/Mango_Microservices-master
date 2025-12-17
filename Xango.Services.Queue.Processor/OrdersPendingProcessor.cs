@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 using Xango.Models.Dto;
 using Xango.Services.Client.Utility;
-using Xango.Services.RabbitMQ.Utility;
+using Xango.Services.Server.Utility;
 using static Xango.Services.Queue.Processor.QueueMessage;
 
 
@@ -12,7 +12,7 @@ namespace Xango.Services.Queue.Processor
 	internal class OrdersPendingProcessor : QueueMessageProcessorBase
 	{
 		internal OrdersPendingProcessor(IServiceProvider _serviceProvider, CancellationTokenSource cancellationTokenSource) : 
-			base(QueueConstants.ORDERS_PENDING_QUEUE, _serviceProvider, cancellationTokenSource)
+			base(QueueConstants.ORDERS_PENDING_QUEUE(), _serviceProvider, cancellationTokenSource)
 		{
 		}
 		protected override bool ProcessSingleMessage(QueueMessage message)

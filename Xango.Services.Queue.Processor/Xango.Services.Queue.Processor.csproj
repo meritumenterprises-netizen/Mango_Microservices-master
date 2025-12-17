@@ -28,10 +28,10 @@
   <ItemGroup>
     <ProjectReference Include="..\Xango.Service.AuthenticationAPI.Client\Xango.Service.AuthenticationAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Service.OrderAPI.Client\Xango.Service.OrderAPI.Client.csproj" />
+    <ProjectReference Include="..\Xango.Service.RabbitMQPublisher\Xango.Service.RabbitMQPublisher.csproj" />
     <ProjectReference Include="..\Xango.Services.Client.Utility\Xango.Services.Client.Utility.csproj" />
     <ProjectReference Include="..\Xango.Services.Dto\Xango.Models.Dto.csproj" />
     <ProjectReference Include="..\Xango.Services.Interfaces\Xango.Services.Interfaces.csproj" />
-    <ProjectReference Include="..\Xango.Services.RabbitMQ.Utility\Xango.Services.RabbitMQ.Utility.csproj" />
   </ItemGroup>
 
 </Project>

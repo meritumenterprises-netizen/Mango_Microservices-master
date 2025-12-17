@@ -3,26 +3,22 @@ using Microsoft.AspNetCore.Mvc;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Exceptions;
 using Xango.Models.Dto;
+using Xango.Service.RabbitMQPublisher;
+using Xango.Services.Client.Utility;
+using Xango.Services.Server.Utility;
 using Xango.Services.Dto;
 using Xango.Services.Interfaces;
-using Xango.Services.RabbitMQ.Utility;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
-using IConnection = RabbitMQ.Client.IConnection;
-using IModel = RabbitMQ.Client.IModel;
-
 
 namespace Xango.Services.Queue.Controllers
 {
 	[ApiController]
 	[Route("api/queue")]
-	public class QueueController : ControllerBase, IDisposable
+	public class QueueController : ControllerBase
 	{
-		private IConnection _connection;
-		private RabbitMQUtils _rabbitMqUtils;
-		public QueueController(IConnection connection)
+		private IRabbitMqPublisher _rabbitMqPublisher;
+		public QueueController(IRabbitMqPublisher rabbitMqPublisher)
 		{
-			this._connection = connection;
-			this._rabbitMqUtils = new RabbitMQUtils();
+			this._rabbitMqPublisher = rabbitMqPublisher;
 		}
 
 		[HttpPost]
@@ -30,16 +26,12 @@ namespace Xango.Services.Queue.Controllers
 		[Route("OrderApproved")]
 		public ResponseDto OrderApproved(OrderHeaderDto orderHeader)
 		{
-			this._rabbitMqUtils.EnsureQueueExists(_connection, QueueConstants.ORDERS_APPROVED_QUEUE);
-			using (var channel = _connection.CreateModel())
+			_rabbitMqPublisher.Publish<OrderHeaderDto>(QueueConstants.ORDERS_APPROVED_QUEUE(), orderHeader);
+			return new ResponseDto
 			{
-				_rabbitMqUtils.PostMessage(channel, QueueConstants.ORDERS_APPROVED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
-				return new ResponseDto
-				{
-					IsSuccess = true,
-					Result = orderHeader,
-				};
-			}
+				IsSuccess = true,
+				Result = orderHeader,
+			};
 		}
 
 		[HttpPost]
@@ -47,16 +39,12 @@ namespace Xango.Services.Queue.Controllers
 		[Route("OrderPending")]
 		public ResponseDto OrderPending(OrderHeaderDto orderHeader)
 		{
-			this._rabbitMqUtils.EnsureQueueExists(_connection, QueueConstants.ORDERS_PENDING_QUEUE);
-			using (var channel = _connection.CreateModel())
+			_rabbitMqPublisher.Publish<OrderHeaderDto>(QueueConstants.ORDERS_PENDING_QUEUE(), orderHeader);
+			return new ResponseDto
 			{
-				_rabbitMqUtils.PostMessage(channel, QueueConstants.ORDERS_PENDING_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
-				return new ResponseDto
-				{
-					IsSuccess = true,
-					Result = orderHeader,
-				};
-			}
+				IsSuccess = true,
+				Result = orderHeader,
+			};
 		}
 
 		[HttpPost]
@@ -64,16 +52,12 @@ namespace Xango.Services.Queue.Controllers
 		[Route("OrderReadyForPickup")]
 		public ResponseDto OrderReadyForPickup(OrderHeaderDto orderHeader)
 		{
-			_rabbitMqUtils.EnsureQueueExists(_connection, QueueConstants.ORDERS_READYFORPICKUP_QUEUE);
-			using (var channel = _connection.CreateModel())
+			_rabbitMqPublisher.Publish<OrderHeaderDto>(QueueConstants.ORDERS_READYFORPICKUP_QUEUE(), orderHeader);
+			return new ResponseDto
 			{
-				_rabbitMqUtils.PostMessage(channel, QueueConstants.ORDERS_READYFORPICKUP_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
-				return new ResponseDto
-				{
-					IsSuccess = true,
-					Result = orderHeader,
-				};
-			}
+				IsSuccess = true,
+				Result = orderHeader,
+			};
 		}
 
 		[HttpPost]
@@ -81,16 +65,12 @@ namespace Xango.Services.Queue.Controllers
 		[Route("OrderCancelled")]
 		public ResponseDto OrderCancelled(OrderHeaderDto orderHeader)
 		{
-			_rabbitMqUtils.EnsureQueueExists(_connection, QueueConstants.ORDERS_CANCELLED_QUEUE);
-			using (var channel = _connection.CreateModel())
+			_rabbitMqPublisher.Publish<OrderHeaderDto>(QueueConstants.ORDERS_CANCELLED_QUEUE(), orderHeader);
+			return new ResponseDto
 			{
-				_rabbitMqUtils.PostMessage(channel, QueueConstants.ORDERS_CANCELLED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
-				return new ResponseDto
-				{
-					IsSuccess = true,
-					Result = orderHeader,
-				};
-			}
+				IsSuccess = true,
+				Result = orderHeader,
+			};
 		}
 
 		[HttpPost]
@@ -98,16 +78,11 @@ namespace Xango.Services.Queue.Controllers
 		[Route("OrderCompleted")]
 		public ResponseDto OrderCompleted(OrderHeaderDto orderHeader)
 		{
-			_rabbitMqUtils.EnsureQueueExists(_connection, QueueConstants.ORDERS_COMPLETED_QUEUE);
-			using (var channel = _connection.CreateModel())
+			_rabbitMqPublisher.Publish<OrderHeaderDto>(QueueConstants.ORDERS_COMPLETED_QUEUE(), orderHeader); return new ResponseDto
 			{
-				_rabbitMqUtils.PostMessage(channel, QueueConstants.ORDERS_COMPLETED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
-				return new ResponseDto
-				{
-					IsSuccess = true,
-					Result = orderHeader,
-				};
-			}
+				IsSuccess = true,
+				Result = orderHeader,
+			};
 		}
 
 		[HttpPost]
@@ -115,32 +90,11 @@ namespace Xango.Services.Queue.Controllers
 		[Route("OrderShipped")]
 		public ResponseDto OrderShipped(OrderHeaderDto orderHeader)
 		{
-			_rabbitMqUtils.EnsureQueueExists(_connection, QueueConstants.ORDERS_SHIPPED_QUEUE);
-			using (var channel = _connection.CreateModel())
+			_rabbitMqPublisher.Publish<OrderHeaderDto>(QueueConstants.ORDERS_SHIPPED_QUEUE(), orderHeader); return new ResponseDto
 			{
-				_rabbitMqUtils.PostMessage(channel, QueueConstants.ORDERS_SHIPPED_QUEUE, System.Text.Json.JsonSerializer.Serialize(orderHeader));
-				return new ResponseDto
-				{
-					IsSuccess = true,
-					Result = orderHeader,
-				};
-			}
-		}
-
-		public void Dispose()
-		{
-			if (_connection != null)
-			{
-				try
-				{
-					_connection.Close();
-					_connection.Dispose();
-				}
-				catch (AlreadyClosedException)
-				{
-					// Connection is already closed, nothing to do
-				}
-			}
+				IsSuccess = true,
+				Result = orderHeader,
+			};
 		}
 	}
 }

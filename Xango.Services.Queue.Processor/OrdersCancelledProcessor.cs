@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 using Xango.Models.Dto;
 using Xango.Services.Client.Utility;
-using Xango.Services.RabbitMQ.Utility;
+using Xango.Services.Server.Utility;
 using static Xango.Services.Queue.Processor.QueueMessage;
 
 namespace Xango.Services.Queue.Processor
@@ -11,7 +11,7 @@ namespace Xango.Services.Queue.Processor
 	internal class OrdersCancelledProcessor : QueueMessageProcessorBase
 	{
 		internal OrdersCancelledProcessor(IServiceProvider _serviceProvider, CancellationTokenSource cancellationTokenSource) :
-			base(QueueConstants.ORDERS_CANCELLED_QUEUE, _serviceProvider, cancellationTokenSource)
+			base(QueueConstants.ORDERS_CANCELLED_QUEUE(), _serviceProvider, cancellationTokenSource)
 		{
 			this.PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_CANCELLED_PICK_INTERVAL_SECONDS");
 			this.CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_CANCELLED_INTERVAL_SECONDS");

@@ -162,7 +162,8 @@ namespace Xango.Services.OrderAPI.Controllers
                     await _inventoryClient.SubtractFromStock(orderDetail.ProductId, orderDetail.Count);
                 }
                 orderHeaderDto.OrderTotal = Math.Round(orderHeaderDto.OrderTotal, 2);
-                OrderHeader orderCreated = _db.OrderHeaders.Add(_mapper.Map<OrderHeader>(orderHeaderDto)).Entity;
+				orderHeaderDto.OrderTotalWithCurrency = orderHeaderDto.OrderTotal.ToString("C2");
+				OrderHeader orderCreated = _db.OrderHeaders.Add(_mapper.Map<OrderHeader>(orderHeaderDto)).Entity;
                 orderCreated.ModifiedTime = DateTime.Now;
 
 				await _db.SaveChangesAsync();
@@ -268,7 +269,6 @@ namespace Xango.Services.OrderAPI.Controllers
                     orderHeader.Status = SD.Status_Approved;
                     this.SetClientToken(_queueClient, _tokenProvider);
                     var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
-                    orderHeaderDto.OrderTotalWithCurrency = orderHeaderDto.OrderTotal.ToString("C2");   
 					await _queueClient.PostOrderApproved(orderHeaderDto);
                     _db.SaveChanges();
                     _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
@@ -290,7 +290,7 @@ namespace Xango.Services.OrderAPI.Controllers
                 OrderHeader orderHeader = _db.OrderHeaders.Include((od) => od.OrderDetails).First(u => u.OrderHeaderId == orderId);
                 if (orderHeader != null)
                 {
-                    if (newStatus == SD.Status_Approved)
+					if (newStatus == SD.Status_Approved)
                     {
                         var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
                         orderHeaderDto.ModifiedTime = DateTime.Now;

@@ -43,7 +43,6 @@ namespace Xango.Service.QueueAPI.Client
 			{
 				token = this._token;
 			}
-			orderHeader.OrderTotalWithCurrency = orderHeader.OrderTotal.ToString("C2");
 			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 			var response = await client.PostAsync("/api/queue/OrderApproved", StringContentUTF8.AsJsonString(orderHeader));
 			response.EnsureSuccessStatusCode();
@@ -66,7 +65,6 @@ namespace Xango.Service.QueueAPI.Client
 				token = this._token;
 			}
 
-			orderHeader.OrderTotalWithCurrency = orderHeader.OrderTotal.ToString("C2");
 			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 			var response = await client.PostAsync("/api/queue/OrderPending", StringContentUTF8.AsJsonString(orderHeader));
 			response.EnsureSuccessStatusCode();
@@ -88,7 +86,6 @@ namespace Xango.Service.QueueAPI.Client
 				token = this._token;
 			}
 
-			orderHeader.OrderTotalWithCurrency = orderHeader.OrderTotal.ToString("C2");
 			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 			var response = await client.PostAsync("/api/queue/OrderReadyForPickup", StringContentUTF8.AsJsonString(orderHeader));
 			response.EnsureSuccessStatusCode();
@@ -110,7 +107,6 @@ namespace Xango.Service.QueueAPI.Client
 				token = this._token;
 			}
 
-			orderHeader.OrderTotalWithCurrency = orderHeader.OrderTotal.ToString("C2");
 			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 			var response = await client.PostAsync("/api/queue/OrderCancelled", StringContentUTF8.AsJsonString(orderHeader));
 			response.EnsureSuccessStatusCode();
@@ -132,7 +128,6 @@ namespace Xango.Service.QueueAPI.Client
 				token = this._token;
 			}
 
-			orderHeader.OrderTotalWithCurrency = orderHeader.OrderTotal.ToString("C2");
 			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 			var response = await client.PostAsync("/api/queue/OrderCompleted", StringContentUTF8.AsJsonString(orderHeader));
 			response.EnsureSuccessStatusCode();
@@ -154,7 +149,6 @@ namespace Xango.Service.QueueAPI.Client
 				token = this._token;
 			}
 
-			orderHeader.OrderTotalWithCurrency = orderHeader.OrderTotal.ToString("C2");
 			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 			var response = await client.PostAsync("/api/queue/OrderShipped", StringContentUTF8.AsJsonString(orderHeader));
 			response.EnsureSuccessStatusCode();

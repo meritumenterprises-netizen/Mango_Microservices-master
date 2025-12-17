@@ -6,7 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Xango.Models.Dto;
 using Xango.Services.Client.Utility;
-using Xango.Services.RabbitMQ.Utility;
+using Xango.Services.Server.Utility;
 using static Xango.Services.Queue.Processor.QueueMessage;
 
 namespace Xango.Services.Queue.Processor
@@ -14,7 +14,7 @@ namespace Xango.Services.Queue.Processor
 	internal class OrdersCompletedProcessor : QueueMessageProcessorBase
 	{
 		internal OrdersCompletedProcessor(IServiceProvider _serviceProvider, CancellationTokenSource cancellationTokenSource) :
-			base(QueueConstants.ORDERS_COMPLETED_QUEUE, _serviceProvider, cancellationTokenSource)
+			base(QueueConstants.ORDERS_COMPLETED_QUEUE(), _serviceProvider, cancellationTokenSource)
 		{
 			PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_COMPLETED_PICK_INTERVAL_SECONDS");
 			CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_COMPLETED_INTERVAL_SECONDS");
