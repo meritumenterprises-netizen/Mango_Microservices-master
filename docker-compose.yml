@@ -116,6 +116,7 @@ services:
        dockerfile: Xango.Services.OrderAPI/Dockerfile
     depends_on:
        - sqlserver
+       - auth-api
   shoppingcart-api:
     image: ${docker_registry-}shoppingcartapi
     extra_hosts:

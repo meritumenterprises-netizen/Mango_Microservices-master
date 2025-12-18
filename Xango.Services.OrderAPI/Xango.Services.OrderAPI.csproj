@@ -11,10 +11,9 @@
   <ItemGroup>
 	  <PackageReference Include="AutoMapper" Version="15.0.1" />
 	  <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
-	  <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="6.0.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.9" />
-	  <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.9" />
+	  <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
 	  <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
 	  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
@@ -30,7 +29,6 @@
 	  <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	  <PackageReference Include="Stripe.net" Version="49.0.0" />
 	  <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.6" />
-	  <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +37,21 @@
     <ProjectReference Include="..\Xango.Service.InventoryAPI.Client\Xango.Service.InventoryAPI.Client.csproj" />
     <ProjectReference Include="..\Xango.Services.Client.Utility\Xango.Services.Client.Utility.csproj" />
     <ProjectReference Include="..\Xango.Services.Dto\Xango.Models.Dto.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>

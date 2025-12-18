@@ -119,18 +119,12 @@ namespace Xango.Web.Controllers
         {
             IEnumerable<OrderHeaderDto> list;
             string userId = "";
-            //if (!User.IsInRole(SD.RoleAdmin))
-            {
-                userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
-            }
+			userId = User.Claims.Where(u => u.Type == JwtRegisteredClaimNames.Sub)?.FirstOrDefault()?.Value;
+            
             ResponseDto response = await _orderHttpClient.GetAll(userId, status);
             if (response != null && response.IsSuccess)
             {
                 list = DtoConverter.ToDto<List<OrderHeaderDto>>(response);
-                foreach (var order in list)
-                {
-                    order.OrderTotalWithCurrency = order.OrderTotal.ToString("C2");
-                }
             }
             else
             {

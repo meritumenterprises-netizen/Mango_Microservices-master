@@ -50,6 +50,8 @@ namespace Xango.Services.OrderAPI.Controllers
         [ResponseCache(Duration = 60, Location = ResponseCacheLocation.Any, NoStore = true)]
         public ResponseDto? GetAll(string userId, string status = "all")
         {
+            // NOTE: this is called twice from Xango.Web.Application Order controller
+            // TODO: ensure this is called only once
             try
             {
                 IEnumerable<OrderHeader> objList;
