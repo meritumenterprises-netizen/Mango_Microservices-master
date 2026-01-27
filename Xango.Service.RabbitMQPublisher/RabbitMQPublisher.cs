@@ -31,7 +31,7 @@ namespace Xango.Service.RabbitMQPublisher
 								  body: body);
 		}
 
-		public void EnsureQueueExists(string queueName)
+		private void EnsureQueueExists(string queueName)
 		{
 			_channel.QueueDeclare(queue: queueName,
 								  durable: true,

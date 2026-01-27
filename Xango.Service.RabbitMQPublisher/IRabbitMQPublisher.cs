@@ -9,6 +9,5 @@ namespace Xango.Service.RabbitMQPublisher
 	public interface IRabbitMqPublisher
 	{
 		void Publish<T>(string queueName, T message);
-		void EnsureQueueExists(string queueName);
 	}
 }

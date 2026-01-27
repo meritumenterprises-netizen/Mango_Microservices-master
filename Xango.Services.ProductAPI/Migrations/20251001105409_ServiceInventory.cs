@@ -22,28 +22,28 @@ namespace Xango.Services.ProductAPI.Migrations
                 keyColumn: "ProductId",
                 keyValue: 1,
                 column: "StockInventory",
-                value: 0);
+                value: 100);
 
             migrationBuilder.UpdateData(
                 table: "Products",
                 keyColumn: "ProductId",
                 keyValue: 2,
                 column: "StockInventory",
-                value: 0);
+                value: 200);
 
             migrationBuilder.UpdateData(
                 table: "Products",
                 keyColumn: "ProductId",
                 keyValue: 3,
                 column: "StockInventory",
-                value: 0);
+                value: 300);
 
             migrationBuilder.UpdateData(
                 table: "Products",
                 keyColumn: "ProductId",
                 keyValue: 4,
                 column: "StockInventory",
-                value: 0);
+                value: 400);
         }
 
         /// <inheritdoc />

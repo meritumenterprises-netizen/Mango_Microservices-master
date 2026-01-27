@@ -44,10 +44,4 @@
     <ProjectReference Include="..\Xango.Services.Dto\Xango.Models.Dto.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="Xango.pfx">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

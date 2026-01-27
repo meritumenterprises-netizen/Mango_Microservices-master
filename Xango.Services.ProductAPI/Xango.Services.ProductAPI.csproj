@@ -14,6 +14,11 @@
     <EmbeddedResource Remove="OpenAPIs\**" />
     <None Remove="OpenAPIs\**" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20251007182220_AddInventory.cs" />
+    <Compile Remove="Migrations\20251007182220_AddInventory.Designer.cs" />
+  </ItemGroup>
 	
 	<ItemGroup>
   <None Update="Certs\aspnetapp.pfx">

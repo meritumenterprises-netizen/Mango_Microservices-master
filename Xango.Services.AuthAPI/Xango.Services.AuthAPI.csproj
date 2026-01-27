@@ -50,10 +50,4 @@
 	  <None Remove="..\.dockerignore" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <None Update="Xango.pfx">
-	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-	  </None>
-	</ItemGroup>
-
 </Project>
