@@ -7,4 +7,4 @@ This setup is for the Windows 11 and Docker Desktop.
    
 <img width="400" height="488" alt="image" src="https://github.com/user-attachments/assets/4fea1679-27fc-47c9-8fa5-2b6c10e27df2" />
 
-5. Modify docker-compose.yml with IP addresses, defined earlier.
+3. Modify docker-compose.yml with IP addresses, defined earlier.
