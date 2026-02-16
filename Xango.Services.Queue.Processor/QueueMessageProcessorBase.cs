@@ -74,7 +74,6 @@ namespace Xango.Services.Queue.Processor
 		{
 			Console.WriteLine($"[{this.GetType().FullName}] Processor beginning...");
 			Console.WriteLine($"[{this.GetType().FullName}] Ensuring queue {this.QueueName} exists ...");
-			this._rabbitMqPublisher.EnsureQueueExists(this.QueueName);
 			Console.WriteLine($"{this.GetType().FullName} Check queue every {this.CheckQueueEverySeconds} seconds");
 			Console.WriteLine($"{this.GetType().FullName} Pick messages older than {this.PickMessageOlderThanSeconds} seconds");
 			try
