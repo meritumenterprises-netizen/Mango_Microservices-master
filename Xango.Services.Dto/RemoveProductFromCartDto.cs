@@ -8,6 +8,6 @@ namespace Xango.Models.Dto
 {
 	public class RemoveProductFromCartDto
 	{
-		public string CartDetailsId { get; set; }
+		public string? CartDetailsId { get; set; } = null!;
 	}
 }

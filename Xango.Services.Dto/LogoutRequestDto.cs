@@ -2,6 +2,6 @@
 {
     public class LogoutRequestDto
     {
-        public string UserName { get; set; }
+        public string? UserName { get; set; } = null!;
     }
 }

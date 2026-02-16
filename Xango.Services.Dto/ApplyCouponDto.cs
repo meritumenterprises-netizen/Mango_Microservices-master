@@ -8,7 +8,7 @@ namespace Xango.Models.Dto
 {
 	public class ApplyCouponDto
 	{
-		public string UserId { get; set; }
-		public string CouponCode { get; set; }
+		public string? UserId { get; set; } = null!;
+		public string? CouponCode { get; set; } = null!;
 	}
 }
