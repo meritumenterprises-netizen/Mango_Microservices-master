@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
+using RabbitMQ.Client.Exceptions;
 using Xango.Models.Dto;
 using Xango.Service.AuthenticationAPI.Client;
 using Xango.Service.OrderAPI.Client;
@@ -14,6 +15,7 @@ namespace Xango.Services.MassTransit.Processor;
 public sealed class OrderQueuePollingService : BackgroundService
 {
 	private const int DefaultPollIntervalSeconds = 5;
+	private const int RabbitMqConnectionRetrySeconds = 5;
 
 	private readonly IServiceScopeFactory _scopeFactory;
 	private readonly ILogger<OrderQueuePollingService> _logger;
@@ -44,24 +46,98 @@ public sealed class OrderQueuePollingService : BackgroundService
 			RequestedHeartbeat = TimeSpan.FromSeconds(30)
 		};
 
-		await using var connection = await factory.CreateConnectionAsync("Xango.Services.MassTransit.Processor", stoppingToken);
+		await using var connection = await CreateRabbitMqConnection(factory, stoppingToken);
 		await using var channel = await connection.CreateChannelAsync(cancellationToken: stoppingToken);
 
 		var queues = CreateQueueDefinitions();
+		await DeclareQueues(channel, queues, stoppingToken);
+
 		while (!stoppingToken.IsCancellationRequested)
 		{
 			foreach (var queue in queues)
 			{
-				await ProcessQueue(channel, queue, stoppingToken);
+				try
+				{
+					await ProcessQueue(channel, queue, stoppingToken);
+				}
+				catch (OperationInterruptedException ex) when (!stoppingToken.IsCancellationRequested)
+				{
+					_logger.LogWarning(
+						ex,
+						"Could not access queue {QueueName}.",
+						queue.QueueName);
+				}
+				catch (Exception ex) when (!stoppingToken.IsCancellationRequested)
+				{
+					_logger.LogError(ex, "Could not process queue {QueueName}.", queue.QueueName);
+				}
 			}
 
 			await Task.Delay(pollInterval, stoppingToken);
 		}
 	}
 
+	private async Task<IConnection> CreateRabbitMqConnection(
+		ConnectionFactory factory,
+		CancellationToken cancellationToken)
+	{
+		while (!cancellationToken.IsCancellationRequested)
+		{
+			try
+			{
+				var connection = await factory.CreateConnectionAsync(
+					"Xango.Services.MassTransit.Processor",
+					cancellationToken);
+
+				_logger.LogInformation(
+					"Connected to RabbitMQ at {RabbitMqHost}.",
+					QueueConstants.RABBITMQ_HOST());
+
+				return connection;
+			}
+			catch (BrokerUnreachableException ex) when (!cancellationToken.IsCancellationRequested)
+			{
+				_logger.LogWarning(
+					ex,
+					"RabbitMQ at {RabbitMqHost} is not ready. Retrying in {RetrySeconds} seconds.",
+					QueueConstants.RABBITMQ_HOST(),
+					RabbitMqConnectionRetrySeconds);
+
+				await Task.Delay(TimeSpan.FromSeconds(RabbitMqConnectionRetrySeconds), cancellationToken);
+			}
+		}
+
+		throw new OperationCanceledException(cancellationToken);
+	}
+
+	private async Task DeclareQueues(
+		IChannel channel,
+		IEnumerable<OrderQueueDefinition> queues,
+		CancellationToken cancellationToken)
+	{
+		foreach (var queue in queues)
+		{
+			await channel.QueueDeclareAsync(
+				queue: queue.QueueName,
+				durable: true,
+				exclusive: false,
+				autoDelete: false,
+				arguments: null,
+				cancellationToken: cancellationToken);
+
+			_logger.LogInformation("Declared RabbitMQ queue {QueueName}.", queue.QueueName);
+		}
+	}
+
 	private async Task ProcessQueue(IChannel channel, OrderQueueDefinition queue, CancellationToken cancellationToken)
 	{
-		var queueInfo = await channel.QueueDeclarePassiveAsync(queue.QueueName, cancellationToken);
+		var queueInfo = await channel.QueueDeclareAsync(
+			queue: queue.QueueName,
+			durable: true,
+			exclusive: false,
+			autoDelete: false,
+			arguments: null,
+			cancellationToken: cancellationToken);
 		var messagesToCheck = queueInfo.MessageCount;
 
 		if (messagesToCheck == 0)

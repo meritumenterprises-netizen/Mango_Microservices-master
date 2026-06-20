@@ -74,6 +74,8 @@ services:
     labels:
       - "com.microsoft.visualstudio.debuggee.openBrowser=true"
       - "com.microsoft.visualstudio.debuggee.url=http://myhost.local"
+      - "com.microsoft.visualstudio.debuggee.launchBrowser=true"
+      - "com.microsoft.visualstudio.debuggee.launchUrl=http://myhost.local"
   rabbitmq:
     ports:
       - "192.168.18.47:5672:5672"

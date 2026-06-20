@@ -27,7 +27,7 @@ WORKDIR /src
 COPY ["Xango.Services.InventoryApi/Xango.Services.InventoryApi.csproj", "Xango.Services.InventoryApi/"]
 COPY ["Xango.Services.Server.Utility/Xango.Services.Server.Utility.csproj", "Xango.Services.Server.Utility/"]
 COPY ["Xango.Services.Client.Utility/Xango.Services.Client.Utility.csproj", "Xango.Services.Client.Utility/"]
-COPY ["Xango.Services.Dto/Xango.Services.Dto.csproj", "Xango.Services.Dto/"]
+COPY ["Xango.Services.Dto/Xango.Models.Dto.csproj", "Xango.Services.Dto/"]
 RUN dotnet restore "./Xango.Services.InventoryApi/Xango.Services.InventoryApi.csproj"
 COPY . .
 WORKDIR "/src/Xango.Services.InventoryApi"
