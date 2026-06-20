@@ -54,7 +54,7 @@ namespace Xango.Services.Queue.Processor
 				foreach (var processor in processors)
 				{
 					Console.WriteLine($"[{this.GetType().FullName}] Starting {processor.QueueName} processor...");
-					tasks.Add(ConsumeQueuePeriodically(token, processor));
+					tasks.Add(Task.Run(() => ConsumeQueuePeriodically(token, processor), token));
 
 
 					// stagger startup
@@ -80,6 +80,7 @@ namespace Xango.Services.Queue.Processor
 		private async Task ConsumeQueuePeriodically(CancellationToken cancellationToken, QueueMessageProcessorBase processor)
 		{
 			var queueCheckIntervalSeconds = processor.CheckQueueEverySeconds;
+			await Task.Yield();
 			processor.Begin();
 			do
 			{
@@ -95,7 +96,7 @@ namespace Xango.Services.Queue.Processor
 					if (!cancellationToken.IsCancellationRequested)
 					{
 						Console.WriteLine($"[{this.GetType().FullName}] Waiting {queueCheckIntervalSeconds} seconds before checking queue {processor.QueueName} again.");
-						await Task.Delay(queueCheckIntervalSeconds * 1000);
+						await Task.Delay(queueCheckIntervalSeconds * 1000, cancellationToken);
 					}
 				}
 				catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
@@ -111,6 +112,11 @@ namespace Xango.Services.Queue.Processor
 				catch (Exception ex)
 				{
 					Console.WriteLine($"[{processor.GetType().FullName}] Exception {ex.Message}.");
+					if (!cancellationToken.IsCancellationRequested)
+					{
+						Console.WriteLine($"[{processor.GetType().FullName}] Waiting {queueCheckIntervalSeconds} seconds before retrying after an error.");
+						await Task.Delay(queueCheckIntervalSeconds * 1000, cancellationToken);
+					}
 				}
 			} while (true);
 			processor.End();

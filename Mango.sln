@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.6.33606.364
+# Visual Studio Version 18
+VisualStudioVersion = 18.7.11903.348 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{9DBEDFC7-6695-43A2-A386-869558CE9FCA}"
 EndProject
@@ -60,6 +60,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.Server.Utility", "Xango.Services.Server.Utility\Xango.Services.Server.Utility.csproj", "{9EB69BA7-BDA0-13F7-782B-A2DA27DF82A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Service.RabbitMQPublisher", "Xango.Service.RabbitMQPublisher\Xango.Service.RabbitMQPublisher.csproj", "{33E5FE6C-0A94-4AF8-9E74-C9C8E3889F0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.MassTransit.Processor", "..\Mango-github\Xango.Services.MassTransit.Processor\Xango.Services.MassTransit.Processor.csproj", "{76CF3C07-968E-486A-BA97-D606ED129A5D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -155,6 +157,10 @@ Global
 		{33E5FE6C-0A94-4AF8-9E74-C9C8E3889F0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{33E5FE6C-0A94-4AF8-9E74-C9C8E3889F0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{33E5FE6C-0A94-4AF8-9E74-C9C8E3889F0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76CF3C07-968E-486A-BA97-D606ED129A5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76CF3C07-968E-486A-BA97-D606ED129A5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76CF3C07-968E-486A-BA97-D606ED129A5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76CF3C07-968E-486A-BA97-D606ED129A5D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -80,6 +80,15 @@ namespace Xango.Services.Queue.Processor
 			{
 				this.RabbitMqConnection = this.ServiceProvider.GetRequiredService<IConnection>();
 				Console.WriteLine($"[{this.GetType().FullName}] Created connection to the message queue broker");
+				using (var channel = this.RabbitMqConnection.CreateModel())
+				{
+					channel.QueueDeclare(queue: this.QueueName,
+										 durable: true,
+										 exclusive: false,
+										 autoDelete: false,
+										 arguments: null);
+				}
+				Console.WriteLine($"[{this.GetType().FullName}] Ensured queue {this.QueueName} exists.");
 				var loginRequest = new LoginRequestDto()
 				{
 					UserName = Environment.GetEnvironmentVariable("AUTH_USER"),

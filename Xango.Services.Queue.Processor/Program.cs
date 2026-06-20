@@ -11,6 +11,7 @@ using RabbitMQ.Client;
 using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using Xango.Service.AuthenticationAPI.Client;
 using Xango.Service.OrderAPI.Client;
 using Xango.Services.Client.Utility;
@@ -19,7 +20,7 @@ using Xango.Services.Server.Utility;
 using Xango.Service.RabbitMQPublisher;
 public class Program
 {
-	public static void Main(string[] args)
+	public static async Task Main(string[] args)
 	{
 		var configuration = new ConfigurationBuilder()
 			.SetBasePath(Directory.GetCurrentDirectory())
@@ -90,8 +91,12 @@ public class Program
 				Console.WriteLine("[Xango.Services.QueueProcessor] the process will run indefinitely");
 			}
 			var mqReader = new RabbitMqReader(serviceProvider);
-			mqReader.StartAsync();
-			host.Run();
+			var processorTask = mqReader.StartAsync();
+			var hostTask = host.RunAsync();
+
+			await Task.WhenAny(processorTask, hostTask);
+			await processorTask;
+			await host.StopAsync();
 		}
 		catch (Exception ex)
 		{

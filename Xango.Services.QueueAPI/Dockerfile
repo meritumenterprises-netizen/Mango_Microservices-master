@@ -20,12 +20,12 @@ ENV SQL_CONNECTION_STRING=Server="tcp:mssql.default.svc.cluster.local,1433;Datab
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["Xango.Services.Queue/Xango.Services.QueueAPI.csproj", "Xango.Services.Queue/"]
+COPY ["Xango.Services.QueueAPI/Xango.Services.QueueAPI.csproj", "Xango.Services.QueueAPI/"]
 COPY ["Xango.Services.Dto/Xango.Models.Dto.csproj", "Xango.Services.Dto/"]
 COPY ["Xango.Services.Interfaces/Xango.Services.Interfaces.csproj", "Xango.Services.Interfaces/"]
-RUN dotnet restore "./Xango.Services.Queue/Xango.Services.QueueAPI.csproj"
+RUN dotnet restore "./Xango.Services.QueueAPI/Xango.Services.QueueAPI.csproj"
 COPY . .
-WORKDIR "/src/Xango.Services.Queue"
+WORKDIR "/src/Xango.Services.QueueAPI"
 RUN dotnet build "./Xango.Services.QueueAPI.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
 # This stage is used to publish the service project to be copied to the final stage

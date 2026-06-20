@@ -14,6 +14,8 @@ namespace Xango.Services.Queue.Processor
 		internal OrdersPendingProcessor(IServiceProvider _serviceProvider, CancellationTokenSource cancellationTokenSource) : 
 			base(QueueConstants.ORDERS_PENDING_QUEUE(), _serviceProvider, cancellationTokenSource)
 		{
+			PickMessageOlderThanSeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_PENDING_PICK_INTERVAL_SECONDS");
+			CheckQueueEverySeconds = EnvironmentEx.GetEnvironmentVariableOrThrow<int>("QUEUE_PENDING_INTERVAL_SECONDS");
 		}
 		protected override bool ProcessSingleMessage(QueueMessage message)
 		{
