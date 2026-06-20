@@ -7,7 +7,6 @@ using Stripe.Checkout;
 using Stripe.Climate;
 using Xango.Models.Dto;
 using Xango.Service.InventoryAPI.Client;
-using Xango.Service.QueueAPI.Client;
 using Xango.Services.Client.Utility;
 using Xango.Services.Dto;
 using Xango.Services.OrderAPI.Data;
@@ -96,15 +95,28 @@ namespace Xango.Services.OrderAPI.Controllers
         {
             try
             {
-                OrderHeader orderHeader = _db.OrderHeaders.First(u => u.OrderHeaderId == id);
-                if (orderHeader != null && orderHeader.Status == SD.Status_Pending)
+                OrderHeader orderHeader = _db.OrderHeaders.Include(u => u.OrderDetails).First(u => u.OrderHeaderId == id);
+                if (orderHeader != null && (orderHeader.Status == SD.Status_Pending || orderHeader.Status == SD.Status_Approved))
                 {
+                    var previousStatus = orderHeader.Status;
+                    await DeleteOrderFromCurrentQueue(previousStatus, id);
+
                     this.SetClientToken(_inventoryClient, _tokenProvider);
 					foreach (var orderDetail in orderHeader.OrderDetails)
                     {
                         await _inventoryClient.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                     }
                     orderHeader.Status = SD.Status_Cancelled;
+                    orderHeader.ModifiedTime = DateTime.Now;
+
+                    var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
+                    this.SetClientToken(_queueClient, _tokenProvider);
+                    var response = await _queueClient.PostOrderCancelled(orderHeaderDto);
+                    if (!response.IsSuccess)
+                    {
+                        throw new ApplicationException("Could not post order in status of Cancelled to the queue");
+                    }
+
                     _db.SaveChanges();
                     _response.IsSuccess = true;
                     _response.Message = "Order cancelled successfully";
@@ -126,6 +138,7 @@ namespace Xango.Services.OrderAPI.Controllers
                 OrderHeader orderHeader = _db.OrderHeaders.Include((d) => d.OrderDetails).First(u => u.OrderHeaderId == id);
                 if (orderHeader != null)
                 {
+					await DeleteOrderFromCurrentQueue(orderHeader.Status, id);
                     this.SetClientToken(_inventoryClient, _tokenProvider);
 					foreach (var orderDetail in orderHeader.OrderDetails)
                     {
@@ -269,10 +282,11 @@ namespace Xango.Services.OrderAPI.Controllers
                     //then payment was successful
                     orderHeader.PaymentIntentId = paymentIntent.Id;
                     orderHeader.Status = SD.Status_Approved;
+                    orderHeader.ModifiedTime = DateTime.Now;
+                    _db.SaveChanges();
                     this.SetClientToken(_queueClient, _tokenProvider);
                     var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
 					await _queueClient.PostOrderApproved(orderHeaderDto);
-                    _db.SaveChanges();
                     _response.Result = _mapper.Map<OrderHeaderDto>(orderHeader);
                 }
             }
@@ -289,22 +303,29 @@ namespace Xango.Services.OrderAPI.Controllers
         {
             try
             {
+                newStatus = NormalizeOrderStatus(newStatus);
                 OrderHeader orderHeader = _db.OrderHeaders.Include((od) => od.OrderDetails).First(u => u.OrderHeaderId == orderId);
                 if (orderHeader != null)
                 {
+					var previousStatus = NormalizeOrderStatus(orderHeader.Status);
+					if (!string.Equals(previousStatus, newStatus, StringComparison.Ordinal))
+					{
+						await DeleteOrderFromCurrentQueue(previousStatus, orderId);
+					}
+
 					if (newStatus == SD.Status_Approved)
                     {
+						orderHeader.Status = SD.Status_Approved;
+						orderHeader.ModifiedTime = DateTime.Now;
                         var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
-                        orderHeaderDto.ModifiedTime = DateTime.Now;
 						this.SetClientToken(_queueClient, _tokenProvider);
-                        var response = await _queueClient.PostOrderReadyForPickup(orderHeaderDto);
+                        var response = await _queueClient.PostOrderApproved(orderHeaderDto);
                         if (!response.IsSuccess)
                         {
                             throw new ApplicationException("Could not post order in status of Approved to the queue");
                         }
-                        orderHeader.Status = SD.Status_Approved;
                         _db.SaveChanges();
-
+						_response.Result = orderHeaderDto;
 					}
                     if (newStatus == SD.Status_Cancelled)
                     {
@@ -313,56 +334,60 @@ namespace Xango.Services.OrderAPI.Controllers
                         {
                             await _inventoryClient.ReturnQty(orderDetail.ProductId, orderDetail.Count);
                         }
+						orderHeader.Status = SD.Status_Cancelled;
+						orderHeader.ModifiedTime = DateTime.Now;
 						var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
-						orderHeaderDto.ModifiedTime = DateTime.Now;
 						this.SetClientToken(_queueClient, _tokenProvider);
 						var response = await _queueClient.PostOrderCancelled(orderHeaderDto);
 						if (!response.IsSuccess)
 						{
 							throw new ApplicationException("Could not post order in status of Cancelled to the queue");
 						}
-						orderHeader.Status = SD.Status_Cancelled;
 						_db.SaveChanges();
+						_response.Result = orderHeaderDto;
 
 					}
                     if (newStatus == SD.Status_ReadyForPickup)
                     {
+						orderHeader.Status = SD.Status_ReadyForPickup;
+						orderHeader.ModifiedTime = DateTime.Now;
                         var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
-						orderHeaderDto.ModifiedTime = DateTime.Now;
 						this.SetClientToken(_queueClient, _tokenProvider);
                         var response = await _queueClient.PostOrderReadyForPickup(orderHeaderDto);
                         if (!response.IsSuccess)
                         {
                             throw new ApplicationException("Could not post order in status of Ready for Pickup to the queue");
                         }
-						orderHeader.Status = SD.Status_ReadyForPickup;
 						_db.SaveChanges();
+						_response.Result = orderHeaderDto;
 					}
 					if (newStatus == SD.Status_Completed)
 					{
+						orderHeader.Status = SD.Status_Completed;
+						orderHeader.ModifiedTime = DateTime.Now;
 						var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
-						orderHeaderDto.ModifiedTime = DateTime.Now;
 						this.SetClientToken(_queueClient, _tokenProvider);
 						var response = await _queueClient.PostOrderCompleted(orderHeaderDto);
 						if (!response.IsSuccess)
 						{
 							throw new ApplicationException("Could not post order in status of Completed to the queue");
 						}
-						orderHeader.Status = SD.Status_Completed;
 						_db.SaveChanges();
+						_response.Result = orderHeaderDto;
 					}
                     if (newStatus == SD.Status_Shipped)
                     {
+						orderHeader.Status = SD.Status_Shipped;
+						orderHeader.ModifiedTime = DateTime.Now;
 						var orderHeaderDto = _mapper.Map<OrderHeaderDto>(orderHeader);
-						orderHeaderDto.ModifiedTime = DateTime.Now;
 						this.SetClientToken(_queueClient, _tokenProvider);
 						var response = await _queueClient.PostOrderShipped(orderHeaderDto);
 						if (!response.IsSuccess)
 						{
 							throw new ApplicationException("Could not post order in status of Shipped to the queue");
 						}
-						orderHeader.Status = SD.Status_Shipped;
 						_db.SaveChanges();
+						_response.Result = orderHeaderDto;
 
 					}
 				}
@@ -370,8 +395,45 @@ namespace Xango.Services.OrderAPI.Controllers
             catch (Exception ex)
             {
                 return ResponseProducer.ErrorResponse(ex.Message);
-            }
+			}
             return _response;
         }
+
+		private async Task DeleteOrderFromCurrentQueue(string? status, int orderHeaderId)
+		{
+			if (string.IsNullOrWhiteSpace(status))
+			{
+				return;
+			}
+
+			status = NormalizeOrderStatus(status);
+			this.SetClientToken(_queueClient, _tokenProvider);
+			var queueResponse = await _queueClient.DeleteOrderFromQueue(status, orderHeaderId);
+			if (!queueResponse.IsSuccess)
+			{
+				throw new ApplicationException($"Could not delete order from the {status} queue");
+			}
+		}
+
+		private static string NormalizeOrderStatus(string? status)
+		{
+			if (string.IsNullOrWhiteSpace(status))
+			{
+				return string.Empty;
+			}
+
+			var compactStatus = status.Trim().Replace(" ", "", StringComparison.Ordinal);
+			return compactStatus.ToLowerInvariant() switch
+			{
+				"pending" => SD.Status_Pending,
+				"approved" => SD.Status_Approved,
+				"readyforpickup" => SD.Status_ReadyForPickup,
+				"completed" => SD.Status_Completed,
+				"cancelled" => SD.Status_Cancelled,
+				"canceled" => SD.Status_Cancelled,
+				"shipped" => SD.Status_Shipped,
+				_ => status.Trim()
+			};
+		}
 	}
 }

@@ -160,5 +160,31 @@ namespace Xango.Service.QueueAPI.Client
 			return ResponseProducer.ErrorResponse("Could not posted shipped order to the queue");
 		}
 
+		public async Task<ResponseDto> DeleteOrderFromCompletedQueue(int orderHeaderId)
+		{
+			return await DeleteOrderFromQueue(SD.Status_Completed, orderHeaderId);
+		}
+
+		public async Task<ResponseDto> DeleteOrderFromQueue(string status, int orderHeaderId)
+		{
+			var client = _httpClientFactory.NewClientNoSslErrors("Queue");
+			client.BaseAddress = new Uri(_baseUri);
+			var token = _tokenProvider.GetToken();
+			if (token == null)
+			{
+				token = this._token;
+			}
+
+			client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+			var response = await client.DeleteAsync("/api/queue/Order/" + orderHeaderId + "/Status/" + Uri.EscapeDataString(status));
+			response.EnsureSuccessStatusCode();
+			var resp = response.Content.ReadFromJsonAsync<ResponseDto?>().GetAwaiter().GetResult();
+			if (resp != null && resp.IsSuccess)
+			{
+				return ResponseProducer.OkResponse(resp.Result);
+			}
+			return ResponseProducer.ErrorResponse("Could not delete order from the queue for status " + status);
+		}
+
 	}
 }

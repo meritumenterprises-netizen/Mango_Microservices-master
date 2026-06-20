@@ -11,5 +11,7 @@ namespace Xango.Services.Interfaces
 		Task<ResponseDto> PostOrderCancelled(OrderHeaderDto orderHeaderDto);
 		Task<ResponseDto> PostOrderCompleted(OrderHeaderDto orderHeaderDto);
 		Task<ResponseDto> PostOrderShipped(OrderHeaderDto orderHeaderDto);
+		Task<ResponseDto> DeleteOrderFromQueue(string status, int orderHeaderId);
+		Task<ResponseDto> DeleteOrderFromCompletedQueue(int orderHeaderId);
 	}
 }

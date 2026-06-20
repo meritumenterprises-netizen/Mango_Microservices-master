@@ -1,13 +1,10 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using RabbitMQ.Client;
-using RabbitMQ.Client.Exceptions;
+using MassTransit;
 using Xango.Models.Dto;
-using Xango.Service.RabbitMQPublisher;
 using Xango.Services.Client.Utility;
+using Xango.Services.Queue.Services;
 using Xango.Services.Server.Utility;
-using Xango.Services.Dto;
-using Xango.Services.Interfaces;
 
 namespace Xango.Services.Queue.Controllers
 {
@@ -15,57 +12,99 @@ namespace Xango.Services.Queue.Controllers
 	[Route("api/queue")]
 	public class QueueController : ControllerBase
 	{
-		private IRabbitMqPublisher _rabbitMqPublisher;
-		public QueueController(IRabbitMqPublisher rabbitMqPublisher)
+		private readonly ISendEndpointProvider _sendEndpointProvider;
+		private readonly IQueueCleanupService _queueCleanupService;
+
+		public QueueController(
+			ISendEndpointProvider sendEndpointProvider,
+			IQueueCleanupService queueCleanupService)
 		{
-			this._rabbitMqPublisher = rabbitMqPublisher;
+			_sendEndpointProvider = sendEndpointProvider;
+			_queueCleanupService = queueCleanupService;
 		}
 
 		[HttpPost]
 		[Authorize]
 		[Route("OrderApproved")]
-		public ResponseDto OrderApproved(OrderHeaderDto orderHeader)
+		public async Task<ResponseDto> OrderApproved(OrderHeaderDto orderHeader)
 		{
-			_rabbitMqPublisher.Publish<OrderHeaderDto>(QueueConstants.ORDERS_APPROVED_QUEUE(), orderHeader);
-			return new ResponseDto
-			{
-				IsSuccess = true,
-				Result = orderHeader,
-			};
+			return await SendOrder(QueueConstants.ORDERS_APPROVED_QUEUE(), orderHeader);
 		}
 
 		[HttpPost]
 		[Authorize]
 		[Route("OrderPending")]
-		public ResponseDto OrderPending(OrderHeaderDto orderHeader)
+		public async Task<ResponseDto> OrderPending(OrderHeaderDto orderHeader)
 		{
-			_rabbitMqPublisher.Publish<OrderHeaderDto>(QueueConstants.ORDERS_PENDING_QUEUE(), orderHeader);
-			return new ResponseDto
-			{
-				IsSuccess = true,
-				Result = orderHeader,
-			};
+			return await SendOrder(QueueConstants.ORDERS_PENDING_QUEUE(), orderHeader);
 		}
 
 		[HttpPost]
 		[Authorize]
 		[Route("OrderReadyForPickup")]
-		public ResponseDto OrderReadyForPickup(OrderHeaderDto orderHeader)
+		public async Task<ResponseDto> OrderReadyForPickup(OrderHeaderDto orderHeader)
 		{
-			_rabbitMqPublisher.Publish<OrderHeaderDto>(QueueConstants.ORDERS_READYFORPICKUP_QUEUE(), orderHeader);
-			return new ResponseDto
-			{
-				IsSuccess = true,
-				Result = orderHeader,
-			};
+			return await SendOrder(QueueConstants.ORDERS_READYFORPICKUP_QUEUE(), orderHeader);
 		}
 
 		[HttpPost]
 		[Authorize]
 		[Route("OrderCancelled")]
-		public ResponseDto OrderCancelled(OrderHeaderDto orderHeader)
+		public async Task<ResponseDto> OrderCancelled(OrderHeaderDto orderHeader)
 		{
-			_rabbitMqPublisher.Publish<OrderHeaderDto>(QueueConstants.ORDERS_CANCELLED_QUEUE(), orderHeader);
+			return await SendOrder(QueueConstants.ORDERS_CANCELLED_QUEUE(), orderHeader);
+		}
+
+		[HttpPost]
+		[Authorize]
+		[Route("OrderCompleted")]
+		public async Task<ResponseDto> OrderCompleted(OrderHeaderDto orderHeader)
+		{
+			return await SendOrder(QueueConstants.ORDERS_COMPLETED_QUEUE(), orderHeader);
+		}
+
+		[HttpPost]
+		[Authorize]
+		[Route("OrderShipped")]
+		public async Task<ResponseDto> OrderShipped(OrderHeaderDto orderHeader)
+		{
+			return await SendOrder(QueueConstants.ORDERS_SHIPPED_QUEUE(), orderHeader);
+		}
+
+		[HttpDelete]
+		[Authorize]
+		[Route("OrderCompleted/{orderHeaderId:int}")]
+		public async Task<ResponseDto> DeleteOrderFromCompleted(int orderHeaderId)
+		{
+			return await _queueCleanupService.DeleteOrderFromQueue(
+				QueueConstants.ORDERS_COMPLETED_QUEUE(),
+				orderHeaderId);
+		}
+
+		[HttpDelete]
+		[Authorize]
+		[Route("Order/{orderHeaderId:int}/Status/{status}")]
+		public async Task<ResponseDto> DeleteOrderFromStatusQueue(int orderHeaderId, string status)
+		{
+			var queueName = GetQueueName(status);
+			if (queueName == null)
+			{
+				return new ResponseDto
+				{
+					IsSuccess = false,
+					Message = $"No queue is configured for order status '{status}'."
+				};
+			}
+
+			return await _queueCleanupService.DeleteOrderFromQueue(queueName, orderHeaderId);
+		}
+
+		private async Task<ResponseDto> SendOrder(string queueName, OrderHeaderDto orderHeader)
+		{
+			orderHeader.ModifiedTime = DateTime.Now;
+			var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{queueName}"));
+			await endpoint.Send(orderHeader);
+
 			return new ResponseDto
 			{
 				IsSuccess = true,
@@ -73,27 +112,33 @@ namespace Xango.Services.Queue.Controllers
 			};
 		}
 
-		[HttpPost]
-		[Authorize]
-		[Route("OrderCompleted")]
-		public ResponseDto OrderCompleted(OrderHeaderDto orderHeader)
+		private static string? GetQueueName(string status)
 		{
-			_rabbitMqPublisher.Publish<OrderHeaderDto>(QueueConstants.ORDERS_COMPLETED_QUEUE(), orderHeader); return new ResponseDto
+			return NormalizeOrderStatus(status) switch
 			{
-				IsSuccess = true,
-				Result = orderHeader,
+				SD.Status_Pending => QueueConstants.ORDERS_PENDING_QUEUE(),
+				SD.Status_Approved => QueueConstants.ORDERS_APPROVED_QUEUE(),
+				SD.Status_ReadyForPickup => QueueConstants.ORDERS_READYFORPICKUP_QUEUE(),
+				SD.Status_Completed => QueueConstants.ORDERS_COMPLETED_QUEUE(),
+				SD.Status_Cancelled => QueueConstants.ORDERS_CANCELLED_QUEUE(),
+				SD.Status_Shipped => QueueConstants.ORDERS_SHIPPED_QUEUE(),
+				_ => null
 			};
 		}
 
-		[HttpPost]
-		[Authorize]
-		[Route("OrderShipped")]
-		public ResponseDto OrderShipped(OrderHeaderDto orderHeader)
+		private static string NormalizeOrderStatus(string status)
 		{
-			_rabbitMqPublisher.Publish<OrderHeaderDto>(QueueConstants.ORDERS_SHIPPED_QUEUE(), orderHeader); return new ResponseDto
+			var compactStatus = status.Trim().Replace(" ", "", StringComparison.Ordinal);
+			return compactStatus.ToLowerInvariant() switch
 			{
-				IsSuccess = true,
-				Result = orderHeader,
+				"pending" => SD.Status_Pending,
+				"approved" => SD.Status_Approved,
+				"readyforpickup" => SD.Status_ReadyForPickup,
+				"completed" => SD.Status_Completed,
+				"cancelled" => SD.Status_Cancelled,
+				"canceled" => SD.Status_Cancelled,
+				"shipped" => SD.Status_Shipped,
+				_ => status.Trim()
 			};
 		}
 	}

@@ -28,7 +28,7 @@ WORKDIR /src
 COPY ["Xango.Services.OrderAPI/Xango.Services.OrderAPI.csproj", "Xango.Services.OrderAPI/"]
 COPY ["Xango.Services.Server.Utility/Xango.Services.Server.Utility.csproj", "Xango.Services.Server.Utility/"]
 COPY ["Xango.Services.Client.Utility/Xango.Services.Client.Utility.csproj", "Xango.Services.Client.Utility/"]
-COPY ["Xango.Services.Dto/Xango.Services.Dto.csproj", "Xango.Services.Dto/"]
+COPY ["Xango.Services.Dto/Xango.Models.Dto.csproj", "Xango.Services.Dto/"]
 COPY ["Xango.Service.InventoryAPI.Client/Xango.Service.InventoryAPI.Client.csproj", "Xango.Service.InventoryAPI.Client/"]
 COPY ["Xango.Services.Interfaces/Xango.Services.Interfaces.csproj", "Xango.Services.Interfaces/"]
 RUN dotnet restore "./Xango.Services.OrderAPI/Xango.Services.OrderAPI.csproj"

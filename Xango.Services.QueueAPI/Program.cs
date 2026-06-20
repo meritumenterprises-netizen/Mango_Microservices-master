@@ -1,13 +1,13 @@
 using AutoMapper;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Http;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Xango.Services.Queue.Services;
 using Xango.Services.Server.Utility;
 using Xango.Services.Server.Utility.Extensions;
-using RabbitMQ.Client;
-using Xango.Service.RabbitMQPublisher;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -34,22 +34,21 @@ builder.Services.AddCors(options =>
 //builder.Services.AddSingleton(mapper);
 builder.Services.AddScoped<BackendApiAuthenticationHttpClientHandler>();
 builder.Services.AddScoped<ITokenProvider, TokenProvider>();
-builder.Services.AddSingleton<IConnection>(sp =>
+builder.Services.AddScoped<IQueueCleanupService, RabbitMqQueueCleanupService>();
+builder.Services.AddMassTransit(x =>
 {
-	var factory = new ConnectionFactory
+	x.UsingRabbitMq((context, cfg) =>
 	{
-		HostName = QueueConstants.RABBITMQ_HOST(),
-		UserName = QueueConstants.RABBITMQ_USER(),
-		Password = QueueConstants.RABBITMQ_PASSWORD(),
-		AutomaticRecoveryEnabled = true,
-		NetworkRecoveryInterval = TimeSpan.FromSeconds(10),
-		TopologyRecoveryEnabled = true,
-		RequestedHeartbeat = TimeSpan.FromSeconds(10)
-	};
+		cfg.Host(QueueConstants.RABBITMQ_HOST(), "/", h =>
+		{
+			h.Username(QueueConstants.RABBITMQ_USER());
+			h.Password(QueueConstants.RABBITMQ_PASSWORD());
+			h.Heartbeat(TimeSpan.FromSeconds(30));
+		});
 
-	return factory.CreateConnection("Xango.Services.QueueAPI");
+		cfg.UseRawJsonSerializer(RawSerializerOptions.All);
+	});
 });
-builder.Services.AddSingleton<IRabbitMqPublisher, RabbitMqPublisher>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

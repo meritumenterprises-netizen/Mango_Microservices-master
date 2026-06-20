@@ -217,16 +217,12 @@ services:
       depends_on:
       - rabbitmq
   queueprocessor:
-      image: ${docker_registry-}queueprocessor
-      container_name: queue-processor
+      image: ${docker_registry-}masstransitprocessor
+      container_name: mass-transit-processor
       environment:
         RABBITMQ_HOST: rabbitmq.default.svc.cluster.local
         RABBITMQ_USER: guest
         RABBITMQ_PASSWORD: guest
-        
-        MAX_RUNTIME_MINUTES: 0 # set to 0 to make the processor run indefinitely
-        STAGGER_TASKS_SECONDS: 5 # how long to wait between starting each task
-        INITIAL_DELAY_SECONDS: 30 # how long to wait before starting the first task
 
         ORDERS_CANCELLED_QUEUE : "Xango.Orders.Cancelled"
         ORDERS_PENDING_QUEUE : "Xango.Orders.Pending"
@@ -235,32 +231,24 @@ services:
         ORDERS_APPROVED_QUEUE : "Xango.Orders.Approved"
         ORDERS_SHIPPED_QUEUE : "Xango.Orders.Shipped"
 
-        QUEUE_PENDING_PICK_INTERVAL_SECONDS: 30 # how old pending orders need to be to pick them up
-        QUEUE_COMPLETED_PICK_INTERVAL_SECONDS: 30 # how old completed orders need to be to pick them up
-        QUEUE_CANCELLED_PICK_INTERVAL_SECONDS: 60 # how old cancelled orders need to be to pick them up
-        QUEUE_READYFORPICKUP_PICK_INTERVAL_SECONDS: 30 # how old readyforpickup orders need to be to pick them up
-        QUEUE_APPROVED_PICK_INTERVAL_SECONDS: 30 # how old approved orders need to be to pick them up
-        QUEUE_SHIPPED_PICK_INTERVAL_SECONDS: 30 # how old shipped orders need to be to pick them up
-
-        QUEUE_CANCELLED_INTERVAL_SECONDS: 30 # how often to check for cancelled orders
-        QUEUE_PENDING_INTERVAL_SECONDS: 120 # how often to check for pending orders
-        QUEUE_COMPLETED_INTERVAL_SECONDS: 30 # how often to check for completed orders
-        QUEUE_READYFORPICKUP_INTERVAL_SECONDS: 30 # how often to check for readyforpickup orders
-        QUEUE_APPROVED_INTERVAL_SECONDS: 30 # how often to check for approved orders
-        QUEUE_SHIPPED_INTERVAL_SECONDS: 30 # how often to check for shipped orders
+        QUEUE_PENDING_PICK_INTERVAL_SECONDS: 120 # how old pending orders need to be to pick them up
+        QUEUE_COMPLETED_PICK_INTERVAL_SECONDS: 120 # how old completed orders need to be to pick them up
+        QUEUE_CANCELLED_PICK_INTERVAL_SECONDS: 120 # how old cancelled orders need to be to pick them up
+        QUEUE_READYFORPICKUP_PICK_INTERVAL_SECONDS: 120 # how old readyforpickup orders need to be to pick them up
+        QUEUE_APPROVED_PICK_INTERVAL_SECONDS: 120 # how old approved orders need to be to pick them up
+        QUEUE_SHIPPED_PICK_INTERVAL_SECONDS: 120 # how old shipped orders need to be to pick them up
+        MESSAGE_QUEUE_POLL_INTERVAL_SECONDS: 5 # how often to check the queues
 
         AUTH_USER: admin@none.com
-        AUTH_PASSWORD: Password1!
+        AUTH_PASSWORD: Pass@word1!
 
         AuthenticationAPI: http://auth-api.default.svc.cluster.local:80
         OrderAPI : http://order-api.default.svc.cluster.local:80
       build:
          context: .
-         dockerfile: Xango.Services.Queue.Processor/Dockerfile
+         dockerfile: Xango.Services.MassTransit.Processor/Dockerfile
       networks:
         appnet:
-          aliases:
-            - rabbitmq.default.svc.cluster.local
       depends_on:
         - rabbitmq
         - auth-api

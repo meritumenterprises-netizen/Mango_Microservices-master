@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.7.11903.348 stable
+VisualStudioVersion = 18.7.11903.348
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{9DBEDFC7-6695-43A2-A386-869558CE9FCA}"
 EndProject
@@ -53,15 +53,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.QueueAPI", "Xango.Services.QueueAPI\Xango.Services.QueueAPI.csproj", "{8FC5007C-41D1-3731-3DD5-8A3AF0011DA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.Queue.Processor", "Xango.Services.Queue.Processor\Xango.Services.Queue.Processor.csproj", "{2D2B9CA1-DDD3-3897-9D52-E9EEE452073A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Service.QueueAPI.Client", "Xango.Service.QueueAPI.Client\Xango.Service.QueueAPI.Client.csproj", "{0FAB602A-5747-C926-7ECB-5EFF565340F8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.Server.Utility", "Xango.Services.Server.Utility\Xango.Services.Server.Utility.csproj", "{9EB69BA7-BDA0-13F7-782B-A2DA27DF82A0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Service.RabbitMQPublisher", "Xango.Service.RabbitMQPublisher\Xango.Service.RabbitMQPublisher.csproj", "{33E5FE6C-0A94-4AF8-9E74-C9C8E3889F0E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.MassTransit.Processor", "..\Mango-github\Xango.Services.MassTransit.Processor\Xango.Services.MassTransit.Processor.csproj", "{76CF3C07-968E-486A-BA97-D606ED129A5D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Services.MassTransit.Processor", "Xango.Services.MassTransit.Processor\Xango.Services.MassTransit.Processor.csproj", "{42853B2C-1DA4-4E7C-9650-082C64106906}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -141,10 +137,6 @@ Global
 		{8FC5007C-41D1-3731-3DD5-8A3AF0011DA4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8FC5007C-41D1-3731-3DD5-8A3AF0011DA4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8FC5007C-41D1-3731-3DD5-8A3AF0011DA4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2D2B9CA1-DDD3-3897-9D52-E9EEE452073A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2D2B9CA1-DDD3-3897-9D52-E9EEE452073A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2D2B9CA1-DDD3-3897-9D52-E9EEE452073A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2D2B9CA1-DDD3-3897-9D52-E9EEE452073A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{0FAB602A-5747-C926-7ECB-5EFF565340F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0FAB602A-5747-C926-7ECB-5EFF565340F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0FAB602A-5747-C926-7ECB-5EFF565340F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -153,14 +145,10 @@ Global
 		{9EB69BA7-BDA0-13F7-782B-A2DA27DF82A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9EB69BA7-BDA0-13F7-782B-A2DA27DF82A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9EB69BA7-BDA0-13F7-782B-A2DA27DF82A0}.Release|Any CPU.Build.0 = Release|Any CPU
-		{33E5FE6C-0A94-4AF8-9E74-C9C8E3889F0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{33E5FE6C-0A94-4AF8-9E74-C9C8E3889F0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{33E5FE6C-0A94-4AF8-9E74-C9C8E3889F0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{33E5FE6C-0A94-4AF8-9E74-C9C8E3889F0E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{76CF3C07-968E-486A-BA97-D606ED129A5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{76CF3C07-968E-486A-BA97-D606ED129A5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{76CF3C07-968E-486A-BA97-D606ED129A5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{76CF3C07-968E-486A-BA97-D606ED129A5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42853B2C-1DA4-4E7C-9650-082C64106906}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42853B2C-1DA4-4E7C-9650-082C64106906}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42853B2C-1DA4-4E7C-9650-082C64106906}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42853B2C-1DA4-4E7C-9650-082C64106906}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -187,10 +175,9 @@ Global
 		{DC634FFD-D74D-4516-AF70-721C02A483D8} = {8C19D64C-29AC-4997-9035-6664E2B8CA97}
 		{3BA5D37A-F27C-49F7-96EC-4F62A9C37DA7} = {8C19D64C-29AC-4997-9035-6664E2B8CA97}
 		{8FC5007C-41D1-3731-3DD5-8A3AF0011DA4} = {93124727-AAF7-4047-BC08-006CF8E31074}
-		{2D2B9CA1-DDD3-3897-9D52-E9EEE452073A} = {93124727-AAF7-4047-BC08-006CF8E31074}
 		{0FAB602A-5747-C926-7ECB-5EFF565340F8} = {8C19D64C-29AC-4997-9035-6664E2B8CA97}
 		{9EB69BA7-BDA0-13F7-782B-A2DA27DF82A0} = {889AA4C7-BA45-481F-AF1F-8A8C11195C93}
-		{33E5FE6C-0A94-4AF8-9E74-C9C8E3889F0E} = {ADB819A7-64B4-4AFF-BA2B-69EFB3F6577A}
+		{42853B2C-1DA4-4E7C-9650-082C64106906} = {ADB819A7-64B4-4AFF-BA2B-69EFB3F6577A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {929D2BC7-133A-46CF-89C4-0315B8019576}
