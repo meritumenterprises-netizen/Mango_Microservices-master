@@ -27,7 +27,7 @@ services:
     ports:
       - "192.168.18.41:80:80"
     environment:
-        - ASPNETCORE_URLS=http://auth-api.default.svc.cluster.local:80
+        - ASPNETCORE_URLS=http://0.0.0.0:80
     build:
       context: .
       dockerfile: Xango.Services.AuthAPI/Dockerfile
@@ -43,7 +43,7 @@ services:
         aliases:
           - coupon-api.default.svc.cluster.local
     environment:
-        - ASPNETCORE_URLS=http://coupon-api.default.svc.cluster.local:80
+        - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "192.168.18.42:80:80"
     build:
@@ -64,7 +64,7 @@ services:
     ports:
       - "192.168.18.44:80:80"
     environment:
-        - ASPNETCORE_URLS=http://inventory-api.default.svc.cluster.local:80
+        - ASPNETCORE_URLS=http://0.0.0.0:80
     build:
        context: .
        dockerfile: Xango.Services.InventoryAPI/Dockerfile
@@ -85,7 +85,7 @@ services:
     ports:
       - "192.168.18.45:80:80"
     environment:
-        - ASPNETCORE_URLS=http://product-api.default.svc.cluster.local:80
+        - ASPNETCORE_URLS=http://0.0.0.0:80
     build:
        context: .
        dockerfile: Xango.Services.ProductAPI/Dockerfile
@@ -110,7 +110,7 @@ services:
     ports:
       - "192.168.18.46:80:80"
     environment:
-        - ASPNETCORE_URLS=http://order-api.default.svc.cluster.local:80
+        - ASPNETCORE_URLS=http://0.0.0.0:80
     build:
        context: .
        dockerfile: Xango.Services.OrderAPI/Dockerfile
@@ -133,7 +133,7 @@ services:
     ports:
       - "192.168.18.43:80:80"
     environment:
-        - ASPNETCORE_URLS=http://shoppingcart-api.default.svc.cluster.local:80
+        - ASPNETCORE_URLS=http://0.0.0.0:80
     build:
        context: .
        dockerfile: Xango.Services.ShoppingCartAPI/Dockerfile
@@ -161,17 +161,31 @@ services:
     ports:
       - "192.168.18.40:80:80"
     environment:
-        - ASPNETCORE_URLS=http://myhost.local:80
+        - ASPNETCORE_URLS=http://0.0.0.0:80
     build:
        context: .
        dockerfile: Mango.Web/Dockerfile
     depends_on:
-      - auth-api
-      - coupon-api
-      - inventory-api
-      - order-api
-      - shoppingcart-api
-      - product-api
+      sqlserver:
+        condition: service_started
+      rabbitmq:
+        condition: service_started
+      auth-api:
+        condition: service_started
+      coupon-api:
+        condition: service_started
+      inventory-api:
+        condition: service_started
+      order-api:
+        condition: service_started
+      shoppingcart-api:
+        condition: service_started
+      product-api:
+        condition: service_started
+      queue-api:
+        condition: service_started
+      queueprocessor:
+        condition: service_started
   rabbitmq:
     image: rabbitmq:3.11-management
     container_name: rabbitmq
@@ -253,7 +267,6 @@ services:
         - rabbitmq
         - auth-api
         - order-api
-        - xango.web
       extra_hosts:
         auth-api.default.svc.cluster.local : 192.168.18.41
         order-api.default.svc.cluster.local : 192.168.18.46

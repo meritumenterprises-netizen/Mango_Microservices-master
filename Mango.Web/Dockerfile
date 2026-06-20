@@ -27,7 +27,7 @@ WORKDIR /src
 COPY ["Mango.Web/Xango.Web.csproj", "Mango.Web/"]
 COPY ["Xango.Services.Server.Utility/Xango.Services.Server.Utility.csproj", "Xango.Services.Server.Utility/"]
 COPY ["Xango.Services.Client.Utility/Xango.Services.Client.Utility.csproj", "Xango.Services.Client.Utility/"]
-COPY ["Xango.Services.Dto/Xango.Services.Dto.csproj", "Xango.Services.Dto/"]
+COPY ["Xango.Services.Dto/Xango.Models.Dto.csproj", "Xango.Services.Dto/"]
 COPY ["Xango.Service.AuthenticationAPI.Client/Xango.Service.AuthenticationAPI.Client.csproj", "Xango.Service.AuthenticationAPI.Client/"]
 COPY ["Xango.Services.Interfaces/Xango.Services.Interfaces.csproj", "Xango.Services.Interfaces/"]
 COPY ["Xango.Service.CouponAPI.Client/Xango.Service.CouponAPI.Client.csproj", "Xango.Service.CouponAPI.Client/"]
