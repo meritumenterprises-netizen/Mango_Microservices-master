@@ -1,0 +1,103 @@
+@if (shoppingCartIsEmpty) {
+    <div class="text-black-50">Please add items to the shopping cart</div>
+}
+@else if (shoppingCart != null && shoppingCart.cartHeader != null) {
+    <br />
+    <div class="">
+        <div class="card border mt-4 container">
+            
+            <div class="card-header text-light ml-0 row bg-secondary bg-gradient ml-0 py-3">
+                <div class="col-6">
+                    <h3 class="text-white"><i class="bi bi-cart"></i> &nbsp; Shopping Cart</h3>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class=" d-none d-lg-block">
+                    <div class="row text-black">
+                        <div class="col-lg-2">
+                        </div>
+                        <div class="col-lg-4 fw-bold">
+                            Product Details
+                        </div>
+                        <div class="col-lg-1 fw-bold">
+                            Price
+                        </div>
+                        <div class="col-lg-1 fw-bold">
+                            Count
+                        </div>
+                        <div class="col-lg-1 fw-bold">
+                            Subtotal
+                        </div>
+                        <div class="col-lg-1 fw-bold">
+                            In Stock
+                        </div>
+                        <div class="col-lg-1">
+                            &nbsp;
+                        </div>
+                    </div>
+                </div>
+                <hr />
+
+                @for (cartDetail of shoppingCart.cartDetails; track cartDetail.cartDetailsId) {
+                <div class="row h-100 py-2">
+                    <div class="col-2 col-md-2 text-center py-2">
+                        <img src="{{cartDetail.product.imageUrl}}" class="rounded" width="100%" />
+                    </div>
+                    <div class="col-2 col-md-4">
+                        <h5>{{cartDetail.product.name}}</h5>
+                        <div style="font-size:11px;">{{cartDetail.product.description}}</div>
+                    </div>
+                    <div class="col-1 col-md-1 pt-md-1" style="font-size:11px;">
+                        <span style="font-size:17px;">{{cartDetail.product.price | currency : 'USD'}}</span>
+                    </div>
+                    <div class="col-1 col-md-1 pt-md-1" style="font-size:11px;">
+                        <span style="font-size:17px;">{{cartDetail.count}}</span>
+                    </div>
+                    <div class="col-1 col-md-1 pt-md-1" style="font-size:11px;">
+                        <span style="font-size:17px;">{{ cartDetail.product.price * cartDetail.count | currency : 'USD'}}</span>
+                    </div>
+                    <div class="col-1 col-md-1 pt-md-1" style="font-size:11px; text-align: center">
+                        <span style="font-size:17px">{{ cartDetail.product.stockInventory}}</span>
+                    </div>
+                    <div class="col-1 col-md-1 pt-md-1">
+                        <a 
+                            class="btn btn-sm btn-danger">
+                            <i class="bi bi-trash-fill" (click)="onDeleteProductFromCart(cartDetail.cartDetailsId)"></i>
+                        </a>
+                    </div>
+                </div>
+            }
+                <hr />
+                <div class="row">
+                    <div class="col-6">
+                        <span>Coupon: &nbsp;</span>
+                        <input class="mx-2"  value="{{shoppingCart.cartHeader.couponCode}}" #applyCouponCode  [disabled]="shoppingCart.cartHeader.couponCode != null"/>
+                        @if (shoppingCart.cartHeader.couponCode !== null) {
+                            <button class="btn btn-sm btn-success" (click)="removeCoupon()"> Remove </button>
+                        }
+                        @else {
+                        <button class="btn btn-sm btn-success" (click)="applyCoupon(applyCouponCode.value)"> Apply </button>
+                        }
+                    </div>
+                    <div class="col-6 text-end">
+                        <span class="text-danger" style="font-size:21px;"> Order Total :{{shoppingCart.cartHeader.cartTotal | currency: 'USD'}}
+                         <br /></span>
+                         @if (shoppingCart.cartHeader.discount > 0)
+                         {
+                             <span class="text-success"> Order Discount :   {{shoppingCart.cartHeader.discount | currency : 'USD'}} </span>
+                         }
+
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer row">
+                <div class="col-6 col-md-3 ">
+                    <button class="btn btn-danger" (click)="emptyCart()">Empty Cart</button>
+                </div>
+                <div class="col-6 col-md-3 offset-md-6">
+                    <a [routerLink]="['/cart/checkout']" class="btn btn-success form-control">Checkout </a>
+                </div>
+            </div>
+        </div>
+    </div>
+}

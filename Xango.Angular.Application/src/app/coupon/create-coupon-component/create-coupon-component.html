@@ -1,0 +1,68 @@
+<form [formGroup]="couponForm" #form="ngForm" (ngSubmit)="onSubmit()">
+    <br />
+    <div class="container border p-3">
+        <div class="card-header bg-secondary bg-gradient ml-0 py-3">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h1 class="text-white">Create Coupon</h1>
+                </div>
+            </div>
+        </div>
+
+        <hr />
+        <div class="row">
+            <div class="col-4">
+                <label class="control-label pt-2" style="font-size:20px;"> Coupon Code</label>
+            </div>
+            <div class="col-8 py-2">
+                <input class="form-control" formControlName="couponCode"/>
+                <div *ngIf="couponCode?.invalid && (couponCode?.touched || couponCode?.dirty)">
+                    <small *ngIf="couponCode?.errors?.['required']" class="text-danger">Coupon code is required. </small>
+                    <small *ngIf="couponCode?.errors?.['minlength']" class="text-danger">Coupon code must be at least 6 characters. </small>
+                    <small *ngIf="couponCode?.errors?.['maxlength']" class="text-danger">Coupon code must be at most 30 characters. </small>
+                </div>
+
+            </div>
+            <div class="col-4">
+                <label class="control-label pt-2" style="font-size:20px;">Discount Amount (USD)</label>
+            </div>
+            <div class="col-8 pb-3">
+                <input class="form-control" formControlName="discountAmount"/>
+                <div *ngIf="discountAmount?.invalid && (discountAmount?.touched || discountAmount?.dirty)">
+                    <small *ngIf="discountAmount?.errors?.['required']" class="text-danger">Coupon discount amount is required. </small>
+                    <small *ngIf="discountAmount?.errors?.['pattern']" class="text-danger">Coupon discount amount must be a number. </small>
+                    <small *ngIf="discountAmount?.errors?.['min']" class="text-danger">Coupon discount amount must be at least 1.00. </small>
+                    <small *ngIf="discountAmount?.errors?.['max']" class="text-danger">Coupon discount amount must be at most 1000.00. </small>
+                </div>
+            </div>
+            <div class="col-4">
+                <label class="control-label pt-2" style="font-size:20px;">Minimum Amount (USD) </label>
+            </div>
+            <div class="col-8 pb-3">
+                <input class="form-control" formControlName="minAmount"/>
+                <div *ngIf="minAmount?.invalid && (minAmount?.touched || minAmount?.dirty)">
+                    <small *ngIf="minAmount?.errors?.['required']" class="text-danger">Coupon minimum amount is required. </small>
+                    <small *ngIf="minAmount?.errors?.['pattern']" class="text-danger">Coupon minimum amount must be a number. </small>
+                    <small *ngIf="minAmount?.errors?.['min']" class="text-danger">Coupon minimum amount must be at least 10.00. </small>
+                    <small *ngIf="minAmount?.errors?.['max']" class="text-danger">Coupon minimum amount must be at most 10000.00. </small>
+                </div>
+            </div>
+
+            <div *ngIf="couponForm.errors?.['lessThan'] && couponForm.touched" class="text-danger">Discount amount must be less than minimum amount.</div>
+
+
+            <div class="col-6">
+
+                <a [routerLink]="['/coupon']" class="btn-primary btn form-control ">Back to List</a>
+            </div>
+            <div class="col-6">
+                <input type="submit" value="Create" class="btn btn-success form-control" [disabled]="couponForm.invalid || couponForm.pristine" />
+
+            </div>
+
+        </div>
+
+        <div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,66 @@
+<div class="card shadow border-0 mt-4">
+	<div class="card-header bg-secondary bg-gradient ml-0 py-3">
+		<div class="row">
+			<div class="col-12 text-center">
+				<h1 class="text-white">Products List</h1>
+			</div>
+		</div>
+	</div>
+	<div class="card-body p-4">
+		<div class="row pb-3">
+			<div class="col-6">
+			</div>
+			<div class="col-6 text-end">
+				<a [routerLink]="['/product/create']" class="btn btn-outline-primary"><i class="bi bi-plus-square"></i> Create New
+					Product</a>
+			</div>
+		</div>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>
+						Name
+					</th>
+					<th>
+						Category Name
+					</th>
+					<th>
+						Price
+					</th>
+					<th>
+						In Stock
+					</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@for (product of products; track product.productId) {
+				<tr>
+					<td>
+						{{product.name.length > 32 ? product.name.slice(0,32) + "..." : product.name}}
+					</td>
+					<td>
+						{{product.categoryName}}
+					</td>
+					<td>
+						{{product.price | currency : 'USD'}}
+					</td>
+					<td>
+						{{product.stockInventory}}
+					</td>
+					<td>
+						<a [routerLink]="['/product/edit/' + product.productId]" class="btn btn-success">
+							<i class="bi bi-pencil-square"></i>
+						</a>&nbsp;
+						<a class="btn btn-danger" >
+							<i class="bi bi-trash" (click)="deleteProduct(product.productId)"></i>
+						</a>
+					</td>
+				</tr>
+			}
+			</tbody>
+		</table>
+
+	</div>
+
+</div>

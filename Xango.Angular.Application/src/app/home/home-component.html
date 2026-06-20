@@ -1,0 +1,24 @@
+<form>
+    <div class="container row" style="width: 1500px">
+        @for (product of products; track product.productId)
+        {
+        <div class="card col-12 col-md-6 col-lg-4 shadow-lg text-center" style="margin: 5px; width: 300px">
+            <h3 class="card-title text-black-50 text-center py-2">{{product.name}}</h3>
+            <img src="{{product.imageUrl}}" class="card-img-top py-3" style="max-height: 400px; width: auto">
+            <div class="card-body d-flex flex-column">
+                <div class="d-flex justify-content-between py-2">
+                    <span class="text-danger" style="font-size:20px;">{{ product.price | currency : 'USD' }}</span>
+                    <span class="text-bg-primary px-2">In Stock: {{product.stockInventory}}</span>
+                    <span class="badge bg-warning text-white p-2">{{product.category}}</span>
+                </div>
+                <p class="card-text" style="text-align: left;" title="{{product.description}}">{{product.description | truncate : 130}}</p>
+                <div class="row mt-auto" style="vertical-align: bottom;">
+                    <div class="col">
+                        <a href="/product/details/{{product.productId}}" class="btn btn-success form-control" [class.disabled]="product.stockInventory === 0">Details</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        }
+    </div>
+</form>

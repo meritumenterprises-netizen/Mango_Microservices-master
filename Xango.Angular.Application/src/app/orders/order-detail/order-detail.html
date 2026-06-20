@@ -1,0 +1,124 @@
+    <br />
+    <div class="container">
+        <div class="card">
+            <div class="card-header bg-dark text-light ml-0">
+                <div class="container row">
+                    <div class="col-12 d-none d-md-block col-md-6 pb-1 text-warning h3">
+                        Order Summary
+                    </div>
+                    <div class="col-12 col-md-4 offset-md-2 text-right mt-2">
+                        <a class="btn btn-warning form-control btn-sm" [routerLink]="['/order']">Back to Orders</a>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body" *ngIf="order">
+                <div class="container rounded p-2">
+                    <div class="row">
+                        <div class="col-12 col-lg-6 pb-4">
+                            <div class="row my-1 align-middle">
+                                <div class="col-3">Name</div>
+                                <div class="col-9">
+                                    <input placeholder="User name" class="form-control" value="{{order?.name}}"/>
+                                </div>
+                            </div>
+                           
+                            <div class="row my-1 align-middle">
+                                <div class="col-3">Phone</div>
+                                <div class="col-9">
+                                    <input placeholder="Phone" readonly class="form-control" value="{{order?.phone}}"/>
+                                </div>
+                            </div>
+
+                            <div class="row my-1 align-middle">
+                                <div class="col-3">Email</div>
+                                <div class="col-9">
+                                    <input placeholder="Email" readonly class="form-control" value="{{order?.email}}"/>
+                                </div>
+                            </div>
+                            <div class="row my-1 align-middle">
+                                <div class="col-3">Order Date</div>
+                                <div class="col-9">
+                                    <input placeholder="Order date and time" readonly class="form-control" value="{{order?.orderTime | date: 'short'}}"/>
+                                </div>
+                            </div>
+
+                            @if (isAdmin())
+                            {
+                                <div class="row my-1 align-middle">
+                                    <div class="col-3">Stripe Session ID</div>
+                                    <div class="col-9">
+                                        <input placeholder="Stripe Session ID" readonly class="form-control" value="{{order?.stripeSessionId}}"/>
+                                    </div>
+                                </div>
+                                <div class="row my-1 align-middle">
+                                    <div class="col-3">Payment Intent ID</div>
+                                    <div class="col-9">
+                                        <input placeholder="Stripe Payment ID" readonly class="form-control" value="{{order?.paymentIntentId}}"/>
+                                    </div>
+                                </div>
+                            }
+                            <div class="row my-1 align-middle">
+                                <div class="col-3">Order Status</div>
+                                <div class="col-9">
+                                    <input placeholder="Order status" readonly class="form-control" value="{{order?.status | splitCamelCase }}"/>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-12 col-lg-5 offset-lg-1">
+                            <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="text-warning">Order Summary</span>
+                            </h4>
+                            <label class="bg-info text-dark text-center form-control my-2">Order Status - {{order?.status | splitCamelCase}}</label>
+
+                            <ul class="list-group mb-3">
+								@for (orderDetail of order.orderDetails; track orderDetail.orderDetailsId) {
+                                <li class="list-group-item d-flex justify-content-between p-2">
+                                    <div class="row container col-12">
+                                        <div class="col-8">
+                                            <h6 class="my-0">Name: {{orderDetail.productName}}</h6>
+                                            <small class="text-muted">Price : {{orderDetail.price | currency: 'USD'}}</small><br />
+                                            <small class="text-muted">Quantity : {{orderDetail.count}}</small>
+                                        </div>
+                                        <div class="col-4 text-end">
+                                            <p class="text-success">{{ orderDetail.price * orderDetail.count | currency: 'USD'}}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                }
+                                <li class="list-group-item bg-secondary">
+                                    <div class="row container">
+                                        <div class="col-6">
+                                            <h5 class="text-white">TOTAL </h5>
+                                        </div>
+                                        <div class="col-6 text-end">
+                                            <h5 class="text-white">{{order.orderTotal | currency: 'USD'}}</h5>
+                                        </div>
+                                    </div>
+                                </li>
+
+                            </ul>
+
+                            @if (isAdmin())
+                            {
+                                @if (order.status == "Approved")
+                                {
+                                    <button class="btn btn-success form-control my-1" (click)="onSubmit_ReadyForPickup()">Set Ready for Pickup</button>
+                                }
+                                @if (order.status == "ReadyForPickup")
+                                {
+                                    <button class="btn btn-success form-control my-1" (click)="onSubmit_Complete()">Set Complete Order</button>
+                                }
+
+                                @if (order.status == "Approved" || order.status == "ReadyForPickup" || order.status == "Pending")
+                                {
+                                    <button class="btn btn-danger form-control my-1" (click)="onSubmit_CancelOrder()">Cancel Order</button>
+                                }
+                                <button class="btn btn-secondary form-control my-1" (click)="onSubmit_DeleteOrder()">Delete Order</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

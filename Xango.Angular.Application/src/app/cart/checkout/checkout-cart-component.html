@@ -1,0 +1,117 @@
+<form method="post" [formGroup]="shoppingCartForm" (ngSubmit)="onSubmit()">
+	<div class="border mt-2 p-4 rounded">
+		<div class="container row">
+			<div class="col-md-7 col-12">
+				<span style="font-size:25px;" class="text-warning mb-2">Order Summary</span>
+			</div>
+			<div class="col-md-5 col-12">
+				<a [routerLink]="['/cart']" class="btn btn-outline-warning form-control">Back to Cart</a>
+			</div>
+			<br /><br /><br />
+			<hr />
+			<div class="col-7">
+				<div class="row col-12 py-2 align-center">
+					<div class="col-2">
+						<label class="control-label pt-2" style="font-size:20px;">Name</label>
+					</div>
+					<div class="col-10">
+						<input placeholder="full name..." class="form-control" formControlName="name"/>
+							<div *ngIf="name?.invalid && (name?.touched || name?.dirty)">
+								<small *ngIf="name?.errors?.['required']" class="text-danger">Name is required.</small>
+							</div>
+                            <small *ngIf="name?.errors?.['minlength']" class="text-danger">Name must be
+                                at least 2 characters. </small>
+                            <small *ngIf="name?.errors?.['maxlength']" class="text-danger">Name must be
+                                at most 100 characters. </small>
+						</div>
+				</div>
+				<div class="row col-12 py-2 align-center">
+					<div class="col-2">
+						<label class="control-label pt-2 col-form-label" style="font-size:20px;">Email</label>
+					</div>
+					<div class="col-10">
+						<input placeholder="email..." class="form-control" formControlName="email"/>
+						<div *ngIf="email?.invalid && (email?.touched || email?.dirty)">
+							<small *ngIf="email?.errors?.['required']" class="text-danger">Email is required.</small>
+							<small *ngIf="email?.errors?.['pattern']" class="text-danger">
+								Email format is invalid.
+							</small>
+						</div>
+					</div>
+				</div>
+				<div class="row col-12 py-2 align-center">
+					<div class="col-2">
+						<label class="control-label pt-2 col-form-label" style="font-size:20px;">Phone</label>
+					</div>
+					<div class="col-10">
+						<input class="form-control" placeholder="phone number..." formControlName="phone"/>
+							<div *ngIf="phone?.invalid && (phone?.touched || phone?.dirty)">
+								<small *ngIf="phone?.errors?.['required']" class="text-danger">Phone is required.</small>
+							</div>
+						</div>
+				</div>
+				<div class="col-12 pt-2">
+					<label class="col-form-label">Order will be ready in 30 minutes after placing order. If you place
+						order when the store is closed it will be ready next day.</label>
+				</div>
+			</div>
+			<div class="col-5">
+				<div class="card mt-2">
+					<div class="card-body">
+						<div class=" d-none d-lg-block">
+							<div class="row text-danger">
+								<div class="col-6">
+									Product Details
+								</div>
+
+								<div class="col-3">
+									Price
+								</div>
+								<div class="col-3">
+									Count
+								</div>
+							</div>
+						</div>
+						<hr />
+						<div class="row h-100">
+							@for (cartDetail of shoppingCart.cartDetails; track cartDetail.cartDetailsId) {
+							<div class="col-6">
+								<span style="font-size:20px">{{cartDetail.product.name}}</span>
+							</div>
+
+							<div class="col-3" style="font-size:11px;">
+								<span style="font-size:17px;">{{cartDetail.product.price | currency: 'USD'}}</span>
+
+							</div>
+							<div class="col-3" style="font-size:11px;">
+								<span style="font-size:17px;">{{cartDetail.count}}</span>
+							</div>
+							}
+						</div>
+						<hr />
+						<div class="row">
+							<div class="col-12 text-center pr-4 text-danger">
+								Order Total : {{shoppingCart.cartHeader.cartTotal | currency: 'USD'}} <br />
+								@if (shoppingCart.cartHeader.discount > 0) {
+								<span class="text-success"> Order Discount : {{shoppingCart.cartHeader.discount |
+									currency: 'USD'}}</span>
+								}
+							</div>
+						</div>
+
+					</div>
+					<div class="card-footer">
+						<div class="row">
+
+							<div class="col-12 ">
+								<button type="submit" class="btn btn-success form-control ">
+									<span>Place Order</span>
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>

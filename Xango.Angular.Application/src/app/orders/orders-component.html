@@ -1,0 +1,65 @@
+<div class="card shadow border-0 mt-4">
+	<div class="card-header bg-secondary bg-gradient ml-0 py-3 d-flex justify-content-between">
+		<div class="row">
+			<h1 class="text-white">Order List</h1>
+		</div>
+		<ul class="list-group list-group-horizontal-sm pt-2">
+			<a style="text-decoration:none; cursor: pointer" (click)="onClickPending()">
+				<li class="list-group-item pending" [ngClass]="status === 'pending' ? 'selected' : 'deselected'">Pending
+				</li>
+			</a>
+			<a style="text-decoration:none; cursor: pointer" (click)="onClickApproved()">
+				<li class="list-group-item @approved" [ngClass]="status === 'approved' ? 'selected' : 'deselected'">
+					Approved</li>
+			</a>
+			<a style="text-decoration:none; cursor: pointer" (click)="onClickReadyForPickup()">
+				<li class="list-group-item @readyforpickup"
+					[ngClass]="status === 'readyforpickup' ? 'selected' : 'deselected'">Ready for Pickup</li>
+			</a>
+			<a style="text-decoration:none; cursor: pointer" (click)="onClickCancelled()">
+				<li class="list-group-item @cancelled" [ngClass]="status === 'cancelled' ? 'selected' : 'deselected'">
+					Cancelled</li>
+			</a>
+			<a style="text-decoration:none; cursor: pointer" (click)="onClickCompleted()">
+				<li class="list-group-item @completed" [ngClass]="status === 'complete' ? 'selected' : 'deselected'">
+					Complete</li>
+			</a>
+			<a style="text-decoration:none; cursor: pointer" (click)="onClickShipped()">
+				<li class="list-group-item @shipped" [ngClass]="status === 'shipped' ? 'selected' : 'deselected'">
+					Shipped</li>
+			</a>
+			<a style="text-decoration:none; cursor: pointer" (click)="onClickAll()">
+				<li class="list-group-item @all" [ngClass]="status === 'all' ? 'selected' : 'deselected'">All</li>
+			</a>
+		</ul>
+	</div>
+	<div class="card-body p-4">
+		<table id="tblData" class="table table-bordered table-striped pt-3" style="width:100%">
+			<thead>
+				<tr>
+					<th class="text-center fw-bold">ID</th>
+					<th class="text-center fw-bold">Email</th>
+					<th class="text-center fw-bold">Name</th>
+					<th class="text-center fw-bold">Phone</th>
+					<th class="text-center fw-bold">Status</th>
+					<th class="text-center fw-bold">Total</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@for (order of orders; track order.orderHeaderId) {
+				<tr>
+					<td>{{order.orderHeaderId}}</td>
+					<td>{{order.email}}</td>
+					<td>{{order.name}}</td>
+					<td>{{order.phone}}</td>
+					<td>{{order.status | splitCamelCase}}</td>
+					<td style="text-align: right">{{order.orderTotal | currency: 'USD'}}</td>
+					<td style="text-align: center;">@if (isAdmin()) { <i class="bi bi-pencil-square"
+							style="cursor: pointer" (click)="onEditOrder(order.orderHeaderId)"></i> } </td>
+				</tr>
+				}
+			</tbody>
+		</table>
+	</div>
+</div>

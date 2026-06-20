@@ -1,0 +1,58 @@
+<form>
+    @if (product != null) {
+    <div class=" pt-4">
+        <div class="card container" >
+            <div class="card-header bg-secondary text-black-50 row" style="border-radius: 2px;">
+                <div class="col-12 col-md-6">
+                    <h1 class="text-white">{{product.name}}</h1>
+                </div>
+                <div class="col-12 col-md-6 text-end">
+                    <h1 class="text-warning">{{product.price | currency : 'USD'}}</h1>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="container rounded p-2">
+                    <div class="row">
+                        <div class="col-12 col-lg-4 p-1 text-center">
+                            <img src="{{product.imageUrl}}" style="border-radius:35px;" width="100%" class="rounded" />
+                        </div>
+                        <div class="col-12 col-lg-8">
+                            <div class="row pl-3">
+
+                                <div class="col-12">
+                                    <span class="badge bg-primary text-white p-3 border">{{product.category}}</span>
+                                    <p class="text-secondary pt-3">{{product.description}}</p>
+                                </div>
+                            </div>
+                            <div class="row mx-0">
+                                <label>Quantity</label>
+                                <input #count class="form-control" min="1" max="{{product.stockInventory}}" value="1"/>
+                                <span  class="text-danger"></span>
+                            </div>
+                            <div class="row col-lg-16" style="margin-top: 20px">
+                                <div class="row pl-3" style="text-align: right">
+                                    <span class="text-info text-success">In Stock: <span class="text-warning" style="font-size:large; text-align: right">{{product.stockInventory}}</span></span>
+                                    <span class="text-danger" id="errorMsg"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer row">
+                <div class="col-12 col-md-4 pb-1 ">
+                    <a [routerLink]="['/']" class="btn btn-success btn-square form-control btn-lg" style="height:50px;">Back</a>
+                </div>
+                <div class="col-12 col-md-4 ">
+                    <button type="submit" class="btn btn-primary form-control btn-lg" style="height:50px;" [class.disabled]="!isLoggedIn() || product.stockInventory == 0" (click)="onSubmit(count.value, product.stockInventory)">Add to Cart</button>
+                </div>
+                @if (isAdmin()) {
+                    <div class="col-12 col-md-4 ">
+                        <button class="btn btn-danger form-control btn-lg" style="height:50px;" [routerLink]="['/product/edit/' + product.productId]">Edit</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    }
+</form>
