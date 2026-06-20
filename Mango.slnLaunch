@@ -1,0 +1,11 @@
+[
+  {
+    "Name": "All services and Web Frontend",
+    "Projects": [
+      {
+        "Path": "docker-compose.dcproj",
+        "Action": "Start"
+      }
+    ]
+  }
+]

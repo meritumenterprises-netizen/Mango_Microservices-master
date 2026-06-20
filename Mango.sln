@@ -7,6 +7,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FrontEnd", "FrontEnd", "{9D
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{ADB819A7-64B4-4AFF-BA2B-69EFB3F6577A}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Xango.Web", "Mango.Web\Xango.Web.csproj", "{B7012943-4F4D-4DEA-B93D-63F446118BC1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Models.Dto", "Xango.Services.Dto\Xango.Models.Dto.csproj", "{BCC05597-4552-404D-A833-4A24C2603AB4}"
@@ -46,8 +48,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Service.OrderAPI.Client", "Xango.Service.OrderAPI.Client\Xango.Service.OrderAPI.Client.csproj", "{DC634FFD-D74D-4516-AF70-721C02A483D8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xango.Service.AuthenticationAPI.Client", "Xango.Service.AuthenticationAPI.Client\Xango.Service.AuthenticationAPI.Client.csproj", "{3BA5D37A-F27C-49F7-96EC-4F62A9C37DA7}"
-EndProject
-Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{81DDED9D-158B-E303-5F62-77A2896D2A5A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{889AA4C7-BA45-481F-AF1F-8A8C11195C93}"
 EndProject

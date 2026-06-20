@@ -1,5 +1,14 @@
 {
   "profiles": {
+    "Xango.Services.InventoryApi": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5003"
+    },
     "Container (Dockerfile)": {
       "commandName": "Docker",
       "launchBrowser": true,
